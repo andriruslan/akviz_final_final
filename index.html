@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>АкВіз_КАГАРЛИК</title>
+  <style>
+    body { font-family: sans-serif; padding: 1rem; background: #f2f2f2; }
+    h1 { font-size: 1.5rem; margin-bottom: 0; }
+    .version { font-size: 0.9rem; color: #555; margin-bottom: 1rem; }
+    .group { margin-bottom: 1rem; }
+    label { display: block; margin-bottom: 0.3rem; }
+    input[type=text], input[type=number], input[type=time], textarea {
+      width: 100%; padding: 0.5rem; font-size: 1rem;
+    }
+    input[readonly] { background-color: #eaeaea; }
+    button, .button-inline {
+      padding: 0.4rem 1rem;
+      font-size: 1rem;
+      margin-right: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .lock-button { background: none; border: none; cursor: pointer; font-size: 1.2rem; }
+    .inline-buttons { display: flex; gap: 0.5rem; align-items: center; }
+    .radio-group { display: flex; flex-direction: column; gap: 0.3rem; }
+  </style>
+</head>
+<body>
+  <h1>АкВіз_КАГАРЛИК</h1>
+  <div class="version">Версія 1.1.3</div>
+
+  <div class="group">
+    <label>Підпорядкування (*)</label>
+    <div class="inline-buttons">
+      <input type="text" id="sector" readonly>
+      <button class="lock-button" onclick="toggleLock('sector')">🔒</button>
+    </div>
+  </div>
+
+  <div class="group">
+    <label>Позиція (*)</label>
+    <div class="inline-buttons">
+      <input type="text" id="position" readonly>
+      <button class="lock-button" onclick="toggleLock('position')">🔒</button>
+    </div>
+  </div>
+
+  <div class="group">
+    <label>Населений пункт (*)</label>
+    <div class="inline-buttons">
+      <input type="text" id="location" readonly>
+      <button class="lock-button" onclick="toggleLock('location')">🔒</button>
+    </div>
+  </div>
+
+  <div class="group">
+    <label>Тип цілі</label>
+    <div class="radio-group">
+      <label><input type="radio" name="target" value="БПЛА літакового типу"> БПЛА літакового типу</label>
+      <label><input type="radio" name="target" value="Крилата ракета"> Крилата ракета</label>
+      <label><input type="radio" name="target" value="Гелікоптер"> Гелікоптер</label>
+      <label><input type="radio" name="target" value="Літак малий"> Літак малий</label>
+      <label><input type="radio" name="target" value="Літак великий"> Літак великий</label>
+      <label><input type="radio" name="target" value="Квадрокоптер"> Квадрокоптер</label>
+      <label><input type="radio" name="target" value="Зонд"> Зонд</label>
+    </div>
+  </div>
+
+  <div class="group">
+    <label>Сторона</label>
+    <div class="radio-group">
+      <label><input type="radio" name="side" value="Ворожий"> Ворожий</label>
+      <label><input type="radio" name="side" value="Свій"> Свій</label>
+      <label><input type="radio" name="side" value="Нейтральний"> Нейтральний</label>
+    </div>
+  </div>
+
+  <div class="group">
+    <label><input type="checkbox" id="noNumber" checked onchange="toggleNumberField()"> Без видачі</label>
+    <input type="number" id="targetNumber" placeholder="номер цілі" readonly>
+  </div>
+
+  <div class="group">
+    <label>Назва</label>
+    <input type="text" id="targetName" placeholder="наприклад, Shahed-136">
+    <div class="inline-buttons">
+      <button class="button-inline" onclick="fillName('Shahed-136')">Shahed-136</button>
+      <button class="button-inline" onclick="fillName('Гербера')">Гербера</button>
+    </div>
+  </div>
+
+  <div class="group">
+    <label>Кількість, од</label>
+    <div class="inline-buttons">
+      <input type="number" id="targetCount" value="1" readonly>
+      <button onclick="changeCount(1)">+1 од.</button>
+      <button id="minusBtn" onclick="changeCount(-1)" disabled>-1 од.</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleLock(id) {
+      const input = document.getElementById(id);
+      if (input.readOnly) {
+        input.readOnly = false;
+        input.focus();
+      } else {
+        input.readOnly = true;
+        localStorage.setItem(id, input.value);
+      }
+    }
+
+    function loadStoredFields() {
+      ['sector', 'position', 'location'].forEach(id => {
+        const value = localStorage.getItem(id);
+        if (value) document.getElementById(id).value = value;
+      });
+    }
+
+    function toggleNumberField() {
+      const isChecked = document.getElementById('noNumber').checked;
+      const field = document.getElementById('targetNumber');
+      field.readOnly = isChecked;
+      if (isChecked) field.value = '';
+    }
+
+    function fillName(name) {
+      document.getElementById('targetName').value = name;
+    }
+
+    function changeCount(delta) {
+      const field = document.getElementById('targetCount');
+      let value = parseInt(field.value);
+      value += delta;
+      if (value <= 1) {
+        value = 1;
+        document.getElementById('minusBtn').disabled = true;
+      } else {
+        document.getElementById('minusBtn').disabled = false;
+      }
+      field.value = value;
+    }
+
+    window.onload = () => {
+      loadStoredFields();
+      toggleNumberField();
+    }
+  </script>
+</body>
+</html>
