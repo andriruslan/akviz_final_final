@@ -211,5 +211,25 @@
       toggleNumberField();
     };
   </script>
+  <div class="group">
+  <label>🧪 Тест компаса (в реальному часі):</label>
+  <div id="sensorDebug" style="font-family: monospace; background: #fff; padding: 0.5rem; border: 1px solid #ccc;"></div>
+</div>
+
+<script>
+  window.addEventListener("deviceorientation", (event) => {
+    const debugEl = document.getElementById("sensorDebug");
+    const alpha = event.alpha !== null ? event.alpha.toFixed(2) : "null";
+    const webkit = event.webkitCompassHeading !== undefined ? event.webkitCompassHeading.toFixed(2) : "н/д";
+    const absolute = event.absolute !== undefined ? event.absolute : "н/д";
+
+    debugEl.innerHTML = `
+      alpha (обертання): <b>${alpha}</b><br>
+      webkitCompassHeading: <b>${webkit}</b><br>
+      absolute: <b>${absolute}</b><br>
+    `;
+  }, true);
+</script>
+
 </body>
 </html>
