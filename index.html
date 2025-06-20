@@ -6,7 +6,7 @@
   <title>АкВіз_КАГАРЛИК</title>
   <style>
     body { font-family: sans-serif; padding: 1rem; background: #f2f2f2; }
-    h1 { font-size: 1.5rem; margin-bottom: 0; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
     .version { font-size: 0.9rem; color: #555; margin-bottom: 1rem; }
     .group { margin-bottom: 1rem; }
     label { display: block; margin-bottom: 0.3rem; }
@@ -14,49 +14,31 @@
       width: 100%; padding: 0.5rem; font-size: 1rem;
     }
     input[readonly] { background-color: #eaeaea; }
-    button, .button-inline {
+    button {
       padding: 0.4rem 1rem;
       font-size: 1rem;
-      margin-right: 0.5rem;
       margin-top: 0.5rem;
+      margin-right: 0.5rem;
     }
-    .lock-button { background: none; border: none; cursor: pointer; font-size: 1.2rem; }
+    .lock-button {
+      background: none; border: none; font-size: 1.3rem; cursor: pointer;
+    }
     .inline-buttons { display: flex; gap: 0.5rem; align-items: center; }
     .radio-group { display: flex; flex-direction: column; gap: 0.3rem; }
+    #debug { font-family: monospace; font-size: 0.9rem; color: #666; }
   </style>
 </head>
 <body>
   <h1>АкВіз_КАГАРЛИК</h1>
   <div class="version">Версія 1.1.3</div>
 
-  <div class="group">
-    <label>Підпорядкування (*)</label>
-    <div class="inline-buttons">
-      <input type="text" id="sector" readonly>
-      <button class="lock-button" onclick="toggleLock('sector')">🔒</button>
-    </div>
-  </div>
-
-  <div class="group">
-    <label>Позиція (*)</label>
-    <div class="inline-buttons">
-      <input type="text" id="position" readonly>
-      <button class="lock-button" onclick="toggleLock('position')">🔒</button>
-    </div>
-  </div>
-
-  <div class="group">
-    <label>Населений пункт (*)</label>
-    <div class="inline-buttons">
-      <input type="text" id="location" readonly>
-      <button class="lock-button" onclick="toggleLock('location')">🔒</button>
-    </div>
-  </div>
-
-  <div class="group">
+  <div class="group"><label>Підпорядкування (*)</label><div class="inline-buttons"><input id="sector" type="text" readonly><button class="lock-button" onclick="toggleLock('sector')">🔒</button></div></div>
+  <div class="group"><label>Позиція (*)</label><div class="inline-buttons"><input id="position" type="text" readonly><button class="lock-button" onclick="toggleLock('position')">🔒</button></div></div>
+  <div class="group"><label>Населений пункт (*)</label><div class="inline-buttons"><input id="location" type="text" readonly><button class="lock-button" onclick="toggleLock('location')">🔒</button></div></div>
+    <div class="group">
     <label>Тип цілі</label>
     <div class="radio-group">
-      <label><input type="radio" name="target" value="БПЛА літакового типу"> 11111БПЛА літакового типу</label>
+      <label><input type="radio" name="target" value="БПЛА літакового типу"> БПЛА літакового типу</label>
       <label><input type="radio" name="target" value="Постріли (ЗУ, кулемет)"> Постріли (ЗУ, кулемет)</label>
       <label><input type="radio" name="target" value="Виходи (ПЗРК, ЗРК)"> Виходи (ПЗРК, ЗРК)</label>
       <label><input type="radio" name="target" value="Вибух КР"> Вибух КР</label>
@@ -88,148 +70,105 @@
     <label>Назва</label>
     <input type="text" id="targetName" placeholder="наприклад, Shahed-136">
     <div class="inline-buttons">
-      <button class="button-inline" onclick="fillName('Shahed-136')">Shahed-136</button>
-      <button class="button-inline" onclick="fillName('Гербера')">Гербера</button>
-    </div>
-  </div>
-
-  <div class="group">
-    <label>Кількість, од</label>
-    <div class="inline-buttons">
-      <input type="number" id="targetCount" value="1" readonly>
-      <button onclick="changeCount(1)">+1 од.</button>
-      <button id="minusBtn" onclick="changeCount(-1)" disabled>-1 од.</button>
-    </div>
-  </div>
-
+      <button onclick="document.getElementById('targetName').value='Shahed-136'">Shahed-136</button>
+      <button onclick="document.getElementById('
   <div class="group">
     <label>Азимут, ° (*)</label>
     <input type="number" id="azimuth" placeholder="Введіть або визначте">
-    <div class="inline-buttons">
-      <button id="azimuthBtn" onclick="toggleSensor('azimuth')">визначити азимут</button>
-    </div>
+    <button id="azimuthBtn" onclick="toggleSensor('azimuth')">визначити азимут</button>
   </div>
 
   <div class="group">
     <label>Курс, ° (*)</label>
     <input type="number" id="course" placeholder="Введіть або визначте">
-    <div class="inline-buttons">
-      <button id="courseBtn" onclick="toggleSensor('course')">визначити Курс</button>
-    </div>
+    <button id="courseBtn" onclick="toggleSensor('course')">визначити Курс</button>
+  </div>
+
+  <div class="group">
+    <label>🧪 Діагностика компаса</label>
+    <div id="debug">Очікування даних...</div>
   </div>
 
   <script>
     function toggleLock(id) {
       const input = document.getElementById(id);
       input.readOnly = !input.readOnly;
-      if (input.readOnly) {
-        localStorage.setItem(id, input.value);
-      } else {
-        input.focus();
-      }
-    }
-
-    function loadStoredFields() {
-      ['sector', 'position', 'location'].forEach(id => {
-        const value = localStorage.getItem(id);
-        if (value) document.getElementById(id).value = value;
-      });
-    }
-
-    function toggleNumberField() {
-      const checked = document.getElementById('noNumber').checked;
-      const field = document.getElementById('targetNumber');
-      field.readOnly = checked;
-      if (checked) field.value = '';
-    }
-
-    function fillName(name) {
-      document.getElementById('targetName').value = name;
+      if (input.readOnly) localStorage.setItem(id, input.value);
+      else input.focus();
     }
 
     function changeCount(delta) {
       const field = document.getElementById('targetCount');
-      let value = parseInt(field.value) + delta;
-      if (value <= 1) {
-        value = 1;
+      let val = parseInt(field.value) + delta;
+      if (val <= 1) {
+        val = 1;
         document.getElementById('minusBtn').disabled = true;
       } else {
         document.getElementById('minusBtn').disabled = false;
       }
-      field.value = value;
+      field.value = val;
+    }
+
+    function toggleNumberField() {
+      const field = document.getElementById('targetNumber');
+      const noNumber = document.getElementById('noNumber').checked;
+      field.readOnly = noNumber;
+      if (noNumber) field.value = '';
+    }
+
+    function loadStored() {
+      ['sector', 'position', 'location'].forEach(id => {
+        const v = localStorage.getItem(id);
+        if (v) document.getElementById(id).value = v;
+      });
     }
 
     let sensors = {
-      azimuth: { active: false, heading: 0 },
-      course: { active: false, heading: 0 }
+      azimuth: { active: false, heading: 0, handler: null },
+      course: { active: false, heading: 0, handler: null }
     };
 
     function toggleSensor(type) {
-      const btn = document.getElementById(type + "Btn");
       const field = document.getElementById(type);
+      const btn = document.getElementById(type + 'Btn');
 
       if (!sensors[type].active) {
-        requestPermission().then(granted => {
-          if (granted) {
-            window.addEventListener("deviceorientation", sensors[type].handler = event => {
-              let heading = event.webkitCompassHeading !== undefined
-                ? Math.round(event.webkitCompassHeading)
-                : (event.absolute && event.alpha != null)
-                  ? Math.round(360 - event.alpha)
-                  : null;
-              if (heading != null) {
-                sensors[type].heading = heading % 360;
-                field.value = sensors[type].heading;
-              }
-            }, true);
-            btn.textContent = "зберегти";
-            sensors[type].active = true;
+        window.addEventListener("deviceorientation", sensors[type].handler = function(event) {
+          let heading = null;
+          const dbg = document.getElementById("debug");
+          let alpha = event.alpha != null ? event.alpha.toFixed(2) : "null";
+          let absolute = event.absolute != null ? event.absolute : "н/д";
+          let wch = event.webkitCompassHeading !== undefined ? event.webkitCompassHeading.toFixed(2) : "н/д";
+
+          if (event.webkitCompassHeading !== undefined) {
+            heading = Math.round(event.webkitCompassHeading);
+          } else if (event.absolute === true && event.alpha != null) {
+            heading = Math.round(360 - event.alpha);
+          } else if (event.alpha != null) {
+            heading = Math.round(360 - event.alpha);
+            dbg.innerHTML = `⚠️ fallback (alpha=${alpha}) → ${heading}° | absolute=${absolute} | wch=${wch}`;
           }
-        });
+
+          if (heading != null) {
+            sensors[type].heading = heading % 360;
+            field.value = sensors[type].heading;
+          }
+        }, true);
+        btn.textContent = "зберегти";
+        sensors[type].active = true;
       } else {
         window.removeEventListener("deviceorientation", sensors[type].handler, true);
         field.value = sensors[type].heading;
-        btn.textContent = type === 'azimuth' ? "визначити азимут" : "визначити Курс";
+        btn.textContent = type === "azimuth" ? "визначити азимут" : "визначити Курс";
         sensors[type].active = false;
       }
     }
 
-    async function requestPermission() {
-      if (typeof DeviceOrientationEvent?.requestPermission === "function") {
-        try {
-          return await DeviceOrientationEvent.requestPermission() === "granted";
-        } catch {
-          alert("Доступ до компаса відхилено.");
-          return false;
-        }
-      }
-      return true;
-    }
-
     window.onload = () => {
-      loadStoredFields();
+      loadStored();
       toggleNumberField();
     };
   </script>
-  <div class="group">
-  <label>🧪 Тест компаса (в реальному часі):</label>
-  <div id="sensorDebug" style="font-family: monospace; background: #fff; padding: 0.5rem; border: 1px solid #ccc;"></div>
-</div>
-
-<script>
-  window.addEventListener("deviceorientation", (event) => {
-    const debugEl = document.getElementById("sensorDebug");
-    const alpha = event.alpha !== null ? event.alpha.toFixed(2) : "null";
-    const webkit = event.webkitCompassHeading !== undefined ? event.webkitCompassHeading.toFixed(2) : "н/д";
-    const absolute = event.absolute !== undefined ? event.absolute : "н/д";
-
-    debugEl.innerHTML = `
-      alpha (обертання): <b>${alpha}</b><br>
-      webkitCompassHeading: <b>${webkit}</b><br>
-      absolute: <b>${absolute}</b><br>
-    `;
-  }, true);
-</script>
-
 </body>
 </html>
+
