@@ -154,6 +154,12 @@
     <label>🧪 Діагностика компаса</label>
     <div id="debug">Очікування даних...</div>
   </div>
+    <div class="group">
+    <label>Відправка</label>
+    <a id="signalLink" onclick="generateSignalMessage()" style="text-decoration: none;">
+      <button>Надіслати в Signal</button>
+    </a>
+  </div>
     <script>
     function toggleLock(id) {
       const input = document.getElementById(id);
@@ -269,6 +275,28 @@
       toggleNumberField();
       setNowTime();  // 🆕
     };
+    function generateSignalMessage() {
+  const text = `
+📌 АкВіз:
+Підпорядкування: ${document.getElementById('sector').value}
+Позиція: ${document.getElementById('position').value}
+Населений пункт: ${document.getElementById('location').value}
+Тип цілі: ${document.querySelector('input[name="target"]:checked')?.value || "-"}
+Сторона: ${document.querySelector('input[name="side"]:checked')?.value || "-"}
+Номер цілі: ${document.getElementById('targetNumber').value}
+Назва: ${document.getElementById('targetName').value}
+Кількість: ${document.getElementById('targetCount').value}
+Азимут: ${document.getElementById('azimuth').value}°
+Курс: ${document.getElementById('course').value}°
+Відстань: ${document.getElementById('distance').value} м
+Висота: ${document.getElementById('height').value} м
+Час: ${document.getElementById('time').value}
+Результат: ${document.querySelector('input[name="result"]:checked')?.value || "-"}
+  `.trim();
+
+  const url = "sgnl://send?text=" + encodeURIComponent(text);
+  document.getElementById("signalLink").setAttribute("href", url);
+}
   </script>
   </body>
 </html>
