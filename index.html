@@ -268,13 +268,6 @@
       detect4.disabled = !detect3.checked;
       if (!detect3.checked) detect4.checked = false;
     }
-
-    // автоматично встановлює час при завантаженні
-    window.onload = () => {
-      loadStored();
-      toggleNumberField();
-      setNowTime();  // 🆕
-    };
     function generateSignalMessage() {
   const text = `
 📌 АкВіз:
@@ -297,6 +290,12 @@
   const url = "sgnl://send?text=" + encodeURIComponent(text);
   document.getElementById("signalLink").setAttribute("href", url);
 }
+// автоматично встановлює час при завантаженні
+    window.onload = () => {
+      loadStored();
+      toggleNumberField();
+      setNowTime();  // 🆕
+    };
   </script>
   </body>
 </html>
