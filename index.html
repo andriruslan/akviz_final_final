@@ -118,7 +118,38 @@
       <button onclick="adjustValue('height', -500)">-500 м</button>
     </div>
   </div>
+    <!-- 🆕 ПОЛЯ 15–17 -->
 
+  <!-- 15. Поле "Час" -->
+  <div class="group">
+    <label>Час (HH:MM)</label>
+    <input type="time" id="time" required>
+    <div class="inline-buttons">
+      <button onclick="setNowTime()">Щойно</button>
+      <button onclick="adjustTime(1)">+1 хв.</button>
+      <button onclick="adjustTime(-1)">-1 хв.</button>
+    </div>
+  </div>
+
+  <!-- 16. Поле "Вияв" -->
+  <div class="group">
+    <label>Вияв</label>
+    <div class="radio-group">
+      <label><input type="checkbox" id="detect1"> Акустично</label>
+      <label><input type="checkbox" id="detect2"> Радіолокаційно</label>
+      <label><input type="checkbox" id="detect3" onchange="checkDetect()"> Візуально</label>
+      <label><input type="checkbox" id="detect4" disabled> Із застосуванням приладів</label>
+    </div>
+  </div>
+  <!-- 17. Поле "Результат" -->
+  <div class="group">
+    <label>Результат</label>
+    <div class="radio-group">
+      <label><input type="radio" name="result" value="Виявлено"> Виявлено</label>
+      <label><input type="radio" name="result" value="Обстріляно"> Обстріляно</label>
+      <label><input type="radio" name="result" value="Уражено"> Уражено</label>
+    </div>
+  </div>
   <div class="group">
     <label>🧪 Діагностика компаса</label>
     <div id="debug">Очікування даних...</div>
@@ -206,9 +237,37 @@
       }
     }
 
+        function setNowTime() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById("time").value = `${hh}:${mm}`;
+    }
+
+    function adjustTime(deltaMinutes) {
+      const field = document.getElementById("time");
+      if (!field.value) return setNowTime();
+      const [hh, mm] = field.value.split(":").map(Number);
+      const d = new Date();
+      d.setHours(hh);
+      d.setMinutes(mm + deltaMinutes);
+      const newHH = String(d.getHours()).padStart(2, '0');
+      const newMM = String(d.getMinutes()).padStart(2, '0');
+      field.value = `${newHH}:${newMM}`;
+    }
+
+    function checkDetect() {
+      const detect3 = document.getElementById("detect3");
+      const detect4 = document.getElementById("detect4");
+      detect4.disabled = !detect3.checked;
+      if (!detect3.checked) detect4.checked = false;
+    }
+
+    // автоматично встановлює час при завантаженні
     window.onload = () => {
       loadStored();
       toggleNumberField();
+      setNowTime();  // 🆕
     };
   </script>
   </body>
