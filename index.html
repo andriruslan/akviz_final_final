@@ -10,7 +10,7 @@
     .version { font-size: 0.9rem; color: #555; margin-bottom: 1rem; }
     .group { margin-bottom: 1rem; }
     label { display: block; margin-bottom: 0.3rem; }
-    input[type=text], input[type=number] {
+    input[type=text], input[type=number], input[type=time] {
       width: 100%; padding: 0.5rem; font-size: 1rem;
     }
     input[readonly] { background-color: #eaeaea; }
@@ -38,7 +38,7 @@
     <div class="group">
     <label>Тип цілі</label>
     <div class="radio-group">
-      <label><input type="radio" name="target" value="БПЛА літакового типу"> 121212БПЛА літакового типу</label>
+      <label><input type="radio" name="target" value="БПЛА літакового типу"> БПЛА літакового типу</label>
       <label><input type="radio" name="target" value="Постріли (ЗУ, кулемет)"> Постріли (ЗУ, кулемет)</label>
       <label><input type="radio" name="target" value="Виходи (ПЗРК, ЗРК)"> Виходи (ПЗРК, ЗРК)</label>
       <label><input type="radio" name="target" value="Вибух КР"> Вибух КР</label>
@@ -118,9 +118,7 @@
       <button onclick="adjustValue('height', -500)">-500 м</button>
     </div>
   </div>
-    <!-- 🆕 ПОЛЯ 15–17 -->
-
-  <!-- 15. Поле "Час" -->
+    <!-- 15. Час -->
   <div class="group">
     <label>Час (HH:MM)</label>
     <input type="time" id="time" required>
@@ -131,7 +129,7 @@
     </div>
   </div>
 
-  <!-- 16. Поле "Вияв" -->
+  <!-- 16. Вияв -->
   <div class="group">
     <label>Вияв</label>
     <div class="radio-group">
@@ -141,7 +139,8 @@
       <label><input type="checkbox" id="detect4" disabled> Із застосуванням приладів</label>
     </div>
   </div>
-  <!-- 17. Поле "Результат" -->
+
+  <!-- 17. Результат -->
   <div class="group">
     <label>Результат</label>
     <div class="radio-group">
@@ -150,17 +149,21 @@
       <label><input type="radio" name="result" value="Уражено"> Уражено</label>
     </div>
   </div>
+
+  <!-- Діагностика компаса -->
   <div class="group">
     <label>🧪 Діагностика компаса</label>
     <div id="debug">Очікування даних...</div>
   </div>
-    <div class="group">
+    <!-- Надіслати в Signal -->
+  <div class="group">
     <label>Відправка</label>
     <a id="signalLink" onclick="generateSignalMessage()" style="text-decoration: none;">
       <button>Надіслати в Signal</button>
     </a>
   </div>
-    <script>
+
+  <script>
     function toggleLock(id) {
       const input = document.getElementById(id);
       input.readOnly = !input.readOnly;
@@ -193,6 +196,55 @@
       val += delta;
       if (val < 0) val = 0;
       field.value = val;
+    }
+
+    function setNowTime() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById("time").value = `${hh}:${mm}`;
+    }
+
+    function adjustTime(deltaMinutes) {
+      const field = document.getElementById("time");
+      if (!field.value) return setNowTime();
+      const [hh, mm] = field.value.split(":").map(Number);
+      const d = new Date();
+      d.setHours(hh);
+      d.setMinutes(mm + deltaMinutes);
+      const newHH = String(d.getHours()).padStart(2, '0');
+      const newMM = String(d.getMinutes()).padStart(2, '0');
+      field.value = `${newHH}:${newMM}`;
+    }
+
+    function checkDetect() {
+      const detect3 = document.getElementById("detect3");
+      const detect4 = document.getElementById("detect4");
+      detect4.disabled = !detect3.checked;
+      if (!detect3.checked) detect4.checked = false;
+    }
+
+    function generateSignalMessage() {
+      const text = `
+📌 АкВіз:
+Підпорядкування: ${document.getElementById('sector').value}
+Позиція: ${document.getElementById('position').value}
+Населений пункт: ${document.getElementById('location').value}
+Тип цілі: ${document.querySelector('input[name="target"]:checked')?.value || "-"}
+Сторона: ${document.querySelector('input[name="side"]:checked')?.value || "-"}
+Номер цілі: ${document.getElementById('targetNumber').value}
+Назва: ${document.getElementById('targetName').value}
+Кількість: ${document.getElementById('targetCount').value}
+Азимут: ${document.getElementById('azimuth').value}°
+Курс: ${document.getElementById('course').value}°
+Відстань: ${document.getElementById('distance').value} м
+Висота: ${document.getElementById('height').value} м
+Час: ${document.getElementById('time').value}
+Результат: ${document.querySelector('input[name="result"]:checked')?.value || "-"}
+      `.trim();
+
+      const url = "sgnl://send?text=" + encodeURIComponent(text);
+      document.getElementById("signalLink").setAttribute("href", url);
     }
 
     function loadStored() {
@@ -243,59 +295,11 @@
       }
     }
 
-        function setNowTime() {
-      const now = new Date();
-      const hh = String(now.getHours()).padStart(2, '0');
-      const mm = String(now.getMinutes()).padStart(2, '0');
-      document.getElementById("time").value = `${hh}:${mm}`;
-    }
-
-    function adjustTime(deltaMinutes) {
-      const field = document.getElementById("time");
-      if (!field.value) return setNowTime();
-      const [hh, mm] = field.value.split(":").map(Number);
-      const d = new Date();
-      d.setHours(hh);
-      d.setMinutes(mm + deltaMinutes);
-      const newHH = String(d.getHours()).padStart(2, '0');
-      const newMM = String(d.getMinutes()).padStart(2, '0');
-      field.value = `${newHH}:${newMM}`;
-    }
-
-    function checkDetect() {
-      const detect3 = document.getElementById("detect3");
-      const detect4 = document.getElementById("detect4");
-      detect4.disabled = !detect3.checked;
-      if (!detect3.checked) detect4.checked = false;
-    }
-    function generateSignalMessage() {
-  const text = `
-📌 АкВіз:
-Підпорядкування: ${document.getElementById('sector').value}
-Позиція: ${document.getElementById('position').value}
-Населений пункт: ${document.getElementById('location').value}
-Тип цілі: ${document.querySelector('input[name="target"]:checked')?.value || "-"}
-Сторона: ${document.querySelector('input[name="side"]:checked')?.value || "-"}
-Номер цілі: ${document.getElementById('targetNumber').value}
-Назва: ${document.getElementById('targetName').value}
-Кількість: ${document.getElementById('targetCount').value}
-Азимут: ${document.getElementById('azimuth').value}°
-Курс: ${document.getElementById('course').value}°
-Відстань: ${document.getElementById('distance').value} м
-Висота: ${document.getElementById('height').value} м
-Час: ${document.getElementById('time').value}
-Результат: ${document.querySelector('input[name="result"]:checked')?.value || "-"}
-  `.trim();
-
-  const url = "sgnl://send?text=" + encodeURIComponent(text);
-  document.getElementById("signalLink").setAttribute("href", url);
-}
-// автоматично встановлює час при завантаженні
     window.onload = () => {
       loadStored();
       toggleNumberField();
-      setNowTime();  // 🆕
+      setNowTime();
     };
   </script>
-  </body>
+    </body>
 </html>
