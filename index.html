@@ -123,3 +123,93 @@
     <label>🧪 Діагностика компаса</label>
     <div id="debug">Очікування даних...</div>
   </div>
+  <script>
+    function toggleLock(id) {
+      const input = document.getElementById(id);
+      input.readOnly = !input.readOnly;
+      if (input.readOnly) localStorage.setItem(id, input.value);
+      else input.focus();
+    }
+
+    function changeCount(delta) {
+      const field = document.getElementById('targetCount');
+      let val = parseInt(field.value) + delta;
+      if (val <= 1) {
+        val = 1;
+        document.getElementById('minusBtn').disabled = true;
+      } else {
+        document.getElementById('minusBtn').disabled = false;
+      }
+      field.value = val;
+    }
+
+    function toggleNumberField() {
+      const field = document.getElementById('targetNumber');
+      const noNumber = document.getElementById('noNumber').checked;
+      field.readOnly = noNumber;
+      if (noNumber) field.value = '';
+    }
+
+    function adjustValue(id, delta) {
+      const field = document.getElementById(id);
+      let val = parseInt(field.value) || 0;
+      val += delta;
+      if (val < 0) val = 0;
+      field.value = val;
+    }
+
+    function loadStored() {
+      ['sector', 'position', 'location'].forEach(id => {
+        const v = localStorage.getItem(id);
+        if (v) document.getElementById(id).value = v;
+      });
+    }
+
+    let sensors = {
+      azimuth: { active: false, heading: 0, handler: null },
+      course: { active: false, heading: 0, handler: null }
+    };
+
+    function toggleSensor(type) {
+      const field = document.getElementById(type);
+      const btn = document.getElementById(type + 'Btn');
+
+      if (!sensors[type].active) {
+        window.addEventListener("deviceorientation", sensors[type].handler = function(event) {
+          let heading = null;
+          const dbg = document.getElementById("debug");
+          let alpha = event.alpha != null ? event.alpha.toFixed(2) : "null";
+          let absolute = event.absolute != null ? event.absolute : "н/д";
+          let wch = event.webkitCompassHeading !== undefined ? event.webkitCompassHeading.toFixed(2) : "н/д";
+
+          if (event.webkitCompassHeading !== undefined) {
+            heading = Math.round(event.webkitCompassHeading);
+          } else if (event.absolute === true && event.alpha != null) {
+            heading = Math.round(360 - event.alpha);
+          } else if (event.alpha != null) {
+            heading = Math.round(360 - event.alpha);
+            dbg.innerHTML = `⚠️ fallback (alpha=${alpha}) → ${heading}° | absolute=${absolute} | wch=${wch}`;
+          }
+
+          if (heading != null) {
+            sensors[type].heading = heading % 360;
+            field.value = sensors[type].heading;
+          }
+        }, true);
+        btn.textContent = "зберегти";
+        sensors[type].active = true;
+      } else {
+        window.removeEventListener("deviceorientation", sensors[type].handler, true);
+        field.value = sensors[type].heading;
+        btn.textContent = type === "azimuth" ? "визначити азимут" : "визначити Курс";
+        sensors[type].active = false;
+      }
+    }
+
+    window.onload = () => {
+      loadStored();
+      toggleNumberField();
+    };
+  </script>
+</body>
+</html>
