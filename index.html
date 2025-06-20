@@ -23,7 +23,7 @@
     .lock-button {
       background: none; border: none; font-size: 1.3rem; cursor: pointer;
     }
-    .inline-buttons { display: flex; gap: 0.5rem; align-items: center; }
+    .inline-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
     .radio-group { display: flex; flex-direction: column; gap: 0.3rem; }
     #debug { font-family: monospace; font-size: 0.9rem; color: #666; }
   </style>
@@ -35,7 +35,7 @@
   <div class="group"><label>Підпорядкування (*)</label><div class="inline-buttons"><input id="sector" type="text" readonly><button class="lock-button" onclick="toggleLock('sector')">🔒</button></div></div>
   <div class="group"><label>Позиція (*)</label><div class="inline-buttons"><input id="position" type="text" readonly><button class="lock-button" onclick="toggleLock('position')">🔒</button></div></div>
   <div class="group"><label>Населений пункт (*)</label><div class="inline-buttons"><input id="location" type="text" readonly><button class="lock-button" onclick="toggleLock('location')">🔒</button></div></div>
-  <div class="group">
+    <div class="group">
     <label>Тип цілі</label>
     <div class="radio-group">
       <label><input type="radio" name="target" value="БПЛА літакового типу"> БПЛА літакового типу</label>
@@ -83,7 +83,7 @@
       <button id="minusBtn" onclick="changeCount(-1)" disabled>-1 од.</button>
     </div>
   </div>
-  <div class="group">
+    <div class="group">
     <label>Азимут, ° (*)</label>
     <input type="number" id="azimuth" placeholder="Введіть або визначте">
     <button id="azimuthBtn" onclick="toggleSensor('azimuth')">визначити азимут</button>
@@ -115,7 +115,7 @@
       <button onclick="adjustValue('height', 100)">+100 м</button>
       <button onclick="adjustValue('height', 500)">+500 м</button>
       <button onclick="adjustValue('height', -100)">-100 м</button>
-      <button onclick="adjustValue('height', -1000)">-1000 м</button>
+      <button onclick="adjustValue('height', -500)">-500 м</button>
     </div>
   </div>
 
@@ -123,7 +123,7 @@
     <label>🧪 Діагностика компаса</label>
     <div id="debug">Очікування даних...</div>
   </div>
-  <script>
+    <script>
     function toggleLock(id) {
       const input = document.getElementById(id);
       input.readOnly = !input.readOnly;
@@ -211,5 +211,5 @@
       toggleNumberField();
     };
   </script>
-</body>
+  </body>
 </html>
