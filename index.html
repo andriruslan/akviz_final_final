@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>АкВіз_КАГАРЛИК</title>
   <style>
     body { font-family: sans-serif; padding: 1rem; background: #f2f2f2; }
@@ -10,7 +10,7 @@
     .version { font-size: 0.9rem; color: #555; margin-bottom: 1rem; }
     .group { margin-bottom: 1rem; }
     label { display: block; margin-bottom: 0.3rem; }
-    input[type=text], input[type=number], input[type=time], textarea {
+    input[type=text], input[type=number], input[type=time] {
       width: 100%; padding: 0.5rem; font-size: 1rem;
     }
     input[readonly] { background-color: #eaeaea; }
@@ -59,15 +59,14 @@
       <label><input type="radio" name="target" value="БПЛА літакового типу"> БПЛА літакового типу</label>
       <label><input type="radio" name="target" value="Постріли (ЗУ, кулемет)"> Постріли (ЗУ, кулемет)</label>
       <label><input type="radio" name="target" value="Виходи (ПЗРК, ЗРК)"> Виходи (ПЗРК, ЗРК)</label>
-      <label><input type="radio" name="target" value="Вибух"> Вибух</label>
-      <label><input type="radio" name="target" value="КР (Крилата ракета)"> КР (Крилата ракета)</label>
-      <label><input type="radio" name="target" value="Г (Гелікоптер)"> Г (Гелікоптер)</label>
-      <label><input type="radio" name="target" value="ЛМ (Літак малий)"> ЛМ (Літак малий)</label>
-      <label><input type="radio" name="target" value="ЛВ (Літак великий)"> ЛВ (Літак великий)</label>
-      <label><input type="radio" name="target" value="Літак великий"> Літак великий</label>
-      <label><input type="radio" name="target" value="К (Квадрокоптер)"> К (Квадрокоптер)</label>
-      <label><input type="radio" name="target" value="З (Зонд)"> З (Зонд)</label>
-      <label><input type="radio" name="target" value="Інше (деталі в описі)"> Інше (деталі в описі)</label>
+      <label><input type="radio" name="target" value="Вибух КР"> Вибух КР</label>
+      <label><input type="radio" name="target" value="Гелікоптер"> Гелікоптер</label>
+      <label><input type="radio" name="target" value="Літак (малий)"> Літак (малий)</label>
+      <label><input type="radio" name="target" value="Літак (великий)"> Літак (великий)</label>
+      <label><input type="radio" name="target" value="Зонд"> Зонд</label>
+      <label><input type="radio" name="target" value="Невстановлене"> Невстановлене</label>
+      <label><input type="radio" name="target" value="Інше"> Інше</label>
+      <label><input type="radio" name="target" value="Аеростат"> Аеростат</label>
     </div>
   </div>
 
@@ -100,6 +99,14 @@
       <input type="number" id="targetCount" value="1" readonly>
       <button onclick="changeCount(1)">+1 од.</button>
       <button id="minusBtn" onclick="changeCount(-1)" disabled>-1 од.</button>
+    </div>
+  </div>
+
+  <div class="group">
+    <label>Азимут, ° (*)</label>
+    <input type="number" id="azimuth" placeholder="Введіть або визначте">
+    <div class="inline-buttons">
+      <button id="azimuthBtn" onclick="toggleAzimuth()">визначити азимут</button>
     </div>
   </div>
 
@@ -144,6 +151,46 @@
         document.getElementById('minusBtn').disabled = false;
       }
       field.value = value;
+    }
+
+    let azimuthListening = false;
+    let currentAzimuth = 0;
+
+    function toggleAzimuth() {
+      const btn = document.getElementById("azimuthBtn");
+      const field = document.getElementById("azimuth");
+
+      if (!azimuthListening) {
+        if (typeof DeviceOrientationEvent?.requestPermission === "function") {
+          DeviceOrientationEvent.requestPermission().then(state => {
+            if (state === "granted") {
+              window.addEventListener("deviceorientation", handleOrientation);
+              btn.textContent = "зберегти";
+              azimuthListening = true;
+            } else {
+              alert("Доступ до компаса відхилено.");
+            }
+          }).catch(console.error);
+        } else {
+          window.addEventListener("deviceorientation", handleOrientation);
+          btn.textContent = "зберегти";
+          azimuthListening = true;
+        }
+      } else {
+        window.removeEventListener("deviceorientation", handleOrientation);
+        field.value = currentAzimuth;
+        btn.textContent = "визначити азимут";
+        azimuthListening = false;
+      }
+    }
+
+    function handleOrientation(event) {
+      const alpha = event.alpha;
+      if (alpha !== null) {
+        const value = Math.round(alpha);
+        currentAzimuth = value;
+        document.getElementById("azimuth").value = value;
+      }
     }
 
     window.onload = () => {
