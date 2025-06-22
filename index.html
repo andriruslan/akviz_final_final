@@ -737,6 +737,37 @@ function attachListeners() {
   if (val < 0) val = 0;
   field.value = val;
 }
+function attachReportUpdateListeners() {
+  // Всі поля input, textarea, select
+  const inputs = document.querySelectorAll("input, textarea, select");
+
+  inputs.forEach(el => {
+    // Для текстових полів - input
+    el.addEventListener("input", updatePreview);
+    // Для чекбоксів і радіокнопок - change
+    if (el.type === "checkbox" || el.type === "radio") {
+      el.addEventListener("change", updatePreview);
+    }
+  });
+}
+
+function updatePreview() {
+  document.getElementById("preview").textContent = generateReportText();
+}
+
+// Віконний onload або ініціалізація
+window.onload = () => {
+  loadStored();
+  toggleNumberField();
+  setNowTime();
+  updateAmmoVisibility();
+  checkDetect();
+
+  attachReportUpdateListeners();  // Підключаємо події оновлення звіту
+
+  // Виводимо початковий звіт
+  updatePreview();
+};
 
 
 window.onload = () => {
