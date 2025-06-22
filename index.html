@@ -298,9 +298,8 @@
       <label>Назва</label>
       <input type="text" id="targetName" placeholder="наприклад, Shahed-136">
       <div class="inline-buttons">
-<button class="red-button" onclick="document.getElementById('targetName').value='Shahed-136'">Shahed-136</button>
-<button class="red-button" onclick="document.getElementById('targetName').value='Гербера'">Гербера</button>
-
+<button onclick="setTargetNameAndUpdate('Shahed-136')">Shahed-136</button>
+<button onclick="setTargetNameAndUpdate('Гербера')">Гербера</button>
       </div>
     </div>
 
@@ -784,7 +783,11 @@ function attachReportUpdateListeners() {
 
   updatePreview(); // Оновити звіт при зміні через кнопки
 }
-
+function setTargetNameAndUpdate(name) {
+  const targetNameInput = document.getElementById('targetName');
+  targetNameInput.value = name;
+  updatePreview();  // Оновлюємо міні-звіт
+}
 
 window.onload = () => {
   loadStored();
