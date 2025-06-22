@@ -606,6 +606,34 @@
       document.getElementById('debug').textContent = `Визначення ${currentField}: ${heading}°`;
     }
   }
+  function updatePreview() {
+  const preview = document.getElementById('preview');
+  preview.textContent = generateReportText();
+}
+
+function attachListeners() {
+  const inputs = document.querySelectorAll('input, textarea');
+  inputs.forEach(input => {
+    input.addEventListener('input', updatePreview);
+    input.addEventListener('change', updatePreview);
+  });
+  const radiosAndCheckboxes = document.querySelectorAll('input[type=radio], input[type=checkbox]');
+  radiosAndCheckboxes.forEach(el => {
+    el.addEventListener('change', updatePreview);
+  });
+}
+
+window.onload = () => {
+  loadStored();
+  toggleNumberField();
+  setNowTime();
+  updateAmmoVisibility();
+  checkDetect();
+  changeCount(0);
+  attachListeners();
+  updatePreview();
+};
+
 
   // --- Ініціалізація сторінки ---
   window.onload = () => {
