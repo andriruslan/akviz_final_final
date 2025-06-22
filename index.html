@@ -171,38 +171,36 @@
   </div>
 
   <!-- 18. Розхід БК -->
-<div class="group" id="ammoBlock" style="display:none;">
+<div class="group" id="ammoBlock" style="display: none;">
   <label>Розхід БК</label>
   <div class="radio-group">
     <div>
       <label>
-        <input type="checkbox" onchange="toggleAmmo('ak')"> АК-74 - 5.45
+        <input type="checkbox" id="chk_ak" onchange="toggleAmmoInput('chk_ak', 'ak_input')"> АК-74 - 5.45
       </label>
-      <input type="number" id="ak" placeholder="Кількість" style="display:none;" inputmode="numeric">
+      <input type="number" id="ak_input" placeholder="Кількість" style="display:none;" inputmode="numeric">
     </div>
-
     <div>
       <label>
-        <input type="checkbox" onchange="toggleAmmo('canik')"> CANiK M2
+        <input type="checkbox" id="chk_canik" onchange="toggleAmmoInput('chk_canik', 'canik_input')"> CANiK M2
       </label>
-      <input type="number" id="canik" placeholder="Кількість" style="display:none;" inputmode="numeric">
+      <input type="number" id="canik_input" placeholder="Кількість" style="display:none;" inputmode="numeric">
     </div>
-
     <div>
       <label>
-        <input type="checkbox" onchange="toggleAmmo('dp')"> ДП-27 7.62
+        <input type="checkbox" id="chk_dp" onchange="toggleAmmoInput('chk_dp', 'dp_input')"> ДП-27 7.62
       </label>
-      <input type="number" id="dp" placeholder="Кількість" style="display:none;" inputmode="numeric">
+      <input type="number" id="dp_input" placeholder="Кількість" style="display:none;" inputmode="numeric">
     </div>
-
     <div>
       <label>
-        <input type="checkbox" onchange="toggleAmmo('other')"> Інше
+        <input type="checkbox" id="chk_other" onchange="toggleAmmoInput('chk_other', 'other_input')"> Інше
       </label>
-      <input type="number" id="other" placeholder="Кількість" style="display:none;" inputmode="numeric">
+      <input type="number" id="other_input" placeholder="Кількість" style="display:none;" inputmode="numeric">
     </div>
   </div>
 </div>
+
 
 
   <!-- 19. Опис -->
@@ -307,6 +305,7 @@
     document.querySelectorAll('input[name="result"]').forEach(el => {
       el.addEventListener("change", updateAmmoVisibility);
     });
+    
     function toggleAmmo(id) {
   const field = document.getElementById(id);
   field.style.display = document.getElementById(id).previousElementSibling.querySelector('input[type="checkbox"]').checked
@@ -399,6 +398,17 @@
     function checkedBox(id) {
       return document.getElementById(id)?.checked;
     }
+function toggleAmmoInput(checkboxId, inputId) {
+  const checkbox = document.getElementById(checkboxId);
+  const input = document.getElementById(inputId);
+  if (checkbox.checked) {
+    input.style.display = "inline-block";
+    input.focus();
+  } else {
+    input.style.display = "none";
+    input.value = "";
+  }
+}
 
     function generateReportText() {
       const P = `${val('sector')}, ${val('position')}`;
