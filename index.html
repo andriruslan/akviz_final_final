@@ -473,12 +473,13 @@ function sendToSignal() {
   const text = generateReportText();
   navigator.clipboard.writeText(text).then(() => {
     document.getElementById("preview").textContent = text;
-    // Відкриваємо Signal через URL-схему
-    window.location.href = "sgnl://";
+    // Відкриваємо Signal з посиланням на групу
+    window.location.href = "sgnl://group?uuid=https://signal.group/#CjQKIH0PvBY6xxC1HtXQxPnctVdzlcLGP6K1BXXufe0VP2t2EhCwZSh26T1IwbEIeoLXezKw";
   }).catch(err => {
     alert("Не вдалося скопіювати звіт у буфер: " + err);
   });
 }
+
 
   setInterval(() => {
     document.getElementById("preview").textContent = generateReportText();
