@@ -430,14 +430,28 @@ function toggleAmmoInput(checkboxId, inputId) {
       if (checkedBox("detect3")) Вияв.push("Візуально");
       if (checkedBox("detect4")) Вияв.push("Прилад");
 
-      let Опис = "";
-      ["ak", "canik", "dp", "other"].forEach(id => {
-        const checkbox = document.getElementById(id)?.previousElementSibling;
-        const value = document.getElementById(id)?.value;
-        if (checkbox?.checked && value) {
-          Опис += `${checkbox.value}: ${value}, `;
-        }
-      });
+      let ОписЧастини = [];
+
+[
+  ["chk_ak", "ak_input", "АК-74 - 5.45"],
+  ["chk_canik", "canik_input", "CANiK M2"],
+  ["chk_dp", "dp_input", "ДП-27 7.62"],
+  ["chk_other", "other_input", "Інше"]
+].forEach(([chkId, inputId, label]) => {
+  const chk = document.getElementById(chkId);
+  const val = document.getElementById(inputId)?.value;
+  if (chk?.checked && val) {
+    ОписЧастини.push(`${label}: ${val}`);
+  }
+});
+
+if (checkedBox("desc1")) ОписЧастини.push("змінила звук");
+if (checkedBox("desc2")) ОписЧастини.push("змінила курс");
+
+const допис = document.getElementById("descText")?.value;
+if (допис) ОписЧастини.push(допис);
+
+let Опис = ОписЧастини.length > 0 ? `Опис: ${ОписЧастини.join(", ")}` : "";
 
       if (checkedBox("desc1")) Опис += "змінила звук, ";
       if (checkedBox("desc2")) Опис += "змінила курс, ";
@@ -456,7 +470,7 @@ function toggleAmmoInput(checkboxId, inputId) {
 Ч: ${Ч}
 Вияв: ${Вияв.join(", ")}
 ПП: Виявлено
-Опис: ${Опис.trim().replace(/,\s*$/, "")}
+${Опис}
 `.trim();
     }
 
