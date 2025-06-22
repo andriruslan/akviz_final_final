@@ -304,15 +304,15 @@
       </div>
     </div>
 
-    <div class="group">
-      <label>Кількість, од</label>
-      <div class="inline-buttons">
-  <input type="number" id="targetCount" value="1" readonly>
-  <button class="plus-button" onclick="changeCount(1)">+1 од.</button>
-  <button id="minusBtn" class="minus-button" onclick="changeCount(-1)" disabled>-1 од.</button>
+   <!-- Кількість, од -->
+<div class="group">
+  <label>Кількість, од</label>
+  <div class="inline-buttons">
+    <input type="number" id="targetCount" value="1" readonly>
+    <button class="plus-button" onclick="changeCount(1)">+1 од.</button>
+    <button class="minus-button" id="minusBtn" onclick="changeCount(-1)" disabled>-1 од.</button>
+  </div>
 </div>
-
-    </div>
 
     <!-- 11. Азимут -->
     <div class="group">
@@ -343,18 +343,18 @@
 </div>
 
 
-    <!-- 14. Висота, м -->
-    <div class="group">
-      <label>Висота, м</label>
-      <input type="number" id="height" placeholder="висота над рівнем" min="0" step="1">
-    <div class="inline-buttons">
-  <button class="plus-button" onclick="adjustValue('height', 100)">+100 м</button>
-  <button class="plus-button" onclick="adjustValue('height', 500)">+500 м</button>
-  <button class="minus-button" onclick="adjustValue('height', -100)">-100 м</button>
-  <button class="minus-button" onclick="adjustValue('height', -500)">-500 м</button>
+   <!-- 14. Висота, м -->
+<div class="group">
+  <label>Висота, м</label>
+  <input type="number" id="height" placeholder="висота в метрах">
+  <div class="inline-buttons">
+    <button class="plus-button" onclick="adjustValue('height', 100)">+100 м</button>
+    <button class="plus-button" onclick="adjustValue('height', 500)">+500 м</button>
+    <button class="minus-button" onclick="adjustValue('height', -100)">-100 м</button>
+    <button class="minus-button" onclick="adjustValue('height', -500)">-500 м</button>
+  </div>
 </div>
 
-    </div>
 
     <!-- 15. Час -->
     <div class="group">
@@ -461,13 +461,18 @@
   }
 
   // --- Зміна кількості цілей ---
-  function changeCount(delta) {
-    const input = document.getElementById('targetCount');
-    let val = Number(input.value) + delta;
-    if (val < 1) val = 1;
-    input.value = val;
-    document.getElementById('minusBtn').disabled = (val <= 1);
+ function changeCount(delta) {
+  const field = document.getElementById('targetCount');
+  let val = parseInt(field.value) + delta;
+  if (val <= 1) {
+    val = 1;
+    document.getElementById('minusBtn').disabled = true;
+  } else {
+    document.getElementById('minusBtn').disabled = false;
   }
+  field.value = val;
+}
+
 
   // --- Вмикання/вимикання поля номер цілі ---
   function toggleNumberField() {
