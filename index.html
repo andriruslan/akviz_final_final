@@ -730,6 +730,14 @@ function attachListeners() {
     el.addEventListener('change', updatePreview);
   });
 }
+  function adjustValue(id, delta) {
+  const field = document.getElementById(id);
+  let val = parseInt(field.value) || 0;
+  val += delta;
+  if (val < 0) val = 0;
+  field.value = val;
+}
+
 
 window.onload = () => {
   loadStored();
