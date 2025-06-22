@@ -187,6 +187,53 @@
 .minus-button:hover {
   background-color: #b71c1c;
 }
+.inline-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.inline-buttons input {
+  flex: 1 1 auto;
+  min-width: 80px;
+}
+
+/* Плюсові кнопки (зелені) */
+.plus-button {
+  background-color: #43a047;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.4rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 3px 6px rgba(67, 160, 71, 0.5);
+  flex: 1 1 auto;
+}
+.plus-button:hover {
+  background-color: #2e7d32;
+}
+
+/* Мінусові кнопки (червоні) */
+.minus-button {
+  background-color: #e53935;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.4rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 3px 6px rgba(229, 57, 53, 0.5);
+  flex: 1 1 auto;
+}
+.minus-button:hover {
+  background-color: #b71c1c;
+}
 
 
   </style>
@@ -281,20 +328,20 @@
       <button type="button" id="courseBtn" onclick="toggleSensor('course')">визначити Курс</button>
     </div>
 
-    <!-- 13. Відстань+, м -->
-    <div class="group">
-      <label>Відстань+, м (*)</label>
-      <input type="number" id="distance" placeholder="висота прольоту цілі" min="0" step="1">
-     <div class="inline-buttons">
-  <button class="plus-button" onclick="adjustValue('distance', 100)">+100 м</button>
-  <button class="plus-button" onclick="adjustValue('distance', 1000)">+1000 м</button>
-  <button class="plus-button" onclick="adjustValue('distance', 5000)">+5000 м</button>
-  <button class="minus-button" onclick="adjustValue('distance', -100)">-100 м</button>
-  <button class="minus-button" onclick="adjustValue('distance', -1000)">-1000 м</button>
-  <button class="minus-button" onclick="adjustValue('distance', -5000)">-5000 м</button>
+ <!-- 13. Відстань+, м -->
+<div class="group">
+  <label>Відстань+, м (*)</label>
+  <input type="number" id="distance" placeholder="висота прольоту цілі">
+  <div class="inline-buttons">
+    <button class="plus-button" onclick="adjustValue('distance', 100)">+100 м</button>
+    <button class="plus-button" onclick="adjustValue('distance', 1000)">+1000 м</button>
+    <button class="plus-button" onclick="adjustValue('distance', 5000)">+5000 м</button>
+    <button class="minus-button" onclick="adjustValue('distance', -100)">-100 м</button>
+    <button class="minus-button" onclick="adjustValue('distance', -1000)">-1000 м</button>
+    <button class="minus-button" onclick="adjustValue('distance', -5000)">-5000 м</button>
+  </div>
 </div>
 
-    </div>
 
     <!-- 14. Висота, м -->
     <div class="group">
