@@ -285,36 +285,40 @@
     <div class="group">
       <label>Відстань+, м (*)</label>
       <input type="number" id="distance" placeholder="висота прольоту цілі" min="0" step="1">
-      <div class="inline-buttons">
-        <button type="button" onclick="addDistance(100)">+100 м</button>
-        <button type="button" onclick="addDistance(1000)">+1000 м</button>
-        <button type="button" onclick="addDistance(5000)">+5000 м</button>
-        <button type="button" onclick="addDistance(-100)">-100 м</button>
-        <button type="button" onclick="addDistance(-1000)">-1000 м</button>
-        <button type="button" onclick="addDistance(-5000)">-5000 м</button>
-      </div>
+     <div class="inline-buttons">
+  <button class="plus-button" onclick="adjustValue('distance', 100)">+100 м</button>
+  <button class="plus-button" onclick="adjustValue('distance', 1000)">+1000 м</button>
+  <button class="plus-button" onclick="adjustValue('distance', 5000)">+5000 м</button>
+  <button class="minus-button" onclick="adjustValue('distance', -100)">-100 м</button>
+  <button class="minus-button" onclick="adjustValue('distance', -1000)">-1000 м</button>
+  <button class="minus-button" onclick="adjustValue('distance', -5000)">-5000 м</button>
+</div>
+
     </div>
 
     <!-- 14. Висота, м -->
     <div class="group">
       <label>Висота, м</label>
       <input type="number" id="height" placeholder="висота над рівнем" min="0" step="1">
-      <div class="inline-buttons">
-        <button type="button" onclick="addHeight(100)">+100 м</button>
-        <button type="button" onclick="addHeight(500)">+500 м</button>
-        <button type="button" onclick="addHeight(-100)">-100 м</button>
-        <button type="button" onclick="addHeight(-500)">-500 м</button>
-      </div>
+    <div class="inline-buttons">
+  <button class="plus-button" onclick="adjustValue('height', 100)">+100 м</button>
+  <button class="plus-button" onclick="adjustValue('height', 500)">+500 м</button>
+  <button class="minus-button" onclick="adjustValue('height', -100)">-100 м</button>
+  <button class="minus-button" onclick="adjustValue('height', -500)">-500 м</button>
+</div>
+
     </div>
 
     <!-- 15. Час -->
     <div class="group">
       <label>Час</label>
       <input type="time" id="time">
-      <div class="inline-buttons">
-        <button type="button" onclick="setNowTime()">Щойно</button>
-        <button type="button" onclick="changeTime(1)">+1 хв</button>
-        <button type="button" onclick="changeTime(-1)">-1 хв</button>
+     <div class="inline-buttons">
+  <button onclick="setNowTime()">Щойно</button>
+  <button class="plus-button" onclick="adjustTime(1)">+1 хв.</button>
+  <button class="minus-button" onclick="adjustTime(-1)">-1 хв.</button>
+</div>
+
       </div>
     </div>
 
