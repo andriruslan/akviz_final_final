@@ -171,22 +171,39 @@
   </div>
 
   <!-- 18. Розхід БК -->
-  <div class="group" id="ammoBlock" style="display:none;">
-    <label>Розхід БК</label>
-    <div class="radio-group">
-      <label><input type="checkbox" name="ammo" value="АК-74 - 5.45" onchange="toggleAmmo('ak')"> АК-74 - 5.45</label>
+<div class="group" id="ammoBlock" style="display:none;">
+  <label>Розхід БК</label>
+  <div class="radio-group">
+    <div>
+      <label>
+        <input type="checkbox" onchange="toggleAmmo('ak')"> АК-74 - 5.45
+      </label>
       <input type="number" id="ak" placeholder="Кількість" style="display:none;" inputmode="numeric">
-      
-      <label><input type="checkbox" name="ammo" value="CANiK M2" onchange="toggleAmmo('canik')"> CANiK M2</label>
+    </div>
+
+    <div>
+      <label>
+        <input type="checkbox" onchange="toggleAmmo('canik')"> CANiK M2
+      </label>
       <input type="number" id="canik" placeholder="Кількість" style="display:none;" inputmode="numeric">
-      
-      <label><input type="checkbox" name="ammo" value="ДП-27 7.62" onchange="toggleAmmo('dp')"> ДП-27 7.62</label>
+    </div>
+
+    <div>
+      <label>
+        <input type="checkbox" onchange="toggleAmmo('dp')"> ДП-27 7.62
+      </label>
       <input type="number" id="dp" placeholder="Кількість" style="display:none;" inputmode="numeric">
-      
-      <label><input type="checkbox" name="ammo" value="Інше" onchange="toggleAmmo('other')"> Інше</label>
+    </div>
+
+    <div>
+      <label>
+        <input type="checkbox" onchange="toggleAmmo('other')"> Інше
+      </label>
       <input type="number" id="other" placeholder="Кількість" style="display:none;" inputmode="numeric">
     </div>
   </div>
+</div>
+
 
   <!-- 19. Опис -->
   <div class="group">
@@ -290,6 +307,16 @@
     document.querySelectorAll('input[name="result"]').forEach(el => {
       el.addEventListener("change", updateAmmoVisibility);
     });
+    function toggleAmmo(id) {
+  const field = document.getElementById(id);
+  field.style.display = document.getElementById(id).previousElementSibling.querySelector('input[type="checkbox"]').checked
+    ? "inline-block"
+    : "none";
+  if (!document.getElementById(id).previousElementSibling.querySelector('input[type="checkbox"]').checked) {
+    field.value = "";
+  }
+}
+
 
     function toggleAmmo(id) {
       const field = document.getElementById(id);
