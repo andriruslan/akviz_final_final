@@ -235,11 +235,11 @@
   </div>
 
   <!-- 22. Відправити в Signal -->
-  <div class="group">
-    <a id="signalLink" onclick="copyReport()" style="text-decoration: none;">
-      <button>Надіслати в Signal</button>
-    </a>
-  </div>
+ <!-- 22. Відправити в Signal -->
+<div class="group">
+  <button onclick="sendToSignal()">Надіслати в Signal</button>
+</div>
+
 
   <!-- Діагностика компаса -->
   <div class="group">
@@ -469,6 +469,16 @@ ${описРядок}
       document.getElementById("preview").textContent = text;
     });
   }
+function sendToSignal() {
+  const text = generateReportText();
+  navigator.clipboard.writeText(text).then(() => {
+    document.getElementById("preview").textContent = text;
+    // Відкриваємо Signal через URL-схему
+    window.location.href = "sgnl://";
+  }).catch(err => {
+    alert("Не вдалося скопіювати звіт у буфер: " + err);
+  });
+}
 
   setInterval(() => {
     document.getElementById("preview").textContent = generateReportText();
