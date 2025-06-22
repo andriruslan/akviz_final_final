@@ -521,7 +521,9 @@
     const text = generateReportText();
     navigator.clipboard.writeText(text).then(() => {
       document.getElementById("preview").textContent = text;
+      /*
       alert('Звіт скопійовано до буфера обміну!');
+*/
     }).catch(err => {
       alert("Не вдалося скопіювати: " + err);
     });
