@@ -234,6 +234,19 @@
 .minus-button:hover {
   background-color: #b71c1c;
 }
+.btn-red-rounded {
+  background-color: #d9534f; /* яскравий червоний */
+  color: white;
+  border: none;
+  border-radius: 20px; /* заокруглені краї */
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.btn-red-rounded:hover {
+  background-color: #c9302c; /* трохи темніший червоний при ховері */
+}
 
 
   </style>
@@ -266,7 +279,7 @@
     <div class="group">
       <label>Тип цілі</label>
       <div class="radio-group">
-        <label><input type="radio" name="target" value="БПЛА літакового типу"> БПЛА літакового типу</label>
+        <label><input type="radio" name="target" value="йцуБПЛА літакового типу"> БПЛА літакового типу</label>
         <label><input type="radio" name="target" value="Постріли (ЗУ, кулемет)"> Постріли (ЗУ, кулемет)</label>
         <label><input type="radio" name="target" value="Виходи (ПЗРК, ЗРК)"> Виходи (ПЗРК, ЗРК)</label>
         <label><input type="radio" name="target" value="Вибух КР"> Вибух КР</label>
@@ -298,8 +311,15 @@
       <label>Назва</label>
       <input type="text" id="targetName" placeholder="наприклад, Shahed-136">
       <div class="inline-buttons">
-<button onclick="setTargetNameAndUpdate('Shahed-136')">Shahed-136</button>
-<button onclick="setTargetNameAndUpdate('Гербера')">Гербера</button>
+<button 
+  class="btn-red-rounded" 
+  onclick="setTargetNameAndUpdate('Shahed-136')"
+>Shahed-136</button>
+
+<button 
+  class="btn-red-rounded" 
+  onclick="setTargetNameAndUpdate('Гербера')"
+>Гербера</button>
       </div>
     </div>
 
