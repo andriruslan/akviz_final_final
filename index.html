@@ -156,6 +156,37 @@
 .red-button:hover {
   background-color: #b71c1c; /* темніший червоний при наведенні */
 }
+/* Плюсові кнопки (зелені) */
+.plus-button {
+  background-color: #43a047;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.4rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 3px 6px rgba(67, 160, 71, 0.5);
+}
+.plus-button:hover {
+  background-color: #2e7d32;
+}
+
+/* Мінусові кнопки (червоні) */
+.minus-button {
+  background-color: #e53935;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.4rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 3px 6px rgba(229, 57, 53, 0.5);
+}
+.minus-button:hover {
+  background-color: #b71c1c;
+}
 
 
   </style>
@@ -229,10 +260,11 @@
     <div class="group">
       <label>Кількість, од</label>
       <div class="inline-buttons">
-        <input type="number" id="targetCount" value="1" readonly>
-        <button type="button" id="plusBtn" onclick="changeCount(1)">+1 од.</button>
-        <button type="button" id="minusBtn" onclick="changeCount(-1)" disabled>-1 од.</button>
-      </div>
+  <input type="number" id="targetCount" value="1" readonly>
+  <button class="plus-button" onclick="changeCount(1)">+1 од.</button>
+  <button id="minusBtn" class="minus-button" onclick="changeCount(-1)" disabled>-1 од.</button>
+</div>
+
     </div>
 
     <!-- 11. Азимут -->
