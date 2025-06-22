@@ -266,7 +266,7 @@
     <div class="group">
       <label>Тип цілі</label>
       <div class="radio-group">
-        <label><input type="radio" name="target" value="БПЛА літакового типу"> БПЛА літакового типу</label>
+        <label><input type="radio" name="target" value="БПЛА літакового типу"> 111БПЛА літакового типу</label>
         <label><input type="radio" name="target" value="Постріли (ЗУ, кулемет)"> Постріли (ЗУ, кулемет)</label>
         <label><input type="radio" name="target" value="Виходи (ПЗРК, ЗРК)"> Виходи (ПЗРК, ЗРК)</label>
         <label><input type="radio" name="target" value="Вибух КР"> Вибух КР</label>
@@ -755,7 +755,7 @@ function updatePreview() {
   document.getElementById("preview").textContent = generateReportText();
 }
 
-// Віконний onload або ініціалізація
+/*// Віконний onload або ініціалізація
 window.onload = () => {
   loadStored();
   toggleNumberField();
@@ -767,10 +767,10 @@ window.onload = () => {
 
   // Виводимо початковий звіт
   updatePreview();
-};
+};*/
 
 
-/*window.onload = () => {
+window.onload = () => {
   loadStored();
   toggleNumberField();
   setNowTime();
@@ -779,7 +779,7 @@ window.onload = () => {
   changeCount(0);
   attachListeners();
   updatePreview();
-};*/
+};
 
 
 
