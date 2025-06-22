@@ -410,40 +410,69 @@ function toggleAmmoInput(checkboxId, inputId) {
   }
 }
 
-    function generateReportText() {
-      const P = `${val('sector')}, ${val('position')}`;
-      const number = document.getElementById("noNumber").checked ? "без видачі" : val('targetNumber');
-      const targetType = checked('target');
-      const targetSide = checked('side');
-      const Ціль = `${targetType}, ${targetSide}, ${number}`;
-      const Висота = val('height');
-      const Відстань = val('distance');
-      const Кількість = val('targetCount');
-      const A = val('azimuth') + "°";
-      const K = val('course') + "°";
-      const НП = val('location');
-      const Ч = val('time');
+  function generateReportText() {
+  const P = `${val('sector')}, ${val('position')}`;
+  const number = document.getElementById("noNumber").checked ? "без видачі" : val('targetNumber');
+  const targetType = checked('target');
+  const targetSide = checked('side');
+  const Ціль = `${targetType}, ${targetSide}, ${number}`;
+  const Висота = val('height');
+  const Відстань = val('distance');
+  const Кількість = val('targetCount');
+  const A = val('azimuth') + "°";
+  const K = val('course') + "°";
+  const НП = val('location');
+  const Ч = val('time');
 
-      let Вияв = [];
-      if (checkedBox("detect1")) Вияв.push("Акустично");
-      if (checkedBox("detect2")) Вияв.push("РЛС");
-      if (checkedBox("detect3")) Вияв.push("Візуально");
-      if (checkedBox("detect4")) Вияв.push("Прилад");
+  let Вияв = [];
+  if (checkedBox("detect1")) Вияв.push("Акустично");
+  if (checkedBox("detect2")) Вияв.push("РЛС");
+  if (checkedBox("detect3")) Вияв.push("Візуально");
+  if (checkedBox("detect4")) Вияв.push("Прилад");
 
-      let ОписЧастини = [];
+  // 🔁 РОЗХІД БК + ОПИС
+  let описЧастини = [];
 
-[
-  ["chk_ak", "ak_input", "АК-74 - 5.45"],
-  ["chk_canik", "canik_input", "CANiK M2"],
-  ["chk_dp", "dp_input", "ДП-27 7.62"],
-  ["chk_other", "other_input", "Інше"]
-].forEach(([chkId, inputId, label]) => {
-  const chk = document.getElementById(chkId);
-  const val = document.getElementById(inputId)?.value;
-  if (chk?.checked && val) {
-    ОписЧастини.push(`${label}: ${val}`);
-  }
-});
+  const bkOptions = [
+    { chk: 'chk_ak', input: 'ak_input', label: 'АК-74 - 5.45' },
+    { chk: 'chk_canik', input: 'canik_input', label: 'CANiK M2' },
+    { chk: 'chk_dp', input: 'dp_input', label: 'ДП-27 7.62' },
+    { chk: 'chk_other', input: 'other_input', label: 'Інше' },
+  ];
+
+  bkOptions.forEach(({ chk, input, label }) => {
+    const checked = document.getElementById(chk)?.checked;
+    const value = document.getElementById(input)?.value;
+    if (checked && value) {
+      описЧастини.push(`${label}: ${value}`);
+    }
+  });
+
+  if (checkedBox("desc1")) описЧастини.push("змінила звук");
+  if (checkedBox("desc2")) описЧастини.push("змінила курс");
+
+  const допис = document.getElementById("descText")?.value;
+  if (допис) описЧастини.push(допис);
+
+  const описРядок = описЧастини.length > 0 ? `Опис: ${описЧастини.join(", ")}` : "";
+
+  // 🔚 Повертаємо звіт
+  return `
+П: ${P}
+Ціль: ${Ціль}
+Висота: ${Висота}
+Відстань: ${Відстань}
+Кількість: ${Кількість}
+А: ${A}
+К: ${K}
+НП: ${НП}
+Ч: ${Ч}
+Вияв: ${Вияв.join(", ")}
+ПП: Виявлено
+${описРядок}
+`.trim();
+}
+
 
 if (checkedBox("desc1")) ОписЧастини.push("змінила звук");
 if (checkedBox("desc2")) ОписЧастини.push("змінила курс");
