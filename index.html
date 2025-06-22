@@ -331,7 +331,7 @@
  <!-- 13. Відстань+, м -->
 <div class="group">
   <label>Відстань+, м (*)</label>
-  <input type="number" id="distance" placeholder="висота прольоту цілі">
+  <input type="number" id="distance" placeholder="висота прольоту цілі" min="0" inputmode="numeric" />
   <div class="inline-buttons">
     <button class="plus-button" onclick="adjustValue('distance', 100)">+100 м</button>
     <button class="plus-button" onclick="adjustValue('distance', 1000)">+1000 м</button>
@@ -341,6 +341,7 @@
     <button class="minus-button" onclick="adjustValue('distance', -5000)">-5000 м</button>
   </div>
 </div>
+
 
 
    <!-- 14. Висота, м -->
