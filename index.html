@@ -738,18 +738,23 @@ function attachListeners() {
   field.value = val;
 }
 function attachReportUpdateListeners() {
-  // Всі поля input, textarea, select
-  const inputs = document.querySelectorAll("input, textarea, select");
-
-  inputs.forEach(el => {
-    // Для текстових полів - input
-    el.addEventListener("input", updatePreview);
-    // Для чекбоксів і радіокнопок - change
-    if (el.type === "checkbox" || el.type === "radio") {
-      el.addEventListener("change", updatePreview);
+  const ids = [
+    'sector', 'position', 'location', 'azimuth', 'course',
+    'distance', 'height', 'time', 'targetNumber', 'targetName', 'targetCount', 'descText'
+  ];
+  
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) {
+      el.addEventListener('input', updatePreview);
     }
   });
+
+  document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => {
+    el.addEventListener('change', updatePreview);
+  });
 }
+
 
 // Видали або закоментуй цей код:
 // setInterval(() => {
@@ -770,6 +775,16 @@ function attachReportUpdateListeners() {
     }
   });
 }
+  function adjustValue(id, delta) {
+  const field = document.getElementById(id);
+  let val = parseInt(field.value) || 0;
+  val += delta;
+  if (val < 0) val = 0;
+  field.value = val;
+
+  updatePreview(); // Оновити звіт при зміні через кнопки
+}
+
 
 window.onload = () => {
   loadStored();
