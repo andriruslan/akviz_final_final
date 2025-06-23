@@ -260,6 +260,21 @@
 .btn-green-rounded:hover {
   background-color: #2b542c;
 }
+.radio-inline-group,
+.checkbox-inline-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.3rem;
+}
+
+.radio-inline-group label,
+.checkbox-inline-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
 
 
   </style>
@@ -308,7 +323,7 @@
 
     <div class="group">
       <label>Сторона</label>
-      <div class="radio-group">
+      <div class="radio-inline-group">
         <label><input type="radio" name="side" value="Ворожий"> Ворожий</label>
         <label><input type="radio" name="side" value="Свій"> Свій</label>
         <label><input type="radio" name="side" value="Нейтральний"> Нейтральний</label>
@@ -415,7 +430,7 @@
     <!-- 17. Результат -->
     <div class="group">
       <label>Результат</label>
-      <div class="radio-group">
+      <div class="radio-inline-group">
         <label><input type="radio" name="result" value="Detected" onchange="updateAmmoVisibility()"> Виявлено</label>
         <label><input type="radio" name="result" value="Shot at" onchange="updateAmmoVisibility()"> Ведеться вогонь</label>
         <label><input type="radio" name="result" value="Hit" onchange="updateAmmoVisibility()"> Попадання</label>
@@ -441,7 +456,7 @@
     </div>
 
     <!-- 19. Опис -->
-    <div class="group">
+    <div class="radio-inline-group">
       <label>Опис</label>
       <label><input type="checkbox" id="descSound"> змінений звук</label>
       <label><input type="checkbox" id="descCourse"> змінений курс</label>
