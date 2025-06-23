@@ -399,11 +399,16 @@
 <div class="group">
   <label>Висота, м</label>
   <input type="number" id="height" placeholder="висота в метрах">
+  
   <div class="inline-buttons">
-    <button class="plus-button" onclick="adjustValue('height', 100)">+100 м</button>
-    <button class="plus-button" onclick="adjustValue('height', 500)">+500 м</button>
-    <button class="minus-button" onclick="adjustValue('height', -100)">-100 м</button>
-    <button class="minus-button" onclick="adjustValue('height', -500)">-500 м</button>
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+      <button class="btn-green-rounded" onclick="adjustValue('height', 100)">+100 м</button>
+      <button class="btn-green-rounded" onclick="adjustValue('height', 500)">+500 м</button>
+    </div>
+    <div style="display: flex; gap: 0.5rem;">
+      <button class="btn-red-rounded" onclick="adjustValue('height', -100)">-100 м</button>
+      <button class="btn-red-rounded" onclick="adjustValue('height', -500)">-500 м</button>
+    </div>
   </div>
 </div>
 
