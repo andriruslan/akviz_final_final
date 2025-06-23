@@ -658,53 +658,82 @@ function updateAmmoVisibility() {
 
   // --- Формування тексту звіту ---
   function generateReportText() {
-  const sector = document.getElementById('sector').value;
-  const position = document.getElementById('position').value;
-  const location = document.getElementById('location').value;
+  try {
+    const sector = document.getElementById('sector')?.value || '';
+    const position = document.getElementById('position')?.value || '';
+    const location = document.getElementById('location')?.value || '';
 
-  let targetType = '';
-  document.querySelectorAll('input[name="target"]').forEach(r => { if(r.checked) targetType = r.value; });
+    let targetType = '';
+    document.querySelectorAll('input[name="target"]').forEach(r => { if(r.checked) targetType = r.value; });
 
-  let side = '';
-  document.querySelectorAll('input[name="side"]').forEach(r => { if(r.checked) side = r.value; });
+    let side = '';
+    document.querySelectorAll('input[name="side"]').forEach(r => { if(r.checked) side = r.value; });
 
-  const noNumber = document.getElementById('noNumber').checked;
-  const targetNumber = noNumber ? "без видачі" : (document.getElementById('targetNumber').value || '');
+    const noNumber = document.getElementById('noNumber')?.checked;
+    const targetNumber = noNumber ? "без видачі" : (document.getElementById('targetNumber')?.value || '');
 
-  const targetName = document.getElementById('targetName').value;
-  const targetCount = document.getElementById('targetCount').value;
+    const targetCount = document.getElementById('targetCount')?.value || '';
+    const azimuth = document.getElementById('azimuth')?.value || '';
+    const course = document.getElementById('course')?.value || '';
+    const distance = document.getElementById('distance')?.value || '';
+    const height = document.getElementById('height')?.value || '';
+    const time = document.getElementById('time')?.value || '';
 
-  const azimuth = document.getElementById('azimuth').value;
-  const course = document.getElementById('course').value;
+    const acoustic = document.getElementById('acoustic')?.checked ? "Акустично" : "";
+    const radar = document.getElementById('radar')?.checked ? "Радар" : "";
+    const visual = document.getElementById('visual')?.checked ? "Візуально" : "";
+    const obs = document.getElementById('obs')?.checked ? "ЗЗС" : "";
 
-  const distance = document.getElementById('distance').value;
-  const height = document.getElementById('height').value;
+    let resultValue = "";
+    document.querySelectorAll('input[name="result"]').forEach(r => { if(r.checked) resultValue = r.value; });
 
-  const time = document.getElementById('time').value;
-
-  const acoustic = document.getElementById('acoustic').checked ? "Акустично" : "";
-  const radar = document.getElementById('radar').checked ? "Радар" : "";
-  const visual = document.getElementById('visual').checked ? "Візуально" : "";
-  const obs = document.getElementById('obs').checked ? "ЗЗС" : "";
-
-  let resultValue = "";
-  document.getElementsByName('result').forEach(r => { if(r.checked) resultValue = r.value; });
-
-  let ammoText = '';
-  if (resultValue === 'Shot at' || resultValue === 'Hit') {
-    const ammoMap = {
-      'ammo1': 'АК-74 - 5.45',
-      'ammo2': 'CANiK M2',
-      'ammo3': 'ДП-27 7.62',
-      'ammo4': 'Інше'
-    };
-    for (const key in ammoMap) {
-      if (document.getElementById(key).checked) {
-        const count = document.getElementById(key + 'Count').value || 0;
-        ammoText += `${ammoMap[key]}: ${count} шт.\n`;
+    let ammoText = '';
+    if (resultValue === 'Shot at' || resultValue === 'Hit') {
+      const ammoMap = {
+        'ammo1': 'АК-74 - 5.45',
+        'ammo2': 'CANiK M2',
+        'ammo3': 'ДП-27 7.62',
+        'ammo4': 'Інше'
+      };
+      for (const key in ammoMap) {
+        if (document.getElementById(key)?.checked) {
+          const count = document.getElementById(key + 'Count')?.value || 0;
+          ammoText += `${ammoMap[key]}: ${count} шт.\n`;
+        }
       }
     }
+
+    const descSound = document.getElementById('descSound')?.checked ? "змінений звук" : "";
+    const descCourse = document.getElementById('descCourse')?.checked ? "змінений курс" : "";
+    const description = document.getElementById('description')?.value || '';
+
+    let descriptionFull = "";
+    if(descSound) descriptionFull += descSound + "; ";
+    if(descCourse) descriptionFull += descCourse + "; ";
+    if(description) descriptionFull += description;
+
+    let report = `П: ${sector}, ${position}\n`;
+    report += `Ціль: ${targetType}, ${side}, ${targetNumber}\n`;
+    report += `Висота: ${height} м\n`;
+    report += `Відстань: ${distance} м\n`;
+    report += `Кількість: ${targetCount} од\n`;
+    report += `А: ${azimuth}°\n`;
+    report += `К: ${course}°\n`;
+    report += `НП: ${location}\n`;
+    report += `Час: ${time}\n`;
+    report += `Вияв: ${[acoustic, radar, visual, obs].filter(Boolean).join(', ')}\n`;
+    report += `ПП: ${resultValue}\n`;
+    if (ammoText) report += `Розхід Б:\n${ammoText}`;
+    if (descriptionFull) report += `Опис: ${descriptionFull}\n`;
+
+    return report;
+
+  } catch (err) {
+    console.error("Помилка при формуванні звіту:", err);
+    return "";
   }
+}
+
 
   const descSound = document.getElementById('descSound').checked ? "змінений звук" : "";
   const descCourse = document.getElementById('descCourse').checked ? "змінений курс" : "";
