@@ -611,14 +611,17 @@
   }
 
   // --- Показати/сховати витрату боєприпасів ---
-  function updateAmmoVisibility() {
-    const results = document.getElementsByName('result');
-    let show = false;
-    results.forEach(r => {
-      if ((r.checked) && (r.value === 'Shot at' || r.value === 'Hit')) show = true;
-    });
-    document.getElementById('ammoGroup').style.display = show ? 'block' : 'none';
-  }
+ function updateAmmoVisibility() {
+  const results = document.getElementsByName('result');
+  let show = false;
+  results.forEach(r => {
+    if ((r.checked) && (r.value === 'Обстріляно' || r.value === 'Уражено')) {
+      show = true;
+    }
+  });
+  document.getElementById('ammoGroup').style.display = show ? 'block' : 'none';
+}
+
 
   // --- Активувати/деактивувати поля кількості боєприпасів ---
   function toggleAmmoCount(id) {
