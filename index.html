@@ -611,7 +611,7 @@
   }
 
   // --- Показати/сховати витрату боєприпасів ---
- function updateAmmoVisibility() {
+function updateAmmoVisibility() {
   const results = document.getElementsByName('result');
   let show = false;
   results.forEach(r => {
@@ -619,8 +619,12 @@
       show = true;
     }
   });
-  document.getElementById('ammoGroup').style.display = show ? 'block' : 'none';
+  const group = document.getElementById('ammoGroup');
+  if (group) {
+    group.style.display = show ? 'block' : 'none';
+  }
 }
+
 
 
   // --- Активувати/деактивувати поля кількості боєприпасів ---
