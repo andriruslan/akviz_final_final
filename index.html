@@ -9,6 +9,16 @@
   max-width: 100%;
   overflow-x: hidden;
 }
+.two-rows-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.two-rows-buttons .half-width {
+  flex: 1 1 calc(50% - 0.5rem);
+}
     /* --- Стилі як на akustychno-visualno.vercel.app --- */
     body {
       margin: 0;
@@ -399,16 +409,12 @@
 <div class="group">
   <label>Висота, м</label>
   <input type="number" id="height" placeholder="висота в метрах">
-  
-  <div class="inline-buttons">
-    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
-      <button class="btn-green-rounded" onclick="adjustValue('height', 100)">+100 м</button>
-      <button class="btn-green-rounded" onclick="adjustValue('height', 500)">+500 м</button>
-    </div>
-    <div style="display: flex; gap: 0.5rem;">
-      <button class="btn-red-rounded" onclick="adjustValue('height', -100)">-100 м</button>
-      <button class="btn-red-rounded" onclick="adjustValue('height', -500)">-500 м</button>
-    </div>
+
+  <div class="two-rows-buttons">
+    <button class="btn-green-rounded half-width" onclick="adjustValue('height', 100)">+100 м</button>
+    <button class="btn-green-rounded half-width" onclick="adjustValue('height', 500)">+500 м</button>
+    <button class="btn-red-rounded half-width" onclick="adjustValue('height', -100)">-100 м</button>
+    <button class="btn-red-rounded half-width" onclick="adjustValue('height', -500)">-500 м</button>
   </div>
 </div>
 
