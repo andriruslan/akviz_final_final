@@ -289,6 +289,18 @@
   gap: 0.4rem;
   white-space: nowrap;
 }
+.ammo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.ammo-item {
+  flex: 1 1 calc(50% - 1rem);
+  display: flex;
+  flex-direction: column;
+}
 
 
   </style>
@@ -453,22 +465,27 @@
     </div>
 
     <!-- 18. Розхід БК -->
-    <div class="group" id="ammoGroup" style="display:none;">
-      <label>Розхід БК</label>
-      <div class="radio-inline-group">
-        <label><input type="checkbox" id="ammo1" onchange="toggleAmmoCount('ammo1')"> АК-74 - 5.45</label>
-        <input type="number" id="ammo1Count" placeholder="шт" style="width: 70px;" disabled min="0" step="1">
-        <br />
-        <label><input type="checkbox" id="ammo2" onchange="toggleAmmoCount('ammo2')"> CANiK M2</label>
-        <input type="number" id="ammo2Count" placeholder="шт" style="width: 70px;" disabled min="0" step="1">
-        <br />
-        <label><input type="checkbox" id="ammo3" onchange="toggleAmmoCount('ammo3')"> ДП-27 7.62</label>
-        <input type="number" id="ammo3Count" placeholder="шт" style="width: 70px;" disabled min="0" step="1">
-        <br />
-        <label><input type="checkbox" id="ammo4" onchange="toggleAmmoCount('ammo4')"> Інше</label>
-        <input type="number" id="ammo4Count" placeholder="шт" style="width: 70px;" disabled min="0" step="1">
-      </div>
+ <div class="group" id="ammoBlock" style="display:none;">
+  <label>Розхід БК</label>
+  <div class="ammo-grid">
+    <div class="ammo-item">
+      <label><input type="checkbox" id="chk_ak" onchange="toggleAmmoInput('chk_ak', 'ak_input')"> АК-74 - 5.45</label>
+      <input type="number" id="ak_input" placeholder="Кількість" style="display:none;" inputmode="numeric">
     </div>
+    <div class="ammo-item">
+      <label><input type="checkbox" id="chk_canik" onchange="toggleAmmoInput('chk_canik', 'canik_input')"> CANiK M2</label>
+      <input type="number" id="canik_input" placeholder="Кількість" style="display:none;" inputmode="numeric">
+    </div>
+    <div class="ammo-item">
+      <label><input type="checkbox" id="chk_dp" onchange="toggleAmmoInput('chk_dp', 'dp_input')"> ДП-27 7.62</label>
+      <input type="number" id="dp_input" placeholder="Кількість" style="display:none;" inputmode="numeric">
+    </div>
+    <div class="ammo-item">
+      <label><input type="checkbox" id="chk_other" onchange="toggleAmmoInput('chk_other', 'other_input')"> Інше</label>
+      <input type="number" id="other_input" placeholder="Кількість" style="display:none;" inputmode="numeric">
+    </div>
+  </div>
+</div>
 
     <!-- 19. Опис -->
     <div class="radio-inline-group">
