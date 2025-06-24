@@ -167,6 +167,10 @@
     .ammo-item {
       flex: 1 1 calc(50% - 1rem);
     }
+.flex.flex-wrap.justify-between label {
+  flex: 1 1 30%;
+}
+
   </style>
 </head>
 <body>
@@ -197,7 +201,7 @@
       <label>Тип цілі</label>
       <hr>
       <div class="radio-group">
-        <label><input type="radio" name="target" value="БПЛА літакового типу"> БПЛА літакового типу</label>
+        <label><input type="radio" name="target" value="БПЛА літакового типу"> 111БПЛА літакового типу</label>
         <label><input type="radio" name="target" value="Постріли (ЗУ, кулемет)"> Постріли (ЗУ, кулемет)</label>
         <label><input type="radio" name="target" value="Виходи (ПЗРК, ЗРК)"> Виходи (ПЗРК, ЗРК)</label>
         <label><input type="radio" name="target" value="Вибух КР"> Вибух КР</label>
@@ -211,7 +215,7 @@
       </div>
     </div>
 
-    <div class="group">
+   <div class="radio-inline-group side-3col">
       <label>Сторона</label>
       <hr>
       <div class="three-cols">
@@ -279,12 +283,13 @@
       <label>Висота, м</label>
       <hr>
       <input type="number" id="height" inputmode="numeric" placeholder="висота в метрах" />
-      <div class="two-rows-buttons">
-        <button class="plus-button" onclick="adjustValue('height', 100)">+100 м</button>
-        <button class="plus-button" onclick="adjustValue('height', 500)">+500 м</button>
-        <button class="minus-button" onclick="adjustValue('height', -100)">-100 м</button>
-        <button class="minus-button" onclick="adjustValue('height', -500)">-500 м</button>
-      </div>
+     <div class="inline-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+  <button class="plus-button" onclick="adjustValue('height', 100)">+100 м</button>
+  <button class="plus-button" onclick="adjustValue('height', 500)">+500 м</button>
+  <button class="minus-button" onclick="adjustValue('height', -100)">-100 м</button>
+  <button class="minus-button" onclick="adjustValue('height', -500)">-500 м</button>
+</div>
+
     </div>
     <div class="group">
       <label>Час</label>
@@ -302,19 +307,22 @@
       <hr>
       <div class="three-cols">
         <label><input type="checkbox" id="acoustic"> Акустично</label>
-        <label><input type="checkbox" id="radar"> РЛС</label>
+        <label><input type="checkbox" id="radar"> Радіолокаційно</label>
         <label><input type="checkbox" id="visual" onchange="checkDetect()"> Візуально</label>
         <label><input type="checkbox" id="obs" disabled> Прилад</label>
       </div>
     </div>
 
-    <div class="group">
+  <div class="flex flex-wrap justify-between gap-2 mt-2">
       <label>Результат</label>
       <hr>
       <div class="three-cols">
-        <label><input type="radio" name="result" value="Виявлено"> Виявлено</label>
-        <label><input type="radio" name="result" value="Обстріляно"> Обстріляно</label>
-        <label><input type="radio" name="result" value="Уражено"> Уражено</label>
+       <input type="radio" name="result" value="Обстріляно" onchange="updateAmmoVisibility()">
+ Виявлено</label>
+        <input type="radio" name="result" value="Обстріляно" onchange="updateAmmoVisibility()">
+ Обстріляно</label>
+        <input type="radio" name="result" value="Обстріляно" onchange="updateAmmoVisibility()">
+ Уражено</label>
       </div>
     </div>
 
@@ -459,13 +467,21 @@ function checkDetect() {
 
 // --- Розхід БК: показ/приховати ---
 function updateAmmoVisibility() {
-  const result = document.querySelector('input[name="result"]:checked');
-  const ammoGroup = document.getElementById('ammoGroup');
-  if (!result || !ammoGroup) return;
-  const show = result.value === 'Обстріляно' || result.value === 'Уражено';
-  ammoGroup.style.display = show ? 'block' : 'none';
-  updatePreview();
+  const results = document.getElementsByName('result');
+  let show = false;
+
+  results.forEach(r => {
+    if ((r.checked) && (r.value === 'Обстріляно' || r.value === 'Уражено')) {
+      show = true;
+    }
+  });
+
+  const group = document.getElementById('ammoGroup');
+  if (group) {
+    group.style.display = show ? 'block' : 'none';
+  }
 }
+
 
 // --- Вмикання/вимикання полів Розхід БК ---
 function toggleAmmoCount(id) {
