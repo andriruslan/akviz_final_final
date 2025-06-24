@@ -49,7 +49,7 @@
       margin-bottom: 0.3rem;
       color: #bbb;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
     input[type="text"],
     input[type="number"],
@@ -118,317 +118,171 @@
       min-height: 100px;
       user-select: text;
     }
-    textarea {
-      resize: vertical;
-      background-color: #1e1e1e;
-      border: 1px solid #333;
-      color: #ddd;
+    .plus-button {
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 12px;
+      flex: 1 1 calc(50% - 0.5rem);
     }
-    a {
-      color: #40a9ff;
-      text-decoration: none;
+    .minus-button {
+      background-color: #c62828;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 12px;
+      flex: 1 1 calc(50% - 0.5rem);
     }
-    a:hover {
-      text-decoration: underline;
+    .plus-button:hover,
+    .minus-button:hover {
+      opacity: 0.85;
     }
-    #debug {
-      color: #777;
-      font-size: 0.85rem;
-      font-family: monospace;
-      background-color: #1a1a1a;
-      padding: 8px;
-      border-radius: 4px;
-      border: 1px solid #333;
-      min-height: 40px;
+    .result-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
-    /* Адаптивність */
-    @media (max-width: 520px) {
-      body {
-        padding: 12px;
-      }
-      button {
-        margin-right: 4px;
-        padding: 6px 8px;
-        font-size: 0.9rem;
-      }
-      label {
-        font-size: 0.85rem;
-      }
+    .result-group label {
+      flex: 1 1 calc(33.333% - 1rem);
     }
-    .red-button {
-  background-color: #e53935; /* насичений червоний */
-  color: white;
-  border: none;
-  border-radius: 20px; /* заокруглені краї */
-  padding: 0.4rem 1.2rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 3px 6px rgba(229, 57, 53, 0.5);
-}
-
-.red-button:hover {
-  background-color: #b71c1c; /* темніший червоний при наведенні */
-}
-/* Плюсові кнопки (зелені) */
-.plus-button {
-  background-color: #2b542c;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 0.4rem 1.2rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 3px 6px rgba(67, 160, 71, 0.5);
-}
-.plus-button:hover {
-  background-color: #2b542c;
-}
-
-/* Мінусові кнопки (червоні) */
-.minus-button {
-  background-color: #e53935;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 0.4rem 1.2rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 3px 6px rgba(229, 57, 53, 0.5);
-}
-.minus-button:hover {
-  background-color: #e53935;
-}
-.inline-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: flex-start;
-  align-items: center;
-  margin-top: 0.5rem;
-}
-
-.inline-buttons input {
-  flex: 1 1 auto;
-  min-width: 80px;
-}
-
-/* Плюсові кнопки (зелені) */
-.plus-button {
-  background-color: #2b542c;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 0.4rem 1.2rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 3px 6px rgba(67, 160, 71, 0.5);
-  flex: 1 1 auto;
-}
-.plus-button:hover {
-  background-color: #2b542c;
-}
-
-/* Мінусові кнопки (червоні) */
-.minus-button {
-  background-color: #e53935;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 0.4rem 1.2rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 3px 6px rgba(229, 57, 53, 0.5);
-  flex: 1 1 auto;
-}
-.minus-button:hover {
-  background-color: #e53935;
-}
-.btn-red-rounded {
-  background-color: #a94442;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 8px 16px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-.btn-red-rounded:hover {
-  background-color: #843534;
-}
-.btn-green-rounded {
-  background-color: #2b542c;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 8px 16px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-.btn-green-rounded:hover {
-  background-color: #2b542c;
-}
-.radio-inline-group,
-.checkbox-inline-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 0.3rem;
-}
-
-.radio-inline-group label,
-.checkbox-inline-group label {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  white-space: nowrap;
-}
-.ammo-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 0.5rem;
-}
-
-.ammo-item {
-  flex: 1 1 calc(50% - 1rem);
-  display: flex;
-  flex-direction: column;
-}
-
-
+    .checkbox-inline-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .checkbox-inline-group label {
+      flex: 1 1 calc(50% - 1rem);
+    }
+    .ammo-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .ammo-flex .ammo-item {
+      flex: 1 1 calc(50% - 1rem);
+    }
+    hr {
+      border: none;
+      border-bottom: 1px solid #444;
+      margin: 6px 0 10px 0;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>АкВіз_КАГАРЛИК <small style="font-weight:normal;">(версія 1.1.3)</small></h2>
+    <h2>АкВіз_КАГАРЛИК</h2>
 
-    <!-- 1. Підпорядкування -->
     <div class="group">
-      <label>Підпорядкування (*)</label>
-      <input type="text" id="sector" value="" readonly>
-      <button onclick="toggleLock('sector')">🔓/🔒</button>
+      <label>Підпорядкування</label>
+      <hr>
+      <input type="text" id="sector">
     </div>
 
-    <!-- 2. Позиція -->
     <div class="group">
-      <label>Позиція (*)</label>
-      <input type="text" id="position" value="" readonly>
-      <button onclick="toggleLock('position')">🔓/🔒</button>
+      <label>Позиція</label>
+      <hr>
+      <input type="text" id="position">
     </div>
 
-    <!-- 3. Населений пункт -->
     <div class="group">
-      <label>Населений пункт (*)</label>
-      <input type="text" id="location" value="" readonly>
-      <button onclick="toggleLock('location')">🔓/🔒</button>
+      <label>Населений пункт</label>
+      <hr>
+      <input type="text" id="location">
     </div>
 
     <div class="group">
       <label>Тип цілі</label>
-      <div class="radio-inline-group">
-        <label><input type="radio" name="target" value="БПЛА літакового типу">111БПЛА літакового типу</label>
-        <label><input type="radio" name="target" value="Постріли (ЗУ,кулемет)">Постріли (ЗУ,кулемет)</label>
-        <label><input type="radio" name="target" value="Виходи (ПЗРК,ЗРК)"> Виходи (ПЗРК,ЗРК)</label>
-        <label><input type="radio" name="target" value="Вибух КР"> КР</label>
+      <hr>
+      <div class="radio-group">
+        <label><input type="radio" name="target" value="БПЛА літакового типу"> БПЛА літакового типу</label>
+        <label><input type="radio" name="target" value="Постріли (ЗУ, кулемет)"> Постріли (ЗУ, кулемет)</label>
+        <label><input type="radio" name="target" value="Виходи (ПЗРК, ЗРК)"> Виходи (ПЗРК, ЗРК)</label>
+        <label><input type="radio" name="target" value="Вибух КР"> Вибух КР</label>
         <label><input type="radio" name="target" value="Гелікоптер"> Гелікоптер</label>
-        <label><input type="radio" name="target" value="Літак (малий)"> Літак(малий)</label>
-        <label><input type="radio" name="target" value="Літак (великий)"> Літак(великий)</label>
+        <label><input type="radio" name="target" value="Літак (малий)"> Літак (малий)</label>
+        <label><input type="radio" name="target" value="Літак (великий)"> Літак (великий)</label>
         <label><input type="radio" name="target" value="Зонд"> Зонд</label>
         <label><input type="radio" name="target" value="Невстановлене"> Невстановлене</label>
         <label><input type="radio" name="target" value="Інше"> Інше</label>
         <label><input type="radio" name="target" value="Аеростат"> Аеростат</label>
       </div>
     </div>
-
     <div class="group">
       <label>Сторона</label>
-      <div class="radio-inline-group">
+      <hr>
+      <div class="radio-group">
         <label><input type="radio" name="side" value="Ворожий"> Ворожий</label>
         <label><input type="radio" name="side" value="Свій"> Свій</label>
         <label><input type="radio" name="side" value="Нейтральний"> Нейтральний</label>
       </div>
     </div>
 
-   <div class="group">
-      <label class="label-bold" for="targetNumber">Номер цілі</label>
-      <label><input type="checkbox" id="noNumber" checked onchange="toggleNumberField()"> Без видачі</label>
-      <input id="targetNumber" placeholder="висота в метрах" name="targetNumber" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" />
+    <div class="group">
+      <label>Номер цілі</label>
+      <hr>
+      <input id="targetNumber" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" />
     </div>
 
     <div class="group">
       <label>Назва</label>
-      <input type="text" id="targetName" placeholder="наприклад, Shahed-136">
+      <hr>
+      <input type="text" id="targetName">
       <div class="inline-buttons">
-<button 
-  class="btn-red-rounded" 
-  onclick="setTargetNameAndUpdate('Shahed-136')"
->Shahed-136</button>
-
-<button 
-  class="btn-red-rounded" 
-  onclick="setTargetNameAndUpdate('Гербера')"
->Гербера</button>
+        <button class="minus-button" onclick="setTargetNameAndUpdate('Shahed-136')">Shahed-136</button>
+        <button class="minus-button" onclick="setTargetNameAndUpdate('Гербера')">Гербера</button>
       </div>
     </div>
 
-   <!-- Кількість, од -->
-<div class="group">
-  <label>Кількість, од</label>
-  <div class="inline-buttons">
-    <input type="number" id="targetCount" value="1" readonly>
-    <button class="plus-button" onclick="changeCount(1)">+1 од.</button>
-    <button class="minus-button" id="minusBtn" onclick="changeCount(-1)" disabled>-1 од.</button>
-  </div>
-</div>
-
-    <!-- 11. Азимут -->
     <div class="group">
-   <label>Азимут, ° (*)</label>
-      <input type="number" id="azimuth" placeholder="Введіть або визначте" min="0" max="359" step="1">
-      <button type="button" id="azimuthBtn" onclick="toggleSensor('azimuth')">визначити азимут</button>
+      <label>Кількість, од</label>
+      <hr>
+      <div class="inline-buttons">
+        <button class="plus-button" onclick="changeCount(1)">+1 од.</button>
+        <button class="minus-button" onclick="changeCount(-1)" id="minusBtn">-1 од.</button>
+        <input type="number" id="targetCount" value="1" readonly>
+      </div>
     </div>
 
-    <!-- 12. Курс -->
     <div class="group">
-      <label>Курс, ° (*)</label>
-      <input type="number" id="course" placeholder="Введіть або визначте" min="0" max="359" step="1">
-      <button type="button" id="courseBtn" onclick="toggleSensor('course')">визначити Курс</button>
+      <label>Азимут, °</label>
+      <hr>
+      <input type="number" id="azimuth" placeholder="Введіть або визначте" inputmode="numeric" pattern="[0-9]*" min="0" max="359" step="1">
+      <button id="azimuthBtn" onclick="toggleSensor('azimuth')">визначити азимут</button>
     </div>
 
- <!-- 13. Відстань+, м -->
-<div class="group">
-  <label>Відстань+, м (*)</label>
-  <input type="number" id="distance" placeholder="висота прольоту цілі" min="0" inputmode="numeric" />
-  <div class="inline-buttons">
-    <button class="plus-button" onclick="adjustValue('distance', 100)">+100 м</button>
-    <button class="plus-button" onclick="adjustValue('distance', 1000)">+1000 м</button>
-    <button class="plus-button" onclick="adjustValue('distance', 5000)">+5000 м</button>
-    <button class="minus-button" onclick="adjustValue('distance', -100)">-100 м</button>
-    <button class="minus-button" onclick="adjustValue('distance', -1000)">-1000 м</button>
-    <button class="minus-button" onclick="adjustValue('distance', -5000)">-5000 м</button>
-  </div>
-</div>
+    <div class="group">
+      <label>Курс, °</label>
+      <hr>
+      <input type="number" id="course" placeholder="Введіть або визначте" inputmode="numeric" pattern="[0-9]*" min="0" max="359" step="1">
+      <button id="courseBtn" onclick="toggleSensor('course')">визначити Курс</button>
+    </div>
 
+    <div class="group">
+      <label>Відстань+, м</label>
+      <hr>
+      <input type="number" id="distance" placeholder="висота прольоту цілі" inputmode="numeric" pattern="[0-9]*">
+      <div class="inline-buttons">
+        <button class="plus-button" onclick="adjustValue('distance', 100)">+100 м</button>
+        <button class="plus-button" onclick="adjustValue('distance', 1000)">+1000 м</button>
+        <button class="plus-button" onclick="adjustValue('distance', 5000)">+5000 м</button>
+        <button class="minus-button" onclick="adjustValue('distance', -100)">-100 м</button>
+        <button class="minus-button" onclick="adjustValue('distance', -1000)">-1000 м</button>
+        <button class="minus-button" onclick="adjustValue('distance', -5000)">-5000 м</button>
+      </div>
+    </div>
 
-
-   <!-- 14. Висота, м -->
-<div class="group">
-  <label>Висота, м</label>
-  <input type="number" id="height" placeholder="висота прольоту цілі" min="0" inputmode="numeric" />
-  <div class="inline-buttons">
-    <button class="plus-button" onclick="adjustValue('height', 100)">+100 м</button>
-    <button class="plus-button" onclick="adjustValue('height', 500)">+500 м</button>
-    <button class="minus-button" onclick="adjustValue('height', -100)">-100 м</button>
-    <button class="minus-button" onclick="adjustValue('height', -500)">-500 м</button>
-  </div>
-</div>
+    <div class="group">
+      <label>Висота, м</label>
+      <hr>
+      <input type="number" id="height" placeholder="висота цілі" inputmode="numeric" pattern="[0-9]*">
+      <div class="two-rows-buttons">
+        <button class="plus-button half-width" onclick="adjustValue('height', 100)">+100 м</button>
+        <button class="plus-button half-width" onclick="adjustValue('height', 500)">+500 м</button>
+        <button class="minus-button half-width" onclick="adjustValue('height', -100)">-100 м</button>
+        <button class="minus-button half-width" onclick="adjustValue('height', -500)">-500 м</button>
+      </div>
+    </div>
 
 <!-- 15. Час -->
 <div class="group">
