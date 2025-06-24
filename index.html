@@ -330,7 +330,7 @@
 </div>
 
 <!-- Опційно: відображення діагностики -->
-<div id="debug" style="color:#666; font-size:0.9rem; margin-top:1rem;">Дані компаса...</div>
+
 
     <div class="group">
       <label>Відстань+, м</label>
@@ -380,15 +380,15 @@
       </div>
     </div>
 
-  <div class="flex flex-wrap justify-between gap-2 mt-2">
-      <label>Результат</label>
-      <hr>
-      <div class="three-cols">
-      <label><input type="radio" name="result" value="Виявлено" onchange="updateAmmoVisibility()"> Виявлено</label>
-<label><input type="radio" name="result" value="Обстріляно" onchange="updateAmmoVisibility()"> Обстріляно</label>
-<label><input type="radio" name="result" value="Уражено" onchange="updateAmmoVisibility()"> Уражено</label>
-      </div>
-    </div>
+ <div class="group">
+  <label>Результат</label>
+  <hr>
+  <div class="three-cols">
+    <label><input type="radio" name="result" value="Виявлено" onchange="updateAmmoVisibility()"> Виявлено</label>
+    <label><input type="radio" name="result" value="Обстріляно" onchange="updateAmmoVisibility()"> Обстріляно</label>
+    <label><input type="radio" name="result" value="Уражено" onchange="updateAmmoVisibility()"> Уражено</label>
+  </div>
+</div>
 
     <div class="group" id="ammoGroup" style="display: none;">
       <label>Розхід БК</label>
