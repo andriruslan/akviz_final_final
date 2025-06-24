@@ -565,7 +565,7 @@ function generateReportText() {
   report += `Час: ${time}\n`;
   report += `Вияв: ${[acoustic, radar, visual, obs].filter(Boolean).join(', ')}\n`;
   report += `ПП: ${result}\n`;
-  if (ammo) report += `Розхід Б:\n${ammo}`;
+  if (ammo) report += `Розхід БК:\n${ammo}`;
   if (fullDesc) report += `Опис: ${fullDesc}\n`;
 
   return report;
