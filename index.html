@@ -454,67 +454,68 @@
       </div>
     </div>
 
-    <!-- 17. Результат -->
-    <div class="group">
-      <label>Результат</label>
-      <div class="radio-inline-group">
-        <label><input type="radio" name="result" value="Виявлено" onchange="updateAmmoVisibility()"> Виявлено</label>
-        <label><input type="radio" name="result" value="Обстріляно" onchange="updateAmmoVisibility()"> Обстріляно</label>
-        <label><input type="radio" name="result" value="Уражено" onchange="updateAmmoVisibility()"> Уражено</label>
-      </div>
-    </div>
-
-    <!-- 18. Розхід БК -->
- <div class="group" id="ammoBlock" style="display:none;">
-  <label>Розхід БК</label>
-  <div class="ammo-grid">
-    <div class="ammo-item">
-      <label><input type="checkbox" id="chk_ak" onchange="toggleAmmoInput('chk_ak', 'ak_input')"> АК-74 - 5.45</label>
-      <input type="number" id="ak_input" placeholder="Кількість" style="display:none;" inputmode="numeric">
-    </div>
-    <div class="ammo-item">
-      <label><input type="checkbox" id="chk_canik" onchange="toggleAmmoInput('chk_canik', 'canik_input')"> CANiK M2</label>
-      <input type="number" id="canik_input" placeholder="Кількість" style="display:none;" inputmode="numeric">
-    </div>
-    <div class="ammo-item">
-      <label><input type="checkbox" id="chk_dp" onchange="toggleAmmoInput('chk_dp', 'dp_input')"> ДП-27 7.62</label>
-      <input type="number" id="dp_input" placeholder="Кількість" style="display:none;" inputmode="numeric">
-    </div>
-    <div class="ammo-item">
-      <label><input type="checkbox" id="chk_other" onchange="toggleAmmoInput('chk_other', 'other_input')"> Інше</label>
-      <input type="number" id="other_input" placeholder="Кількість" style="display:none;" inputmode="numeric">
-    </div>
+   <!-- Результат -->
+<div class="mt-4">
+  <label><strong>Результат</strong></label>
+  <div class="flex flex-wrap gap-4 mt-2">
+    <label><input type="radio" name="result" value="Detected" onchange="updateAmmoVisibility()"> Виявлено</label>
+    <label><input type="radio" name="result" value="Shot at" onchange="updateAmmoVisibility()"> Обстріляно</label>
+    <label><input type="radio" name="result" value="Hit" onchange="updateAmmoVisibility()"> Уражено</label>
   </div>
 </div>
-<div id="ammoGroup" style="display: none; margin-top: 10px;">
-  <h3>Розхід БК</h3>
-  <div class="grid grid-cols-2 gap-4">
+
+<!-- Розхід БК -->
+<div id="ammoGroup" style="display: none; margin-top: 1rem;">
+  <label><strong>Розхід БК</strong></label>
+  <div class="grid grid-cols-2 gap-4 mt-2">
     <div>
-      <label><input type="checkbox" id="ammo1" onchange="toggleAmmoCount('ammo1')"> АК-74 - 5.45</label>
-      <input type="number" id="ammo1Count" class="input" placeholder="Кількість" disabled>
+      <label>
+        <input type="checkbox" id="ammo1" onchange="toggleAmmoCount('ammo1')">
+        АК-74 - 5.45
+      </label>
+      <input type="number" id="ammo1Count" class="w-full mt-1" placeholder="К-сть" disabled>
     </div>
     <div>
-      <label><input type="checkbox" id="ammo2" onchange="toggleAmmoCount('ammo2')"> CANiK M2</label>
-      <input type="number" id="ammo2Count" class="input" placeholder="Кількість" disabled>
+      <label>
+        <input type="checkbox" id="ammo2" onchange="toggleAmmoCount('ammo2')">
+        CANiK M2
+      </label>
+      <input type="number" id="ammo2Count" class="w-full mt-1" placeholder="К-сть" disabled>
     </div>
     <div>
-      <label><input type="checkbox" id="ammo3" onchange="toggleAmmoCount('ammo3')"> ДП-27 7.62</label>
-      <input type="number" id="ammo3Count" class="input" placeholder="Кількість" disabled>
+      <label>
+        <input type="checkbox" id="ammo3" onchange="toggleAmmoCount('ammo3')">
+        ДП-27 7.62
+      </label>
+      <input type="number" id="ammo3Count" class="w-full mt-1" placeholder="К-сть" disabled>
     </div>
     <div>
-      <label><input type="checkbox" id="ammo4" onchange="toggleAmmoCount('ammo4')"> Інше</label>
-      <input type="number" id="ammo4Count" class="input" placeholder="Кількість" disabled>
+      <label>
+        <input type="checkbox" id="ammo4" onchange="toggleAmmoCount('ammo4')">
+        Інше
+      </label>
+      <input type="number" id="ammo4Count" class="w-full mt-1" placeholder="К-сть" disabled>
     </div>
   </div>
 </div>
 
-    <!-- 19. Опис -->
-    <div class="radio-inline-group">
-      <label>Опис</label>
-      <label><input type="checkbox" id="descSound"> змінила звук</label>
-      <label><input type="checkbox" id="descCourse"> змінила курс</label>
-      <textarea id="description" maxlength="360" rows="3" placeholder="Додатковий опис"></textarea>
-    </div>
+<!-- Опис -->
+<div class="mt-4">
+  <label><strong>Опис</strong></label>
+  <div class="flex flex-col gap-2 mt-2">
+    <label>
+      <input type="checkbox" id="descSound">
+      змінений звук
+    </label>
+    <label>
+      <input type="checkbox" id="descCourse">
+      змінений курс
+    </label>
+    <textarea id="description" maxlength="360" class="w-full mt-2 p-2 border rounded" placeholder="Власний опис (до 360 символів)"></textarea>
+  </div>
+</div>
+
+
 
     <!-- 20. Міні-звіт -->
     <div class="group">
@@ -657,51 +658,82 @@ function updateAmmoVisibility() {
   }
 
   // --- Формування тексту звіту ---
-  function generateReportText() {
-  try {
-    const sector = document.getElementById('sector')?.value || '';
-    const position = document.getElementById('position')?.value || '';
-    const location = document.getElementById('location')?.value || '';
+function generateReportText() {
+  const sector = document.getElementById('sector').value;
+  const position = document.getElementById('position').value;
+  const location = document.getElementById('location').value;
 
-    let targetType = '';
-    document.querySelectorAll('input[name="target"]').forEach(r => { if(r.checked) targetType = r.value; });
+  let targetType = '';
+  document.querySelectorAll('input[name="target"]').forEach(r => { if(r.checked) targetType = r.value; });
 
-    let side = '';
-    document.querySelectorAll('input[name="side"]').forEach(r => { if(r.checked) side = r.value; });
+  let side = '';
+  document.querySelectorAll('input[name="side"]').forEach(r => { if(r.checked) side = r.value; });
 
-    const noNumber = document.getElementById('noNumber')?.checked;
-    const targetNumber = noNumber ? "без видачі" : (document.getElementById('targetNumber')?.value || '');
+  const noNumber = document.getElementById('noNumber').checked;
+  const targetNumber = noNumber ? "без видачі" : (document.getElementById('targetNumber').value || '');
 
-    const targetCount = document.getElementById('targetCount')?.value || '';
-    const azimuth = document.getElementById('azimuth')?.value || '';
-    const course = document.getElementById('course')?.value || '';
-    const distance = document.getElementById('distance')?.value || '';
-    const height = document.getElementById('height')?.value || '';
-    const time = document.getElementById('time')?.value || '';
+  const targetCount = document.getElementById('targetCount').value;
+  const targetName = document.getElementById('targetName').value;
 
-    const acoustic = document.getElementById('acoustic')?.checked ? "Акустично" : "";
-    const radar = document.getElementById('radar')?.checked ? "Радар" : "";
-    const visual = document.getElementById('visual')?.checked ? "Візуально" : "";
-    const obs = document.getElementById('obs')?.checked ? "ЗЗС" : "";
+  const azimuth = document.getElementById('azimuth').value;
+  const course = document.getElementById('course').value;
+  const distance = document.getElementById('distance').value;
+  const height = document.getElementById('height').value;
+  const time = document.getElementById('time').value;
 
-    let resultValue = "";
-    document.querySelectorAll('input[name="result"]').forEach(r => { if(r.checked) resultValue = r.value; });
+  const acoustic = document.getElementById('acoustic').checked ? "Акустично" : "";
+  const radar = document.getElementById('radar').checked ? "Радар" : "";
+  const visual = document.getElementById('visual').checked ? "Візуально" : "";
+  const obs = document.getElementById('obs')?.checked ? "ЗЗС" : "";
 
-    let ammoText = '';
-    if (resultValue === 'Shot at' || resultValue === 'Hit') {
-      const ammoMap = {
-        'ammo1': 'АК-74 - 5.45',
-        'ammo2': 'CANiK M2',
-        'ammo3': 'ДП-27 7.62',
-        'ammo4': 'Інше'
-      };
-      for (const key in ammoMap) {
-        if (document.getElementById(key)?.checked) {
-          const count = document.getElementById(key + 'Count')?.value || 0;
-          ammoText += `${ammoMap[key]}: ${count} шт.\n`;
-        }
+  let resultValue = "";
+  document.getElementsByName('result').forEach(r => { if(r.checked) resultValue = r.value; });
+
+  let ammoText = '';
+  if (resultValue === 'Shot at' || resultValue === 'Hit') {
+    const ammoMap = {
+      'ammo1': 'АК-74 - 5.45',
+      'ammo2': 'CANiK M2',
+      'ammo3': 'ДП-27 7.62',
+      'ammo4': 'Інше'
+    };
+    for (const key in ammoMap) {
+      if (document.getElementById(key).checked) {
+        const count = document.getElementById(key + 'Count').value || 0;
+        ammoText += `${ammoMap[key]}: ${count} шт.\n`;
       }
     }
+  }
+
+  const descSound = document.getElementById('descSound').checked ? "змінений звук" : "";
+  const descCourse = document.getElementById('descCourse').checked ? "змінений курс" : "";
+  const description = document.getElementById('description').value;
+
+  let descriptionFull = "";
+  if(descSound) descriptionFull += descSound + "; ";
+  if(descCourse) descriptionFull += descCourse + "; ";
+  if(description) descriptionFull += description;
+
+  let report = "";
+  report += `П: ${sector}, ${position}\n`;
+  report += `Ціль: ${targetType}, ${side}, ${targetNumber}\n`;
+  if (targetName) report += `Назва: ${targetName}\n`;
+  report += `Висота: ${height} м\n`;
+  report += `Відстань: ${distance} м\n`;
+  report += `Кількість: ${targetCount} од\n`;
+  report += `А: ${azimuth}°\n`;
+  report += `К: ${course}°\n`;
+  report += `НП: ${location}\n`;
+  report += `Час: ${time}\n`;
+  report += `Вияв: ${[acoustic, radar, visual, obs].filter(Boolean).join(', ')}\n`;
+  report += `ПП: ${resultValue}\n`;
+  if(ammoText) report += `Розхід Б:\n${ammoText}`;
+  if(descriptionFull) report += `Опис: ${descriptionFull}\n`;
+
+  return report.trim();
+}
+
+
 
     const descSound = document.getElementById('descSound')?.checked ? "змінений звук" : "";
     const descCourse = document.getElementById('descCourse')?.checked ? "змінений курс" : "";
