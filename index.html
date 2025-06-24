@@ -443,7 +443,7 @@
       <div id="debug">Очікування даних...</div>
     </div>
   </div> 
-  
+  <div id="debug" style="margin-top: 1rem; font-size: 0.9rem; color: #555;">Дані компаса…</div>
 <script>
   function toggleLock(id) {
   const input = document.getElementById(id);
@@ -460,7 +460,76 @@
     localStorage.setItem(id, input.value); // ✅ ЗБЕРІГАЄМО ПІСЛЯ ЗАКРИТТЯ
   }
 }
+let sensorActive = {
+  azimuth: false,
+  course: false
+};
+let currentField = null;
 
+function toggleSensor(field) {
+  if (sensorActive[field]) {
+    stopSensor(field);
+  } else {
+    // iOS 13+
+    if (
+      typeof DeviceOrientationEvent !== "undefined" &&
+      typeof DeviceOrientationEvent.requestPermission === "function"
+    ) {
+      DeviceOrientationEvent.requestPermission()
+        .then(response => {
+          if (response === "granted") {
+            startSensor(field);
+          } else {
+            alert("❌ Доступ до компаса заборонено.");
+          }
+        })
+        .catch(() => {
+          alert("❌ Неможливо отримати дозвіл на компас.");
+        });
+    } else {
+      // Android або старі Safari
+      startSensor(field);
+    }
+  }
+}
+
+function startSensor(field) {
+  sensorActive[field] = true;
+  currentField = field;
+  document.getElementById(field + "Btn").textContent = "Зберегти";
+  window.addEventListener("deviceorientation", onDeviceOrientation);
+  document.getElementById("debug")?.textContent = `⏳ Визначення ${field}...`;
+}
+
+function stopSensor(field) {
+  sensorActive[field] = false;
+  document.getElementById(field + "Btn").textContent =
+    field === "azimuth" ? "визначити азимут" : "визначити курс";
+  currentField = null;
+  window.removeEventListener("deviceorientation", onDeviceOrientation);
+  document.getElementById("debug")?.textContent = `⛔ Компас вимкнено`;
+}
+
+function onDeviceOrientation(event) {
+  if (!currentField) return;
+
+  let heading = null;
+
+  if (event.webkitCompassHeading !== undefined) {
+    heading = event.webkitCompassHeading; // iOS
+  } else if (event.absolute === true || event.absolute === undefined) {
+    if (typeof event.alpha === "number") {
+      heading = 360 - event.alpha; // Android fallback
+    }
+  }
+
+  if (heading != null) {
+    heading = Math.round(heading % 360);
+    document.getElementById(currentField).value = heading;
+    document.getElementById("debug")?.textContent =
+      `📍 ${currentField} = ${heading}°`;
+  }
+}
   function toggleNumberField() {
     const chk = document.getElementById('noNumber');
     const num = document.getElementById('targetNumber');
