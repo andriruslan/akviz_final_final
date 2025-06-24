@@ -379,12 +379,14 @@
       <label>Результат</label>
       <hr>
       <div class="three-cols">
+        <label>
        <input type="radio" name="result" value="Виявлено" onchange="updateAmmoVisibility()">
  Виявлено</label>
         <input type="radio" name="result" value="Обстріляно" onchange="updateAmmoVisibility()">
  Обстріляно</label>
         <input type="radio" name="result" value="Уражено" onchange="updateAmmoVisibility()">
  Уражено</label>
+</label>
       </div>
     </div>
 
@@ -444,14 +446,20 @@
   
 <script>
   function toggleLock(id) {
-    const input = document.getElementById(id);
-    input.readOnly = !input.readOnly;
-    const lockBtn = input.nextElementSibling;
-    if (lockBtn && lockBtn.tagName === "BUTTON") {
-      lockBtn.textContent = input.readOnly ? "🔓" : "🔒";
-    }
-    if (!input.readOnly) input.focus();
+  const input = document.getElementById(id);
+  input.readOnly = !input.readOnly;
+
+  const lockBtn = input.nextElementSibling;
+  if (lockBtn && lockBtn.tagName === "BUTTON") {
+    lockBtn.textContent = input.readOnly ? "🔓" : "🔒";
   }
+
+  if (!input.readOnly) {
+    input.focus();
+  } else {
+    localStorage.setItem(id, input.value); // ✅ ЗБЕРІГАЄМО ПІСЛЯ ЗАКРИТТЯ
+  }
+}
 
   function toggleNumberField() {
     const chk = document.getElementById('noNumber');
@@ -519,7 +527,12 @@
     input.value = name;
     updatePreview();
   }
-
+function toggleAmmoCount(id) {
+  const cb = document.getElementById(id);
+  const input = document.getElementById(id + "Count");
+  input.disabled = !cb.checked;
+  if (!cb.checked) input.value = '';
+}
   function generateReportText() {
     const sector = document.getElementById("sector")?.value || "-";
     const position = document.getElementById("position")?.value || "-";
