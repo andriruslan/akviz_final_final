@@ -197,15 +197,34 @@
   border-radius: 6px;
   cursor: pointer;
 }
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
 
+.field-row input {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.lock-btn {
+  padding: 0.4rem 0.6rem;
+  font-size: 1.2rem;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
   </style>
 </head>
 <body>
   <div class="container">
     <h2>АкВіз_КАГАРЛИК</h2>
-    <div class="group row-field">
+  <div class="group">
   <label for="sector">Підпорядкування</label>
-  <div class="field-with-lock">
+  <div class="field-row">
     <input type="text" id="sector" readonly />
     <button type="button" class="lock-btn" onclick="toggleLock('sector')">🔓</button>
   </div>
@@ -246,10 +265,10 @@
       </div>
     </div>
 
- <div class="group">
+<div class="group">
   <label>Сторона</label>
   <hr>
-  <div class="radio-inline-group side-3col">
+  <div class="side-3col">
     <label><input type="radio" name="side" value="Ворожий"> Ворожий</label>
     <label><input type="radio" name="side" value="Свій"> Свій</label>
     <label><input type="radio" name="side" value="Нейтральний"> Нейтральний</label>
