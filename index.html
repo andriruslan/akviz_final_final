@@ -333,7 +333,7 @@
     <div class="group">
       <label>Тип цілі</label>
       <div class="radio-inline-group">
-        <label><input type="radio" name="target" value="БПЛА літакового типу">БПЛА літакового типу</label>
+        <label><input type="radio" name="target" value="БПЛА літакового типу">111БПЛА літакового типу</label>
         <label><input type="radio" name="target" value="Постріли (ЗУ,кулемет)">Постріли (ЗУ,кулемет)</label>
         <label><input type="radio" name="target" value="Виходи (ПЗРК,ЗРК)"> Виходи (ПЗРК,ЗРК)</label>
         <label><input type="radio" name="target" value="Вибух КР"> КР</label>
@@ -356,9 +356,10 @@
       </div>
     </div>
 
-    <div class="group">
+   <div class="group">
+      <label class="label-bold" for="targetNumber">Номер цілі</label>
       <label><input type="checkbox" id="noNumber" checked onchange="toggleNumberField()"> Без видачі</label>
-      <input type="number" id="targetNumber" placeholder="номер цілі" readonly>
+      <input id="targetNumber" name="targetNumber" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" />
     </div>
 
     <div class="group">
@@ -459,8 +460,8 @@
   <label><strong>Результат</strong></label>
   <div class="flex flex-wrap gap-4 mt-2">
     <label><input type="radio" name="result" value="Detected" onchange="updateAmmoVisibility()"> Виявлено</label>
-    <label><input type="radio" name="result" value="Shot at" onchange="updateAmmoVisibility()"> Обстріляно</label>
-    <label><input type="radio" name="result" value="Hit" onchange="updateAmmoVisibility()"> Уражено</label>
+    <label><input type="radio" name="result" value="Обстріляно" onchange="updateAmmoVisibility()"> Обстріляно</label>
+    <label><input type="radio" name="result" value="Уражено" onchange="updateAmmoVisibility()"> Уражено</label>
   </div>
 </div>
 
@@ -633,7 +634,7 @@ function updateAmmoVisibility() {
   const results = document.getElementsByName('result');
   let show = false;
   results.forEach(r => {
-    if ((r.checked) && (r.value === 'Shot at' || r.value === 'Hit')) show = true;
+   if ((r.checked) && (r.value === 'Обстріляно' || r.value === 'Уражено')) show = true;
   });
   const ammoGroup = document.getElementById('ammoGroup');
   if (ammoGroup) ammoGroup.style.display = show ? 'block' : 'none';
@@ -682,7 +683,7 @@ function generateReportText() {
   document.getElementsByName('result').forEach(r => { if(r.checked) resultValue = r.value; });
 
   let ammoText = '';
-  if (resultValue === 'Shot at' || resultValue === 'Hit') {
+  if (resultValue === 'Обстріляно' || resultValue === 'Уражено') {
     const ammoMap = {
       'ammo1': 'АК-74 - 5.45',
       'ammo2': 'CANiK M2',
