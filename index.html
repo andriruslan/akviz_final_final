@@ -333,7 +333,7 @@
     <div class="group">
       <label>Тип цілі</label>
       <div class="radio-inline-group">
-        <label><input type="radio" name="target" value="БПЛА літакового типу">111БПЛА літакового типу</label>
+        <label><input type="radio" name="target" value="БПЛА літакового типу">БПЛА літакового типу</label>
         <label><input type="radio" name="target" value="Постріли (ЗУ,кулемет)">Постріли (ЗУ,кулемет)</label>
         <label><input type="radio" name="target" value="Виходи (ПЗРК,ЗРК)"> Виходи (ПЗРК,ЗРК)</label>
         <label><input type="radio" name="target" value="Вибух КР"> КР</label>
@@ -542,27 +542,28 @@
   </div> <!-- кінець container -->
 
 <script>
-  // --- Збереження/завантаження з localStorage ---
-  function toggleLock(id) {
-    const input = document.getElementById(id);
-    input.readOnly = !input.readOnly;
-    if (input.readOnly) {
-      localStorage.setItem(id, input.value);
-    } else {
-      input.focus();
-    }
-  }
 
-  function loadStored() {
-    ['sector','position','location'].forEach(id => {
-      const val = localStorage.getItem(id);
-      if (val) document.getElementById(id).value = val;
-    });
-    toggleNumberField();
+// --- Збереження/завантаження з localStorage ---
+function toggleLock(id) {
+  const input = document.getElementById(id);
+  input.readOnly = !input.readOnly;
+  if (input.readOnly) {
+    localStorage.setItem(id, input.value);
+  } else {
+    input.focus();
   }
+}
 
-  // --- Зміна кількості цілей ---
- function changeCount(delta) {
+function loadStored() {
+  ['sector','position','location'].forEach(id => {
+    const val = localStorage.getItem(id);
+    if (val) document.getElementById(id).value = val;
+  });
+  toggleNumberField();
+}
+
+// --- Зміна кількості цілей ---
+function changeCount(delta) {
   const field = document.getElementById('targetCount');
   let val = parseInt(field.value) + delta;
   if (val <= 1) {
@@ -572,67 +573,62 @@
     document.getElementById('minusBtn').disabled = false;
   }
   field.value = val;
+  updatePreview();
 }
 
+// --- Вмикання/вимикання поля номер цілі ---
+function toggleNumberField() {
+  const noNum = document.getElementById('noNumber').checked;
+  const numInput = document.getElementById('targetNumber');
+  numInput.readOnly = noNum;
+  if (noNum) numInput.value = '';
+}
 
-  // --- Вмикання/вимикання поля номер цілі ---
-  function toggleNumberField() {
-    const noNum = document.getElementById('noNumber').checked;
-    const numInput = document.getElementById('targetNumber');
-    numInput.readOnly = noNum;
-    if (noNum) numInput.value = '';
+// --- Додавання/віднімання значень ---
+function adjustValue(id, delta) {
+  const field = document.getElementById(id);
+  let val = parseInt(field.value) || 0;
+  val += delta;
+  if (val < 0) val = 0;
+  field.value = val;
+  updatePreview();
+}
+
+// --- Час ---
+function setNowTime() {
+  const timeInput = document.getElementById('time');
+  const now = new Date();
+  const h = now.getHours().toString().padStart(2,'0');
+  const m = now.getMinutes().toString().padStart(2,'0');
+  timeInput.value = h + ':' + m;
+  updatePreview();
+}
+
+function changeTime(delta) {
+  const timeInput = document.getElementById('time');
+  let [h,m] = timeInput.value.split(':').map(Number);
+  if (isNaN(h) || isNaN(m)) {
+    setNowTime();
+    return;
   }
+  let date = new Date();
+  date.setHours(h, m + delta);
+  const nh = date.getHours().toString().padStart(2,'0');
+  const nm = date.getMinutes().toString().padStart(2,'0');
+  timeInput.value = nh + ':' + nm;
+  updatePreview();
+}
 
-  // --- Додавання/віднімання відстані ---
-  function addDistance(val) {
-    const input = document.getElementById('distance');
-    let current = Number(input.value) || 0;
-    current += val;
-    if (current < 0) current = 0;
-    input.value = current;
-  }
+// --- Виявлення ---
+function checkDetect() {
+  const visual = document.getElementById('visual').checked;
+  const obs = document.getElementById('obs');
+  obs.disabled = !visual;
+  if (!visual) obs.checked = false;
+  updatePreview();
+}
 
-  // --- Додавання/віднімання висоти ---
-  function addHeight(val) {
-    const input = document.getElementById('height');
-    let current = Number(input.value) || 0;
-    current += val;
-    if (current < 0) current = 0;
-    input.value = current;
-  }
-
-  // --- Час ---
-  function setNowTime() {
-    const timeInput = document.getElementById('time');
-    const now = new Date();
-    const h = now.getHours().toString().padStart(2,'0');
-    const m = now.getMinutes().toString().padStart(2,'0');
-    timeInput.value = h + ':' + m;
-  }
-
-  function changeTime(delta) {
-    const timeInput = document.getElementById('time');
-    let [h,m] = timeInput.value.split(':').map(Number);
-    if (isNaN(h) || isNaN(m)) {
-      setNowTime();
-      return;
-    }
-    let date = new Date();
-    date.setHours(h, m + delta);
-    const nh = date.getHours().toString().padStart(2,'0');
-    const nm = date.getMinutes().toString().padStart(2,'0');
-    timeInput.value = nh + ':' + nm;
-  }
-
-  // --- Виявлення ---
-  function checkDetect() {
-    const visual = document.getElementById('visual').checked;
-    const obs = document.getElementById('obs');
-    obs.disabled = !visual;
-    if (!visual) obs.checked = false;
-  }
-
-  // --- Показати/сховати витрату боєприпасів ---
+// --- Показати/сховати витрату боєприпасів ---
 function updateAmmoVisibility() {
   const results = document.getElementsByName('result');
   let show = false;
@@ -643,54 +639,47 @@ function updateAmmoVisibility() {
   if (ammoGroup) ammoGroup.style.display = show ? 'block' : 'none';
 }
 
-
-
-
-  // --- Активувати/деактивувати поля кількості боєприпасів ---
-  function toggleAmmoCount(id) {
-    const cb = document.getElementById(id);
-    const countInput = document.getElementById(id + 'Count');
-    countInput.disabled = !cb.checked;
-    if (!cb.checked) countInput.value = '';
-  }
-
-  // --- Формування тексту звіту ---
+// --- Увімкнути/вимкнути поля кількості боєприпасів ---
+function toggleAmmoCount(id) {
+  const cb = document.getElementById(id);
+  const countInput = document.getElementById(id + 'Count');
+  countInput.disabled = !cb.checked;
+  if (!cb.checked) countInput.value = '';
+  updatePreview();
+}
+// --- Формування тексту звіту ---
 function generateReportText() {
-  const sector = document.getElementById('sector')?.value || '';
-  const position = document.getElementById('position')?.value || '';
-  const location = document.getElementById('location')?.value || '';
+  const sector = document.getElementById('sector').value;
+  const position = document.getElementById('position').value;
+  const location = document.getElementById('location').value;
 
   let targetType = '';
-  document.querySelectorAll('input[name="target"]').forEach(r => {
-    if (r.checked) targetType = r.value;
-  });
+  document.querySelectorAll('input[name="target"]').forEach(r => { if(r.checked) targetType = r.value; });
 
   let side = '';
-  document.querySelectorAll('input[name="side"]').forEach(r => {
-    if (r.checked) side = r.value;
-  });
+  document.querySelectorAll('input[name="side"]').forEach(r => { if(r.checked) side = r.value; });
 
-  const noNumber = document.getElementById('noNumber')?.checked;
-  const targetNumber = noNumber ? "без видачі" : (document.getElementById('targetNumber')?.value || '');
+  const noNumber = document.getElementById('noNumber').checked;
+  const targetNumber = noNumber ? "без видачі" : (document.getElementById('targetNumber').value || '');
 
-  const targetCount = document.getElementById('targetCount')?.value || '';
-  const targetName = document.getElementById('targetName')?.value || '';
+  const targetName = document.getElementById('targetName').value;
+  const targetCount = document.getElementById('targetCount').value;
 
-  const azimuth = document.getElementById('azimuth')?.value || '';
-  const course = document.getElementById('course')?.value || '';
-  const distance = document.getElementById('distance')?.value || '';
-  const height = document.getElementById('height')?.value || '';
-  const time = document.getElementById('time')?.value || '';
+  const azimuth = document.getElementById('azimuth').value;
+  const course = document.getElementById('course').value;
 
-  const acoustic = document.getElementById('acoustic')?.checked ? "Акустично" : "";
-  const radar = document.getElementById('radar')?.checked ? "Радар" : "";
-  const visual = document.getElementById('visual')?.checked ? "Візуально" : "";
-  const obs = document.getElementById('obs')?.checked ? "ЗЗС" : "";
+  const distance = document.getElementById('distance').value;
+  const height = document.getElementById('height').value;
+
+  const time = document.getElementById('time').value;
+
+  const acoustic = document.getElementById('acoustic').checked ? "Акустично" : "";
+  const radar = document.getElementById('radar').checked ? "Радар" : "";
+  const visual = document.getElementById('visual').checked ? "Візуально" : "";
+  const obs = document.getElementById('obs').checked ? "Засоби спостереження" : "";
 
   let resultValue = "";
-  document.getElementsByName('result').forEach(r => {
-    if (r.checked) resultValue = r.value;
-  });
+  document.getElementsByName('result').forEach(r => { if(r.checked) resultValue = r.value; });
 
   let ammoText = '';
   if (resultValue === 'Shot at' || resultValue === 'Hit') {
@@ -701,49 +690,12 @@ function generateReportText() {
       'ammo4': 'Інше'
     };
     for (const key in ammoMap) {
-      const checkbox = document.getElementById(key);
-      const input = document.getElementById(key + 'Count');
-      if (checkbox?.checked) {
-        const count = input?.value || 0;
+      if (document.getElementById(key).checked) {
+        const count = document.getElementById(key + 'Count').value || 0;
         ammoText += `${ammoMap[key]}: ${count} шт.\n`;
       }
     }
   }
-
-  const descSound = document.getElementById('descSound')?.checked ? "змінений звук" : "";
-  const descCourse = document.getElementById('descCourse')?.checked ? "змінений курс" : "";
-  const description = document.getElementById('description')?.value || '';
-
-  let descriptionFull = "";
-  if (descSound) descriptionFull += descSound + "; ";
-  if (descCourse) descriptionFull += descCourse + "; ";
-  if (description) descriptionFull += description;
-
-  let report = "";
-  report += `П: ${sector}, ${position}\n`;
-  report += `Ціль: ${targetType}, ${side}, ${targetNumber}\n`;
-  if (targetName) report += `Назва: ${targetName}\n`;
-  report += `Висота: ${height} м\n`;
-  report += `Відстань: ${distance} м\n`;
-  report += `Кількість: ${targetCount} од\n`;
-  report += `А: ${azimuth}°\n`;
-  report += `К: ${course}°\n`;
-  report += `НП: ${location}\n`;
-  report += `Час: ${time}\n`;
-  report += `Вияв: ${[acoustic, radar, visual, obs].filter(Boolean).join(', ')}\n`;
-  report += `ПП: ${resultValue}\n`;
-  if (ammoText) report += `Розхід Б:\n${ammoText}`;
-  if (descriptionFull) report += `Опис: ${descriptionFull}\n`;
-
-  return report.trim();
-}
-
-  catch (err) {
-    console.error("Помилка при формуванні звіту:", err);
-    return "";
-  }
-}
-
 
   const descSound = document.getElementById('descSound').checked ? "змінений звук" : "";
   const descCourse = document.getElementById('descCourse').checked ? "змінений курс" : "";
@@ -754,9 +706,9 @@ function generateReportText() {
   if(descCourse) descriptionFull += descCourse + "; ";
   if(description) descriptionFull += description;
 
-  // --- Формуємо звіт за новим шаблоном ---
   let report = `П: ${sector}, ${position}\n`;
-  report += `Ціль: ${targetType}, ${side}, ${targetNumber}\n`;
+  report += `Ціль: ${targetType}, ${side}, ${noNumber ? "без видачі" : targetNumber}\n`;
+  if(targetName) report += `Назва: ${targetName}\n`;
   report += `Висота: ${height} м\n`;
   report += `Відстань: ${distance} м\n`;
   report += `Кількість: ${targetCount} од\n`;
@@ -766,182 +718,100 @@ function generateReportText() {
   report += `Час: ${time}\n`;
   report += `Вияв: ${[acoustic, radar, visual, obs].filter(Boolean).join(', ')}\n`;
   report += `ПП: ${resultValue}\n`;
-  if (ammoText) report += `Розхід Б:\n${ammoText}`;
-  if (descriptionFull) report += `Опис: ${descriptionFull}\n`;
+  if(ammoText) report += `Розхід Б:\n${ammoText}`;
+  if(descriptionFull) report += `Опис: ${descriptionFull}\n`;
 
   return report;
 }
 
+// --- Копіювати звіт ---
+function copyReport() {
+  const text = generateReportText();
+  navigator.clipboard.writeText(text).then(() => {
+    document.getElementById("preview").textContent = text;
+  });
+}
 
-    const descSound = document.getElementById('descSound').checked ? "змінений звук" : "";
-    const descCourse = document.getElementById('descCourse').checked ? "змінений курс" : "";
-    const description = document.getElementById('description').value;
+// --- Відправити в Signal ---
+function sendToSignal() {
+  const text = generateReportText();
+  navigator.clipboard.writeText(text).then(() => {
+    document.getElementById("preview").textContent = text;
+    window.location.href = "sgnl://";
+  });
+}
+// --- Компас і гіроскоп для азимуту і курсу ---
+let sensorActive = {
+  azimuth: false,
+  course: false
+};
+let currentField = null;
 
-    let descriptionFull = "";
-    if(descSound) descriptionFull += descSound + "; ";
-    if(descCourse) descriptionFull += descCourse + "; ";
-    if(description) descriptionFull += description;
-
-    let report = `P: ${sector}, ${position}\n`;
-    report += `Location: ${location}\n`;
-    report += `Target: ${targetType}, ${side}, ${noNumber ? "без видачі" : targetNumber}\n`;
-    if(targetName) report += `Name: ${targetName}\n`;
-    report += `Height: ${height} м, Distance: ${distance} м, Quantity: ${targetCount}\n`;
-    report += `Azimuth: ${azimuth}°, Course: ${course}°\n`;
-    report += `Time: ${time}\n`;
-    report += `Detection: ${[acoustic, radar, visual, obs].filter(Boolean).join(', ')}\n`;
-    report += `Result: ${resultValue}\n`;
-    if(ammoText) report += `Ammo consumption:\n${ammoText}`;
-    if(descriptionFull) report += `Description: ${descriptionFull}\n`;
-    return report;
-  }
-
-  // --- Копіювати звіт ---
-  function copyReport() {
-    const text = generateReportText();
-    navigator.clipboard.writeText(text).then(() => {
-      document.getElementById("preview").textContent = text;
-      /*
-      alert('Звіт скопійовано до буфера обміну!');
-*/
-    }).catch(err => {
-      alert("Не вдалося скопіювати: " + err);
-    });
-  }
-
-  // --- Відправити в Signal (копіюємо і відкриваємо додаток) ---
-  function sendToSignal() {
-    const text = generateReportText();
-    navigator.clipboard.writeText(text).then(() => {
-      document.getElementById("preview").textContent = text;
-      window.location.href = "sgnl://";
-    }).catch(err => {
-      alert("Не вдалося скопіювати звіт у буфер: " + err);
-    });
-  }
-
-  // --- Компас і гіроскоп для азимуту і курсу ---
-  let sensorActive = {
-    azimuth: false,
-    course: false
-  };
-  let currentField = null;
-
-  function toggleSensor(field) {
-    if (sensorActive[field]) {
-      // Зупинити визначення, кнопка стає "визначити"
-      sensorActive[field] = false;
-      document.getElementById(field + 'Btn').textContent = field === 'azimuth' ? 'визначити азимут' : 'визначити Курс';
-      currentField = null;
-      window.removeEventListener('deviceorientation', onDeviceOrientation);
-      document.getElementById('debug').textContent = 'Дані компаса зупинено.';
+function toggleSensor(field) {
+  if (sensorActive[field]) {
+    // Зупинити визначення, кнопка стає "визначити"
+    sensorActive[field] = false;
+    document.getElementById(field + 'Btn').textContent = field === 'azimuth' ? 'визначити азимут' : 'визначити курс';
+    currentField = null;
+    window.removeEventListener('deviceorientation', onDeviceOrientation);
+    document.getElementById('debug').textContent = 'Дані компаса зупинено.';
+  } else {
+    // Запит дозволу (для iOS 13+)
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission()
+        .then(response => {
+          if (response === 'granted') {
+            startSensor(field);
+          } else {
+            alert('Дозвіл на доступ до датчиків відмовлено');
+          }
+        })
+        .catch(console.error);
     } else {
-      // Запит дозволу (для iOS 13+)
-      if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-        DeviceOrientationEvent.requestPermission()
-          .then(response => {
-            if (response === 'granted') {
-              startSensor(field);
-            } else {
-              alert('Дозвіл на доступ до датчиків відмовлено');
-            }
-          })
-          .catch(console.error);
-      } else {
-        startSensor(field);
-      }
+      startSensor(field);
     }
   }
+}
 
-  function startSensor(field) {
-    sensorActive[field] = true;
-    currentField = field;
-    document.getElementById(field + 'Btn').textContent = 'зберегти';
-    window.addEventListener('deviceorientation', onDeviceOrientation);
-    document.getElementById('debug').textContent = 'Визначення ' + (field === 'azimuth' ? 'азимуту' : 'курсу') + ' ...';
+function startSensor(field) {
+  sensorActive[field] = true;
+  currentField = field;
+  document.getElementById(field + 'Btn').textContent = 'зберегти';
+  window.addEventListener('deviceorientation', onDeviceOrientation);
+  document.getElementById('debug').textContent = 'Визначення ' + (field === 'azimuth' ? 'азимуту' : 'курсу') + '...';
+}
+
+function onDeviceOrientation(event) {
+  if (!currentField) return;
+
+  let heading = null;
+
+  // Спроба взяти heading для iOS (webkitCompassHeading)
+  if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
+    heading = event.webkitCompassHeading; // 0-360° (0 — північ)
+  } else if (event.absolute === true || event.absolute === undefined) {
+    // fallback на event.alpha (приблизний azimuth/course)
+    // event.alpha — 0-360, 0 — північ, по годинах
+    heading = 360 - event.alpha; // інвертуємо для більш природного відображення
+    if (heading < 0) heading += 360;
   }
 
-  function onDeviceOrientation(event) {
-    if (!currentField) return;
-
-    let heading = null;
-
-    // Спроба взяти heading для iOS (webkitCompassHeading)
-    if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
-      heading = event.webkitCompassHeading; // 0-360° (0 — північ)
-    } else if (event.absolute === true || event.absolute === undefined) {
-      // fallback на event.alpha (приблизний azimuth/course)
-      // event.alpha — 0-360, 0 — північ, по годинах
-      heading = 360 - event.alpha; // інвертуємо для більш природного відображення
-      if (heading < 0) heading += 360;
-    }
-
-    if (heading !== null) {
-      // Округлюємо
-      heading = Math.round(heading);
-      if (heading > 359) heading = 359;
-
-      // Встановлюємо в поле
-      document.getElementById(currentField).value = heading;
-
-      // Вивід в діагностику
-      document.getElementById('debug').textContent = `Визначення ${currentField}: ${heading}°`;
-    }
+  if (heading !== null) {
+    heading = Math.round(heading);
+    if (heading > 359) heading = 359;
+    document.getElementById(currentField).value = heading;
+    document.getElementById('debug').textContent = `Визначення ${currentField}: ${heading}°`;
   }
-  function updatePreview() {
-  const preview = document.getElementById('preview');
-  preview.textContent = generateReportText();
 }
 
-function attachListeners() {
-  const inputs = document.querySelectorAll('input, textarea');
-  inputs.forEach(input => {
-    input.addEventListener('input', updatePreview);
-    input.addEventListener('change', updatePreview);
-  });
-  const radiosAndCheckboxes = document.querySelectorAll('input[type=radio], input[type=checkbox]');
-  radiosAndCheckboxes.forEach(el => {
-    el.addEventListener('change', updatePreview);
-  });
-}
-  function adjustValue(id, delta) {
-  const field = document.getElementById(id);
-  let val = parseInt(field.value) || 0;
-  val += delta;
-  if (val < 0) val = 0;
-  field.value = val;
-}
-function attachReportUpdateListeners() {
-  const ids = [
-    'sector', 'position', 'location', 'azimuth', 'course',
-    'distance', 'height', 'time', 'targetNumber', 'targetName', 'targetCount', 'descText'
-  ];
-  
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if(el) {
-      el.addEventListener('input', updatePreview);
-    }
-  });
-
-  document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => {
-    el.addEventListener('change', updatePreview);
-  });
-}
-
-
-// Видали або закоментуй цей код:
-// setInterval(() => {
-//   document.getElementById("preview").textContent = generateReportText();
-// }, 1500);
-
+// --- Оновлення міні-звіту ---
 function updatePreview() {
   document.getElementById("preview").textContent = generateReportText();
 }
 
+// --- Додаємо прослуховувачі на всі поля ---
 function attachReportUpdateListeners() {
   const inputs = document.querySelectorAll("input, textarea, select");
-
   inputs.forEach(el => {
     el.addEventListener("input", updatePreview);
     if (el.type === "checkbox" || el.type === "radio") {
@@ -949,54 +819,46 @@ function attachReportUpdateListeners() {
     }
   });
 }
-  function adjustValue(id, delta) {
+
+// --- Функція коригування числового значення і оновлення звіту ---
+function adjustValue(id, delta) {
   const field = document.getElementById(id);
   let val = parseInt(field.value) || 0;
   val += delta;
   if (val < 0) val = 0;
   field.value = val;
-
-  updatePreview(); // Оновити звіт при зміні через кнопки
+  updatePreview();
 }
+
+// --- Зміна назви цілі і оновлення звіту ---
 function setTargetNameAndUpdate(name) {
   const targetNameInput = document.getElementById('targetName');
   targetNameInput.value = name;
-  updatePreview();  // Оновлюємо міні-звіт
+  updatePreview();
 }
+
+// --- Показати або сховати блок "Розхід БК" при зміні результату ---
 document.querySelectorAll('input[name="result"]').forEach(el => {
   el.addEventListener("change", updateAmmoVisibility);
 });
 
-window.onload = () => {
-  loadStored();
-  toggleNumberField();
-  setNowTime();
-  updateAmmoVisibility();
-  checkDetect();
-
-  attachReportUpdateListeners();  // Додаємо прослуховувачі
-
-  updatePreview();  // Початкове оновлення міні-звіту
-};
+// --- Запобігання подвійного кліку (dblclick) для всіх кнопок ---
 document.querySelectorAll("button").forEach(btn => {
   btn.addEventListener("dblclick", function(e) {
-    e.preventDefault(); // блокує подвійний клік
+    e.preventDefault();
   });
 });
 
-/*
+// --- Ініціалізація при завантаженні сторінки ---
 window.onload = () => {
   loadStored();
   toggleNumberField();
   setNowTime();
   updateAmmoVisibility();
   checkDetect();
-  changeCount(0);
-  attachListeners();
+  attachReportUpdateListeners();
   updatePreview();
-};*/
-
-
+};
 
 </script>
 
