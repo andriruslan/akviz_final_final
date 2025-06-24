@@ -359,6 +359,7 @@
    <div class="group">
       <label class="label-bold" for="targetNumber">Номер цілі</label>
       <label><input type="checkbox" id="noNumber" checked onchange="toggleNumberField()"> Без видачі</label>
+      <input type="number" id="targetNumber" placeholder="номер цілі" readonly>
       <input id="targetNumber" name="targetNumber" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="1" />
     </div>
 
@@ -390,7 +391,8 @@
 
     <!-- 11. Азимут -->
     <div class="group">
-      <label>Азимут, ° (*)</label>
+     <label class="label-bold" for="azimuth">Азимут, °</label>
+     <input id="azimuth" name="azimuth" type="number" inputmode="numeric" pattern="[0-9]*" min="0" max="359" step="1" />
       <input type="number" id="azimuth" placeholder="Введіть або визначте" min="0" max="359" step="1">
       <button type="button" id="azimuthBtn" onclick="toggleSensor('azimuth')">визначити азимут</button>
     </div>
