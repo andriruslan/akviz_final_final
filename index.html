@@ -632,7 +632,11 @@ ${descParts.length ? "Опис: " + descParts.join(", ") : ""}`.trim();
     attachReportUpdateListeners();
     updatePreview();
   };
-// --- АЗИМУТ / КУРС через deviceorientation ---
+
+  document.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("dblclick", e => e.preventDefault());
+  });
+  // --- АЗИМУТ / КУРС через deviceorientation ---
 let sensorActive = {
   azimuth: false,
   course: false
@@ -700,9 +704,6 @@ function onDeviceOrientation(event) {
     document.getElementById("debug")?.textContent = `📍 ${currentField}: ${heading}°`;
   }
 }
-  document.querySelectorAll("button").forEach(btn => {
-    btn.addEventListener("dblclick", e => e.preventDefault());
-  });
 </script>
 
 </body>
