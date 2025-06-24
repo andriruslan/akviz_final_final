@@ -177,38 +177,62 @@
   gap: 0.5rem;
 }
 *****
+.field-with-lock {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.field-with-lock input {
+  flex: 1;
+  font-size: 1rem;
+  padding: 0.4rem;
+}
+
+.lock-btn {
+  padding: 0.4rem 0.7rem;
+  font-size: 1rem;
+  background: #ddd;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
   </style>
 </head>
 <body>
   <div class="container">
     <h2>АкВіз_КАГАРЛИК</h2>
-    <div class="group">
-      <label>Підпорядкування</label>
-      <hr>
-      <input type="text" id="sector" readonly />
-      <button onclick="toggleLock('sector')">🔓/🔒</button>
-    </div>
+    <div class="group row-field">
+  <label for="sector">Підпорядкування</label>
+  <div class="field-with-lock">
+    <input type="text" id="sector" readonly />
+    <button type="button" class="lock-btn" onclick="toggleLock('sector')">🔓</button>
+  </div>
+</div>
 
-    <div class="group">
-      <label>Позиція</label>
-      <hr>
-      <input type="text" id="position" readonly />
-      <button onclick="toggleLock('position')">🔓/🔒</button>
-    </div>
+<div class="group row-field">
+  <label for="position">Позиція</label>
+  <div class="field-with-lock">
+    <input type="text" id="position" readonly />
+    <button type="button" class="lock-btn" onclick="toggleLock('position')">🔓</button>
+  </div>
+</div>
 
-    <div class="group">
-      <label>Населений пункт</label>
-      <hr>
-      <input type="text" id="location" readonly />
-      <button onclick="toggleLock('location')">🔓/🔒</button>
-    </div>
+<div class="group row-field">
+  <label for="location">Населений пункт</label>
+  <div class="field-with-lock">
+    <input type="text" id="location" readonly />
+    <button type="button" class="lock-btn" onclick="toggleLock('location')">🔓</button>
+  </div>
+</div>
+
 
     <div class="group">
       <label>Тип цілі</label>
       <hr>
       <div class="radio-group">
-        <label><input type="radio" name="target" value="БПЛА літакового типу"> БПЛА літакового типу</label>
+        <label><input type="radio" name="target" value="БПЛА літакового типу"> 123БПЛА літакового типу</label>
         <label><input type="radio" name="target" value="Постріли (ЗУ, кулемет)"> Постріли (ЗУ, кулемет)</label>
         <label><input type="radio" name="target" value="Виходи (ПЗРК, ЗРК)"> Виходи (ПЗРК, ЗРК)</label>
         <label><input type="radio" name="target" value="Вибух КР"> Вибух КР</label>
@@ -222,16 +246,16 @@
       </div>
     </div>
 
-   <div class="radio-inline-group side-3col">
+ <div class="group">
+  <label>Сторона</label>
+  <hr>
+  <div class="radio-inline-group side-3col">
+    <label><input type="radio" name="side" value="Ворожий"> Ворожий</label>
+    <label><input type="radio" name="side" value="Свій"> Свій</label>
+    <label><input type="radio" name="side" value="Нейтральний"> Нейтральний</label>
+  </div>
+</div>
 
-      <label>Сторона</label>
-      <hr>
-     <div class="three-cols">
-        <label><input type="radio" name="side" value="Ворожий"> Ворожий</label>
-        <label><input type="radio" name="side" value="Свій"> Свій</label>
-        <label><input type="radio" name="side" value="Нейтральний"> Нейт-ий</label>
-      </div>
-    </div>
 
     <div class="group">
       <label>Номер цілі</label>
