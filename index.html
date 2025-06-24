@@ -217,6 +217,18 @@
   border-radius: 5px;
   cursor: pointer;
 }
+.side-3col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.3rem;
+}
+
+.side-3col label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 0.95rem;
+}
   </style>
 </head>
 <body>
@@ -230,22 +242,21 @@
   </div>
 </div>
 
-<div class="group row-field">
+  <div class="group">
   <label for="position">Позиція</label>
-  <div class="field-with-lock">
+  <div class="field-row">
     <input type="text" id="position" readonly />
-    <button type="button" class="lock-btn" onclick="toggleLock('position')">🔓</button>
+    <button type="button" class="lock-btn" onclick="toggleLock('sector')">🔓</button>
   </div>
 </div>
 
-<div class="group row-field">
+  <div class="group">
   <label for="location">Населений пункт</label>
-  <div class="field-with-lock">
+  <div class="field-row">
     <input type="text" id="location" readonly />
-    <button type="button" class="lock-btn" onclick="toggleLock('location')">🔓</button>
+    <button type="button" class="lock-btn" onclick="toggleLock('sector')">🔓</button>
   </div>
 </div>
-
 
     <div class="group">
       <label>Тип цілі</label>
