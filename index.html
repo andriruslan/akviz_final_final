@@ -625,17 +625,19 @@ ${descParts.length ? "Опис: " + descParts.join(", ") : ""}`.trim();
   }
 
   window.onload = () => {
-    toggleNumberField();
-    setNowTime();
-    checkDetect();
-    updateAmmoVisibility();
-    attachReportUpdateListeners();
-    updatePreview();
-  };
+  toggleNumberField();
+  setNowTime();
+  checkDetect();
+  updateAmmoVisibility();
+  attachReportUpdateListeners();
+  updatePreview();
+  loadStoredFields();
 
+  // 🔒 Блокування подвійного кліку для всіх кнопок
   document.querySelectorAll("button").forEach(btn => {
     btn.addEventListener("dblclick", e => e.preventDefault());
   });
+};
   // --- АЗИМУТ / КУРС через deviceorientation ---
 let sensorActive = {
   azimuth: false,
@@ -703,6 +705,12 @@ function onDeviceOrientation(event) {
     document.getElementById(currentField).value = heading;
     document.getElementById("debug")?.textContent = `📍 ${currentField}: ${heading}°`;
   }
+}
+function loadStoredFields() {
+  ['sector', 'position', 'location'].forEach(id => {
+    const val = localStorage.getItem(id);
+    if (val) document.getElementById(id).value = val;
+  });
 }
 </script>
 
