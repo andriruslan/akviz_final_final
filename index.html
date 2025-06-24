@@ -625,15 +625,14 @@ ${descParts.length ? "Опис: " + descParts.join(", ") : ""}`.trim();
   }
 
   window.onload = () => {
+  loadStoredFields();
   toggleNumberField();
   setNowTime();
   checkDetect();
   updateAmmoVisibility();
   attachReportUpdateListeners();
   updatePreview();
-  loadStoredFields();
 
-  // 🔒 Блокування подвійного кліку для всіх кнопок
   document.querySelectorAll("button").forEach(btn => {
     btn.addEventListener("dblclick", e => e.preventDefault());
   });
