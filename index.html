@@ -2,138 +2,170 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
   <title>АкВіз_КАГАРЛИК</title>
   <style>
     html, body {
-      max-width: 100%;
-      overflow-x: hidden;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
       background-color: #121212;
-      font-family: 'Consolas', 'Courier New', monospace;
       color: #e0e0e0;
+      overflow-x: hidden;
+      touch-action: manipulation;
+    }
+
+    body {
       display: flex;
       justify-content: center;
       min-height: 100vh;
     }
+
     .container {
-      max-width: 480px;
-      width: 95vw;
+      width: 100%;
+      max-width: 500px;
+      padding: 16px;
+      box-sizing: border-box;
     }
+
     h2 {
       text-align: center;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      color: #eee;
+      font-weight: bold;
+      font-size: 1.4rem;
+      color: #fff;
+      margin-bottom: 1rem;
     }
+
     .group {
       margin-bottom: 1.4rem;
     }
+
     label {
-      display: block;
-      font-size: 1.05rem;
       font-weight: bold;
+      font-size: 1.05rem;
+      display: block;
       margin-bottom: 0.3rem;
-      color: #ddd;
     }
+
     hr {
       border: none;
       border-bottom: 1px solid #444;
-      margin: 6px 0 10px 0;
+      margin: 4px 0 10px 0;
     }
+
     input[type="text"],
     input[type="number"],
     input[type="time"],
     textarea {
       width: 100%;
-      padding: 8px 10px;
+      padding: 8px;
       font-size: 1rem;
       background-color: #1e1e1e;
       border: 1px solid #333;
-      border-radius: 4px;
-      color: #e0e0e0;
+      border-radius: 5px;
+      color: #fff;
       box-sizing: border-box;
     }
-    input:focus,
-    textarea:focus {
+
+    input:focus, textarea:focus {
       outline: none;
-      border-color: #40a9ff;
-      background-color: #252525;
+      border-color: #4caf50;
     }
+
     button {
-      background-color: #282828;
-      color: #e0e0e0;
-      border: 1px solid #444;
-      border-radius: 4px;
+      font-size: 1rem;
       padding: 8px 12px;
-      font-weight: 600;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.3s;
-      font-family: inherit;
+      font-weight: 600;
     }
+
     .plus-button {
-      background-color: #1b5e20;
-      color: #fff;
-      border-radius: 12px;
+      background-color: #2e7d32;
+      color: white;
+      width: 100%;
+      border-radius: 10px;
     }
+
     .minus-button {
-      background-color: #8e0000;
-      color: #fff;
-      border-radius: 12px;
+      background-color: #b71c1c;
+      color: white;
+      width: 100%;
+      border-radius: 10px;
     }
+
     .inline-buttons {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 6px;
+      margin-top: 8px;
     }
-    .inline-buttons .full-width {
-      width: 100%;
+
+    .inline-buttons button {
+      flex: 1 1 48%;
     }
-    .two-rows-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 6px;
-    }
-    .two-rows-buttons .half-width {
-      flex: 1 1 calc(50% - 4px);
-    }
+
     .three-cols {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
     }
+
     .three-cols label {
-      flex: 1 1 calc(33.333% - 8px);
+      flex: 1 1 calc(33.3% - 8px);
     }
-    .checkbox-inline-group {
+
+    .two-cols {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 8px;
     }
-    .checkbox-inline-group label {
-      flex: 1 1 calc(50% - 1rem);
+
+    .two-cols label {
+      flex: 1 1 calc(50% - 8px);
     }
+
+    .two-rows-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .three-cols-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    #preview {
+      background: #1a1a1a;
+      border: 1px solid #444;
+      padding: 8px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      min-height: 100px;
+      color: #fff;
+    }
+
+    .full-width-button {
+      width: 100%;
+    }
+
+    .half-button {
+      flex: 1 1 48%;
+    }
+
     .ammo-flex {
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
     }
+
     .ammo-item {
       flex: 1 1 calc(50% - 1rem);
-    }
-    #preview {
-      background-color: #1a1a1a;
-      border: 1px solid #333;
-      padding: 10px;
-      border-radius: 4px;
-      font-family: monospace;
-      white-space: pre-wrap;
-      color: #ddd;
-      min-height: 100px;
-      user-select: text;
     }
   </style>
 </head>
@@ -182,7 +214,7 @@
     <div class="group">
       <label>Сторона</label>
       <hr>
-      <div class="radio-group three-cols">
+      <div class="three-cols">
         <label><input type="radio" name="side" value="Ворожий"> Ворожий</label>
         <label><input type="radio" name="side" value="Свій"> Свій</label>
         <label><input type="radio" name="side" value="Нейтральний"> Нейтральний</label>
@@ -193,7 +225,7 @@
       <label>Номер цілі</label>
       <hr>
       <label><input type="checkbox" id="noNumber" checked onchange="toggleNumberField()"> Без видачі</label>
-      <input type="number" id="targetNumber" inputmode="numeric" pattern="[0-9]*" placeholder="вкажіть номер" readonly />
+      <input type="number" id="targetNumber" inputmode="numeric" pattern="[0-9]*" placeholder="номер цілі" readonly />
     </div>
     <div class="group">
       <label>Назва</label>
@@ -208,57 +240,57 @@
     <div class="group">
       <label>Кількість, од</label>
       <hr>
-      <input type="number" id="targetCount" inputmode="numeric" pattern="[0-9]*" value="1" readonly />
+      <input type="number" id="targetCount" value="1" readonly inputmode="numeric" />
       <div class="inline-buttons">
         <button class="plus-button" onclick="changeCount(1)">+1 од.</button>
-        <button class="minus-button" id="minusBtn" onclick="changeCount(-1)">-1 од.</button>
+        <button class="minus-button" id="minusBtn" onclick="changeCount(-1)" disabled>-1 од.</button>
       </div>
     </div>
 
     <div class="group">
       <label>Азимут, °</label>
       <hr>
-      <input type="number" id="azimuth" inputmode="numeric" pattern="[0-9]*" placeholder="Введіть або визначте">
+      <input type="number" id="azimuth" inputmode="numeric" placeholder="Введіть або визначте" />
       <button class="plus-button" id="azimuthBtn" onclick="toggleSensor('azimuth')">визначити азимут</button>
     </div>
 
     <div class="group">
       <label>Курс, °</label>
       <hr>
-      <input type="number" id="course" inputmode="numeric" pattern="[0-9]*" placeholder="Введіть або визначте">
+      <input type="number" id="course" inputmode="numeric" placeholder="Введіть або визначте" />
       <button class="plus-button" id="courseBtn" onclick="toggleSensor('course')">визначити Курс</button>
     </div>
 
     <div class="group">
       <label>Відстань+, м</label>
       <hr>
-      <input type="number" id="distance" inputmode="numeric" pattern="[0-9]*" placeholder="висота прольоту цілі">
+      <input type="number" id="distance" inputmode="numeric" placeholder="висота прольоту цілі" />
       <div class="two-rows-buttons">
-        <button class="plus-button half-width" onclick="adjustValue('distance', 100)">+100 м</button>
-        <button class="plus-button half-width" onclick="adjustValue('distance', 1000)">+1000 м</button>
-        <button class="plus-button half-width" onclick="adjustValue('distance', 5000)">+5000 м</button>
-        <button class="minus-button half-width" onclick="adjustValue('distance', -100)">-100 м</button>
-        <button class="minus-button half-width" onclick="adjustValue('distance', -1000)">-1000 м</button>
-        <button class="minus-button half-width" onclick="adjustValue('distance', -5000)">-5000 м</button>
+        <button class="plus-button" onclick="adjustValue('distance', 100)">+100 м</button>
+        <button class="plus-button" onclick="adjustValue('distance', 1000)">+1000 м</button>
+        <button class="plus-button" onclick="adjustValue('distance', 5000)">+5000 м</button>
+        <button class="minus-button" onclick="adjustValue('distance', -100)">-100 м</button>
+        <button class="minus-button" onclick="adjustValue('distance', -1000)">-1000 м</button>
+        <button class="minus-button" onclick="adjustValue('distance', -5000)">-5000 м</button>
       </div>
     </div>
 
     <div class="group">
       <label>Висота, м</label>
       <hr>
-      <input type="number" id="height" inputmode="numeric" pattern="[0-9]*" placeholder="висота цілі">
+      <input type="number" id="height" inputmode="numeric" placeholder="висота в метрах" />
       <div class="two-rows-buttons">
-        <button class="plus-button half-width" onclick="adjustValue('height', 100)">+100 м</button>
-        <button class="plus-button half-width" onclick="adjustValue('height', 500)">+500 м</button>
-        <button class="minus-button half-width" onclick="adjustValue('height', -100)">-100 м</button>
-        <button class="minus-button half-width" onclick="adjustValue('height', -500)">-500 м</button>
+        <button class="plus-button" onclick="adjustValue('height', 100)">+100 м</button>
+        <button class="plus-button" onclick="adjustValue('height', 500)">+500 м</button>
+        <button class="minus-button" onclick="adjustValue('height', -100)">-100 м</button>
+        <button class="minus-button" onclick="adjustValue('height', -500)">-500 м</button>
       </div>
     </div>
     <div class="group">
-      <label>Час (HH:MM)</label>
+      <label>Час</label>
       <hr>
-      <input type="time" id="time" />
-      <div class="inline-buttons">
+      <input type="time" id="time" required />
+      <div class="three-cols-buttons">
         <button class="plus-button" onclick="setNowTime()">Щойно</button>
         <button class="plus-button" onclick="changeTime(1)">+1 хв.</button>
         <button class="minus-button" onclick="changeTime(-1)">-1 хв.</button>
@@ -268,11 +300,11 @@
     <div class="group">
       <label>Виявлення</label>
       <hr>
-      <div class="checkbox-inline-group">
+      <div class="three-cols">
         <label><input type="checkbox" id="acoustic"> Акустично</label>
-        <label><input type="checkbox" id="radar"> Радіолокаційно</label>
+        <label><input type="checkbox" id="radar"> РЛС</label>
         <label><input type="checkbox" id="visual" onchange="checkDetect()"> Візуально</label>
-        <label><input type="checkbox" id="obs" disabled> За допомогою засобів</label>
+        <label><input type="checkbox" id="obs" disabled> Прилад</label>
       </div>
     </div>
 
@@ -292,20 +324,20 @@
       <div class="ammo-flex">
         <div class="ammo-item">
           <label><input type="checkbox" id="ammo1" onchange="toggleAmmoCount('ammo1')"> АК-74 - 5.45</label>
-          <input type="number" id="ammo1Count" inputmode="numeric" pattern="[0-9]*" placeholder="Кількість" disabled>
+          <input type="number" id="ammo1Count" disabled inputmode="numeric" placeholder="шт.">
         </div>
         <div class="ammo-item">
           <label><input type="checkbox" id="ammo2" onchange="toggleAmmoCount('ammo2')"> CANiK M2</label>
-          <input type="number" id="ammo2Count" inputmode="numeric" pattern="[0-9]*" placeholder="Кількість" disabled>
+          <input type="number" id="ammo2Count" disabled inputmode="numeric" placeholder="шт.">
         </div>
         <div class="ammo-item">
           <label><input type="checkbox" id="ammo3" onchange="toggleAmmoCount('ammo3')"> ДП-27 7.62</label>
-          <input type="number" id="ammo3Count" inputmode="numeric" pattern="[0-9]*" placeholder="Кількість" disabled>
+          <input type="number" id="ammo3Count" disabled inputmode="numeric" placeholder="шт.">
         </div>
         <!--
         <div class="ammo-item">
           <label><input type="checkbox" id="ammo4" onchange="toggleAmmoCount('ammo4')"> Інше</label>
-          <input type="number" id="ammo4Count" inputmode="numeric" pattern="[0-9]*" placeholder="Кількість" disabled>
+          <input type="number" id="ammo4Count" disabled inputmode="numeric" placeholder="шт.">
         </div>
         -->
       </div>
@@ -313,7 +345,7 @@
     <div class="group">
       <label>Опис</label>
       <hr>
-      <div class="checkbox-inline-group">
+      <div class="two-cols">
         <label><input type="checkbox" id="descSound"> змінив звук</label>
         <label><input type="checkbox" id="descCourse"> змінив курс</label>
       </div>
@@ -323,13 +355,13 @@
     <div class="group">
       <label>Міні-звіт</label>
       <hr>
-      <pre id="preview"></pre>
+      <pre id="preview">Очікування заповнення...</pre>
     </div>
 
     <div class="group">
       <div class="inline-buttons">
-        <button class="plus-button full-width" onclick="copyReport()">📋 Копіювати звіт</button>
-        <button class="plus-button full-width" onclick="sendToSignal()">📨 Надіслати в Signal</button>
+        <button class="plus-button full-width-button" onclick="copyReport()">📋 Копіювати звіт</button>
+        <button class="plus-button full-width-button" onclick="sendToSignal()">📨 Надіслати в Signal</button>
       </div>
     </div>
 
@@ -338,266 +370,22 @@
       <hr>
       <div id="debug">Очікування даних...</div>
     </div>
-
-  </div> <!-- end .container -->
-
-
-
+  </div> <!-- /container -->
+  
+  <!-- СКРИПТ -->
+  <!-- Встав сюди повний <script>... з оновленою логікою, замочками, визначенням курсу/азимуту, копіюванням звіту тощо -->
 <script>
-  <script>
-  // 🔒 Замки (локальне збереження)
-  function toggleLock(id) {
-    const input = document.getElementById(id);
-    input.readOnly = !input.readOnly;
-    if (input.readOnly) localStorage.setItem(id, input.value);
-    else input.focus();
-  }
-
-  function loadStored() {
-    ['sector','position','location'].forEach(id => {
-      const val = localStorage.getItem(id);
-      if (val) document.getElementById(id).value = val;
-    });
-  }
-
-  // 🎯 Кількість
-  function changeCount(delta) {
-    const field = document.getElementById('targetCount');
-    let val = parseInt(field.value) || 1;
-    val += delta;
-    if (val < 1) val = 1;
-    field.value = val;
-    document.getElementById("minusBtn").disabled = val <= 1;
-    updatePreview();
-  }
-
-  // ✅ Без видачі
-  function toggleNumberField() {
-    const cb = document.getElementById('noNumber');
-    const input = document.getElementById('targetNumber');
-    input.readOnly = cb.checked;
-    if (cb.checked) input.value = '';
-    updatePreview();
-  }
-
-  // ⏱️ Час
-  function setNowTime() {
-    const now = new Date();
-    const h = now.getHours().toString().padStart(2,'0');
-    const m = now.getMinutes().toString().padStart(2,'0');
-    document.getElementById('time').value = `${h}:${m}`;
-    updatePreview();
-  }
-
-  function changeTime(delta) {
-    const input = document.getElementById('time');
-    let [h,m] = input.value.split(':').map(Number);
-    if (isNaN(h) || isNaN(m)) return setNowTime();
-    const d = new Date();
-    d.setHours(h);
-    d.setMinutes(m + delta);
-    const nh = d.getHours().toString().padStart(2,'0');
-    const nm = d.getMinutes().toString().padStart(2,'0');
-    input.value = `${nh}:${nm}`;
-    updatePreview();
-  }
-
-  // 👀 Виявлення
-  function checkDetect() {
-    const obs = document.getElementById('obs');
-    obs.disabled = !document.getElementById('visual').checked;
-    if (obs.disabled) obs.checked = false;
-    updatePreview();
-  }
-
-  // 🔫 Розхід БК
-  function updateAmmoVisibility() {
-    const result = document.querySelector('input[name="result"]:checked')?.value;
-    const show = result === "Обстріляно" || result === "Уражено";
-    const group = document.getElementById('ammoGroup');
-    if (group) group.style.display = show ? 'block' : 'none';
-    updatePreview();
-  }
-
-  function toggleAmmoCount(id) {
-    const cb = document.getElementById(id);
-    const input = document.getElementById(id + 'Count');
-    input.disabled = !cb.checked;
-    if (!cb.checked) input.value = '';
-    updatePreview();
-  }
-
-  // 📌 Значення за + / -
-  function adjustValue(id, delta) {
-    const field = document.getElementById(id);
-    let val = parseInt(field.value) || 0;
-    val += delta;
-    if (val < 0) val = 0;
-    field.value = val;
-    updatePreview();
-  }
-
-  function setTargetNameAndUpdate(name) {
-    document.getElementById('targetName').value = name;
-    updatePreview();
-  }
-
-  // 📋 Звіт
-  function generateReportText() {
-    const val = id => document.getElementById(id)?.value || "";
-    const cb = id => document.getElementById(id)?.checked;
-
-    const P = `${val('sector')}, ${val('position')}`;
-    const Ціль = `${document.querySelector('input[name="target"]:checked')?.value || '-'}, ${document.querySelector('input[name="side"]:checked')?.value || '-'}, ${cb('noNumber') ? 'без видачі' : val('targetNumber')}`;
-    const Висота = `${val('height')} м`;
-    const Відстань = `${val('distance')} м`;
-    const Кількість = `${val('targetCount')} од`;
-    const A = `${val('azimuth')}°`;
-    const K = `${val('course')}°`;
-    const НП = val('location');
-    const Час = val('time');
-
-    const Виявлення = [
-      cb('acoustic') ? 'Акустично' : '',
-      cb('radar') ? 'РЛС' : '',
-      cb('visual') ? 'Візуально' : '',
-      cb('obs') ? 'Прилад' : ''
-    ].filter(Boolean).join(', ');
-
-    const ПП = document.querySelector('input[name="result"]:checked')?.value || "";
-
-    let ammoText = '';
-    if (ПП === "Обстріляно" || ПП === "Уражено") {
-      const ammo = [
-        { id: 'ammo1', label: 'АК-74 - 5.45' },
-        { id: 'ammo2', label: 'CANiK M2' },
-        { id: 'ammo3', label: 'ДП-27 7.62' }
-        // { id: 'ammo4', label: 'Інше' } // закоментовано
-      ];
-      ammo.forEach(({id, label}) => {
-        if (cb(id)) {
-          const count = val(id + 'Count') || '0';
-          ammoText += `${label}: ${count}\n`;
-        }
-      });
-    }
-
-    let опис = [];
-    if (cb('descSound')) опис.push('змінений звук');
-    if (cb('descCourse')) опис.push('змінений курс');
-    if (val('description')) опис.push(val('description'));
-
-    return `
-П: ${P}
-Ціль: ${Ціль}
-Висота: ${Висота}
-Відстань: ${Відстань}
-Кількість: ${Кількість}
-А: ${A}
-К: ${K}
-НП: ${НП}
-Час: ${Час}
-Вияв: ${Виявлення}
-ПП: ${ПП}
-${ammoText ? 'Розхід БК:\n' + ammoText : ''}${опис.length ? 'Опис: ' + опис.join('; ') : ''}
-`.trim();
-  }
-
-  function updatePreview() {
-    document.getElementById('preview').textContent = generateReportText();
-  }
-
-  function copyReport() {
-    const text = generateReportText();
-    navigator.clipboard.writeText(text).then(() => {
-      updatePreview();
-    });
-  }
-
-  function sendToSignal() {
-    const text = generateReportText();
-    navigator.clipboard.writeText(text).then(() => {
-      updatePreview();
-      window.location.href = 'sgnl://';
-    });
-  }
-
-  // 🧭 Компас
-  let currentField = null;
-  let sensorActive = { azimuth: false, course: false };
-
-  function toggleSensor(field) {
-    const btn = document.getElementById(field + 'Btn');
-    if (sensorActive[field]) {
-      sensorActive[field] = false;
-      currentField = null;
-      window.removeEventListener("deviceorientation", onOrientation);
-      btn.textContent = field === 'azimuth' ? "визначити азимут" : "визначити Курс";
-      return;
-    }
-
-    const start = () => {
-      currentField = field;
-      sensorActive[field] = true;
-      btn.textContent = "зберегти";
-      window.addEventListener("deviceorientation", onOrientation);
-    };
-
-    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-      DeviceOrientationEvent.requestPermission().then(res => {
-        if (res === 'granted') start();
-        else alert("❗ Немає дозволу на компас.");
-      }).catch(console.error);
-    } else start();
-  }
-
-  function onOrientation(e) {
-    if (!currentField) return;
-    let deg = e.webkitCompassHeading || (360 - e.alpha);
-    if (deg < 0) deg += 360;
-    const rounded = Math.round(deg);
-    document.getElementById(currentField).value = rounded;
-    document.getElementById('debug').textContent = `${currentField}: ${rounded}°`;
-    updatePreview();
-  }
-
-  // 🧠 Відслідковування
-  function attachListeners() {
-    const all = document.querySelectorAll('input, textarea, select');
-    all.forEach(el => {
-      el.addEventListener("input", updatePreview);
-      el.addEventListener("change", updatePreview);
-    });
-  }
-
-  // 🚀 Пуск
-  window.onload = () => {
-    loadStored();
-    toggleNumberField();
-    setNowTime();
-    checkDetect();
-    updateAmmoVisibility();
-    attachListeners();
-    updatePreview();
-    document.querySelectorAll("button").forEach(btn =>
-      btn.addEventListener("dblclick", e => e.preventDefault())
-    );
-  };
-
-
-/*// --- Збереження полів до localStorage ---
+// --- Замочки: блокування/розблокування полів ---
 function toggleLock(id) {
   const input = document.getElementById(id);
   input.readOnly = !input.readOnly;
-  if (input.readOnly) {
-    localStorage.setItem(id, input.value);
-  } else {
-    input.focus();
-  }
+  if (!input.readOnly) input.focus();
+  localStorage.setItem(id, input.value);
 }
 
+// --- Завантажити дані з localStorage при старті ---
 function loadStored() {
-  ['sector','position','location'].forEach(id => {
+  ['sector', 'position', 'location'].forEach(id => {
     const val = localStorage.getItem(id);
     if (val) document.getElementById(id).value = val;
   });
@@ -607,7 +395,8 @@ function loadStored() {
 // --- Кількість цілей ---
 function changeCount(delta) {
   const field = document.getElementById('targetCount');
-  let val = parseInt(field.value) + delta;
+  let val = parseInt(field.value) || 1;
+  val += delta;
   if (val <= 1) {
     val = 1;
     document.getElementById('minusBtn').disabled = true;
@@ -618,16 +407,16 @@ function changeCount(delta) {
   updatePreview();
 }
 
-// --- Номер цілі: вимкнення поля при "Без видачі" ---
+// --- Номер цілі: вмикання/вимикання поля ---
 function toggleNumberField() {
-  const noNum = document.getElementById('noNumber').checked;
-  const numInput = document.getElementById('targetNumber');
-  numInput.readOnly = noNum;
-  if (noNum) numInput.value = '';
+  const cb = document.getElementById('noNumber');
+  const input = document.getElementById('targetNumber');
+  input.readOnly = cb.checked;
+  if (cb.checked) input.value = '';
   updatePreview();
 }
 
-// --- Додавання/віднімання значення
+// --- Додавання/віднімання чисел ---
 function adjustValue(id, delta) {
   const field = document.getElementById(id);
   let val = parseInt(field.value) || 0;
@@ -637,28 +426,29 @@ function adjustValue(id, delta) {
   updatePreview();
 }
 
-// --- Час
+// --- Час ---
 function setNowTime() {
+  const input = document.getElementById('time');
   const now = new Date();
   const h = now.getHours().toString().padStart(2, '0');
   const m = now.getMinutes().toString().padStart(2, '0');
-  document.getElementById('time').value = `${h}:${m}`;
+  input.value = `${h}:${m}`;
   updatePreview();
 }
 
 function changeTime(delta) {
-  const timeInput = document.getElementById('time');
-  let [h,m] = timeInput.value.split(':').map(Number);
+  const input = document.getElementById('time');
+  let [h, m] = input.value.split(':').map(Number);
   if (isNaN(h) || isNaN(m)) return setNowTime();
-  let date = new Date();
+  const date = new Date();
   date.setHours(h, m + delta);
-  const nh = date.getHours().toString().padStart(2,'0');
-  const nm = date.getMinutes().toString().padStart(2,'0');
-  timeInput.value = `${nh}:${nm}`;
+  const hh = date.getHours().toString().padStart(2, '0');
+  const mm = date.getMinutes().toString().padStart(2, '0');
+  input.value = `${hh}:${mm}`;
   updatePreview();
 }
 
-// --- Виявлення
+// --- Виявлення ---
 function checkDetect() {
   const visual = document.getElementById('visual').checked;
   const obs = document.getElementById('obs');
@@ -667,81 +457,80 @@ function checkDetect() {
   updatePreview();
 }
 
-// --- Розхід БК: відображення
+// --- Розхід БК: показ/приховати ---
 function updateAmmoVisibility() {
-  const results = document.getElementsByName('result');
-  let show = false;
-  results.forEach(r => {
-    if ((r.checked) && (r.value === 'Обстріляно' || r.value === 'Уражено')) show = true;
-  });
+  const result = document.querySelector('input[name="result"]:checked');
   const ammoGroup = document.getElementById('ammoGroup');
-  if (ammoGroup) ammoGroup.style.display = show ? 'block' : 'none';
-}
-
-// --- Активувати/деактивувати поля боєприпасів
-function toggleAmmoCount(id) {
-  const cb = document.getElementById(id);
-  const countInput = document.getElementById(id + 'Count');
-  countInput.disabled = !cb.checked;
-  if (!cb.checked) countInput.value = '';
+  if (!result || !ammoGroup) return;
+  const show = result.value === 'Обстріляно' || result.value === 'Уражено';
+  ammoGroup.style.display = show ? 'block' : 'none';
   updatePreview();
 }
 
-// --- Формування тексту звіту ---
+// --- Вмикання/вимикання полів Розхід БК ---
+function toggleAmmoCount(id) {
+  const cb = document.getElementById(id);
+  const input = document.getElementById(id + 'Count');
+  input.disabled = !cb.checked;
+  if (!cb.checked) input.value = '';
+  updatePreview();
+}
+
+// --- Назва цілі по кнопці ---
+function setTargetNameAndUpdate(name) {
+  document.getElementById('targetName').value = name;
+  updatePreview();
+}
+
+// --- Міні-звіт ---
 function generateReportText() {
   const sector = document.getElementById('sector').value;
   const position = document.getElementById('position').value;
   const location = document.getElementById('location').value;
-
-  let targetType = '';
-  document.querySelectorAll('input[name="target"]').forEach(r => { if(r.checked) targetType = r.value; });
-
-  let side = '';
-  document.querySelectorAll('input[name="side"]').forEach(r => { if(r.checked) side = r.value; });
-
+  const targetType = document.querySelector('input[name="target"]:checked')?.value || '';
+  const side = document.querySelector('input[name="side"]:checked')?.value || '';
   const noNumber = document.getElementById('noNumber').checked;
-  const targetNumber = noNumber ? "без видачі" : (document.getElementById('targetNumber').value || '');
-
+  const targetNumber = noNumber ? 'без видачі' : document.getElementById('targetNumber').value || '';
   const targetName = document.getElementById('targetName').value;
   const targetCount = document.getElementById('targetCount').value;
-
   const azimuth = document.getElementById('azimuth').value;
   const course = document.getElementById('course').value;
   const distance = document.getElementById('distance').value;
   const height = document.getElementById('height').value;
   const time = document.getElementById('time').value;
+  const acoustic = document.getElementById('acoustic').checked ? 'Акустично' : '';
+  const radar = document.getElementById('radar').checked ? 'Радар' : '';
+  const visual = document.getElementById('visual').checked ? 'Візуально' : '';
+  const obs = document.getElementById('obs').checked ? 'За допомогою засобів спостереження' : '';
+  const result = document.querySelector('input[name="result"]:checked')?.value || '';
 
-  const acoustic = document.getElementById('acoustic').checked ? "Акустично" : "";
-  const radar = document.getElementById('radar').checked ? "Радар" : "";
-  const visual = document.getElementById('visual').checked ? "Візуально" : "";
-  const obs = document.getElementById('obs').checked ? "Засоби спостереження" : "";
-
-  let resultValue = "";
-  document.getElementsByName('result').forEach(r => { if(r.checked) resultValue = r.value; });
-
-  let ammoText = '';
-  if (resultValue === 'Обстріляно' || resultValue === 'Уражено') {
-    const ammoMap = {
+  let ammo = '';
+  if (result === 'Обстріляно' || result === 'Уражено') {
+    const map = {
       'ammo1': 'АК-74 - 5.45',
       'ammo2': 'CANiK M2',
       'ammo3': 'ДП-27 7.62',
-      // 'ammo4': 'Інше' // закоментовано згідно з вимогами
+      // 'ammo4': 'Інше' // закоментовано
     };
-    for (const key in ammoMap) {
-      if (document.getElementById(key)?.checked) {
+    for (const key in map) {
+      if (document.getElementById(key).checked) {
         const count = document.getElementById(key + 'Count').value || 0;
-        ammoText += `${ammoMap[key]}: ${count} шт.\n`;
+        ammo += `${map[key]}: ${count} шт.\n`;
       }
     }
   }
 
   const descSound = document.getElementById('descSound').checked ? "змінений звук" : "";
   const descCourse = document.getElementById('descCourse').checked ? "змінений курс" : "";
-  const description = document.getElementById('description').value;
-  let descriptionFull = [descSound, descCourse, description].filter(Boolean).join('; ');
+  const descText = document.getElementById('description').value;
+
+  let fullDesc = "";
+  if (descSound) fullDesc += descSound + "; ";
+  if (descCourse) fullDesc += descCourse + "; ";
+  if (descText) fullDesc += descText;
 
   let report = `П: ${sector}, ${position}\n`;
-  report += `Ціль: ${targetType}, ${side}, ${noNumber ? "без видачі" : targetNumber}\n`;
+  report += `Ціль: ${targetType}, ${side}, ${targetNumber}\n`;
   if (targetName) report += `Назва: ${targetName}\n`;
   report += `Висота: ${height} м\n`;
   report += `Відстань: ${distance} м\n`;
@@ -751,47 +540,49 @@ function generateReportText() {
   report += `НП: ${location}\n`;
   report += `Час: ${time}\n`;
   report += `Вияв: ${[acoustic, radar, visual, obs].filter(Boolean).join(', ')}\n`;
-  report += `ПП: ${resultValue}\n`;
-  if (ammoText) report += `Розхід Б:\n${ammoText}`;
-  if (descriptionFull) report += `Опис: ${descriptionFull}\n`;
+  report += `ПП: ${result}\n`;
+  if (ammo) report += `Розхід Б:\n${ammo}`;
+  if (fullDesc) report += `Опис: ${fullDesc}\n`;
 
   return report;
 }
 
-// --- Копіювання звіту ---
+// --- Оновлення міні-звіту ---
+function updatePreview() {
+  document.getElementById('preview').textContent = generateReportText();
+}
+
+// --- Копіювати звіт ---
 function copyReport() {
   const text = generateReportText();
   navigator.clipboard.writeText(text).then(() => {
-    document.getElementById("preview").textContent = text;
+    document.getElementById('preview').textContent = text;
   });
 }
 
-// --- Відправка в Signal ---
+// --- Надіслати в Signal ---
 function sendToSignal() {
   const text = generateReportText();
   navigator.clipboard.writeText(text).then(() => {
-    document.getElementById("preview").textContent = text;
+    document.getElementById('preview').textContent = text;
     window.location.href = "sgnl://";
   });
 }
 
-// --- Визначення азимуту / курсу ---
+// --- Компас ---
 let sensorActive = { azimuth: false, course: false };
 let currentField = null;
 
 function toggleSensor(field) {
   if (sensorActive[field]) {
     sensorActive[field] = false;
-    document.getElementById(field + 'Btn').textContent = field === 'azimuth' ? 'визначити азимут' : 'визначити Курс';
-    currentField = null;
+    document.getElementById(field + 'Btn').textContent = field === 'azimuth' ? 'визначити азимут' : 'визначити курс';
     window.removeEventListener('deviceorientation', onDeviceOrientation);
-    document.getElementById('debug').textContent = 'Дані компаса зупинено.';
+    currentField = null;
   } else {
-    if (typeof DeviceOrientationEvent !== 'undefined' &&
-        typeof DeviceOrientationEvent.requestPermission === 'function') {
-      DeviceOrientationEvent.requestPermission().then(response => {
-        if (response === 'granted') startSensor(field);
-        else alert('Доступ до датчиків відмовлено.');
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission().then(res => {
+        if (res === 'granted') startSensor(field);
       }).catch(console.error);
     } else {
       startSensor(field);
@@ -804,59 +595,43 @@ function startSensor(field) {
   currentField = field;
   document.getElementById(field + 'Btn').textContent = 'зберегти';
   window.addEventListener('deviceorientation', onDeviceOrientation);
-  document.getElementById('debug').textContent = 'Визначення ' + (field === 'azimuth' ? 'азимуту' : 'курсу') + '...';
 }
 
 function onDeviceOrientation(event) {
   if (!currentField) return;
-  let heading = event.webkitCompassHeading ?? (event.absolute !== false ? 360 - event.alpha : null);
+  let heading = null;
+  if (event.webkitCompassHeading !== undefined) {
+    heading = event.webkitCompassHeading;
+  } else if (event.alpha !== null) {
+    heading = 360 - event.alpha;
+    if (heading < 0) heading += 360;
+  }
   if (heading !== null) {
     heading = Math.round(heading);
     if (heading > 359) heading = 359;
     document.getElementById(currentField).value = heading;
-    document.getElementById('debug').textContent = `Визначення ${currentField}: ${heading}°`;
     updatePreview();
   }
 }
 
-// --- Інші допоміжні ---
-function setTargetNameAndUpdate(name) {
-  const targetNameInput = document.getElementById('targetName');
-  targetNameInput.value = name;
+// --- Ініціалізація ---
+window.onload = () => {
+  loadStored();
+  setNowTime();
+  checkDetect();
+  updateAmmoVisibility();
   updatePreview();
-}
-
-function updatePreview() {
-  document.getElementById("preview").textContent = generateReportText();
-}
-
-function attachReportUpdateListeners() {
-  const inputs = document.querySelectorAll("input, textarea, select");
-  inputs.forEach(el => {
+  document.querySelectorAll("input, textarea, select").forEach(el => {
     el.addEventListener("input", updatePreview);
     if (el.type === "checkbox" || el.type === "radio") {
       el.addEventListener("change", updatePreview);
     }
   });
-}
-
-document.querySelectorAll("button").forEach(btn => {
-  btn.addEventListener("dblclick", e => e.preventDefault());
-});
-
-window.onload = () => {
-  loadStored();
-  toggleNumberField();
-  setNowTime();
-  updateAmmoVisibility();
-  checkDetect();
-  attachReportUpdateListeners();
-  updatePreview();
-  document.querySelectorAll('input[name="result"]').forEach(el => {
-    el.addEventListener("change", updateAmmoVisibility);
+  document.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("dblclick", e => e.preventDefault());
   });
-};*/
+};
 </script>
-    
+
 </body>
 </html>
