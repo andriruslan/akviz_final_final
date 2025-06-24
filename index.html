@@ -446,269 +446,180 @@
   <!-- Встав сюди повний <script>... з оновленою логікою, замочками, визначенням курсу/азимуту, копіюванням звіту тощо -->
 <script>
 // --- Замочки: блокування/розблокування полів ---
-function toggleLock(id) {
-  const input = document.getElementById(id);
-  input.readOnly = !input.readOnly;
-  if (!input.readOnly) input.focus();
-  localStorage.setItem(id, input.value);
-}
-
-// --- Завантажити дані з localStorage при старті ---
-function loadStored() {
-  ['sector', 'position', 'location'].forEach(id => {
-    const val = localStorage.getItem(id);
-    if (val) document.getElementById(id).value = val;
-  });
-  toggleNumberField();
-}
-
-// --- Кількість цілей ---
-function changeCount(delta) {
-  const field = document.getElementById('targetCount');
-  let val = parseInt(field.value) || 1;
-  val += delta;
-  if (val <= 1) {
-    val = 1;
-    document.getElementById('minusBtn').disabled = true;
-  } else {
-    document.getElementById('minusBtn').disabled = false;
-  }
-  field.value = val;
-  updatePreview();
-}
-
-// --- Номер цілі: вмикання/вимикання поля ---
-function toggleNumberField() {
-  const cb = document.getElementById('noNumber');
-  const input = document.getElementById('targetNumber');
-  input.readOnly = cb.checked;
-  if (cb.checked) input.value = '';
-  updatePreview();
-}
-
-// --- Додавання/віднімання чисел ---
-function adjustValue(id, delta) {
-  const field = document.getElementById(id);
-  let val = parseInt(field.value) || 0;
-  val += delta;
-  if (val < 0) val = 0;
-  field.value = val;
-  updatePreview();
-}
-
-// --- Час ---
-function setNowTime() {
-  const input = document.getElementById('time');
-  const now = new Date();
-  const h = now.getHours().toString().padStart(2, '0');
-  const m = now.getMinutes().toString().padStart(2, '0');
-  input.value = `${h}:${m}`;
-  updatePreview();
-}
-
-function changeTime(delta) {
-  const input = document.getElementById('time');
-  let [h, m] = input.value.split(':').map(Number);
-  if (isNaN(h) || isNaN(m)) return setNowTime();
-  const date = new Date();
-  date.setHours(h, m + delta);
-  const hh = date.getHours().toString().padStart(2, '0');
-  const mm = date.getMinutes().toString().padStart(2, '0');
-  input.value = `${hh}:${mm}`;
-  updatePreview();
-}
-
-// --- Виявлення ---
-function checkDetect() {
-  const visual = document.getElementById('visual').checked;
-  const obs = document.getElementById('obs');
-  obs.disabled = !visual;
-  if (!visual) obs.checked = false;
-  updatePreview();
-}
-
-// --- Розхід БК: показ/приховати ---
-function updateAmmoVisibility() {
-  const results = document.getElementsByName('result');
-  let show = false;
-
-  results.forEach(r => {
-    if ((r.checked) && (r.value === 'Обстріляно' || r.value === 'Уражено')) {
-      show = true;
+  function toggleLock(id) {
+    const input = document.getElementById(id);
+    input.readOnly = !input.readOnly;
+    const lockBtn = input.nextElementSibling;
+    if (lockBtn && lockBtn.tagName === "BUTTON") {
+      lockBtn.textContent = input.readOnly ? "🔓" : "🔒";
     }
-  });
-
-  const group = document.getElementById('ammoGroup');
-  if (group) {
-    group.style.display = show ? 'block' : 'none';
-  }
-}
-
-
-// --- Вмикання/вимикання полів Розхід БК ---
-function toggleAmmoCount(id) {
-  const cb = document.getElementById(id);
-  const input = document.getElementById(id + 'Count');
-  input.disabled = !cb.checked;
-  if (!cb.checked) input.value = '';
-  updatePreview();
-}
-
-// --- Назва цілі по кнопці ---
-function setTargetNameAndUpdate(name) {
-  document.getElementById('targetName').value = name;
-  updatePreview();
-}
-
-// --- Міні-звіт ---
-function generateReportText() {
-  const sector = document.getElementById('sector').value;
-  const position = document.getElementById('position').value;
-  const location = document.getElementById('location').value;
-  const targetType = document.querySelector('input[name="target"]:checked')?.value || '';
-  const side = document.querySelector('input[name="side"]:checked')?.value || '';
-  const noNumber = document.getElementById('noNumber').checked;
-  const targetNumber = noNumber ? 'без видачі' : document.getElementById('targetNumber').value || '';
-  const targetName = document.getElementById('targetName').value;
-  const targetCount = document.getElementById('targetCount').value;
-  const azimuth = document.getElementById('azimuth').value;
-  const course = document.getElementById('course').value;
-  const distance = document.getElementById('distance').value;
-  const height = document.getElementById('height').value;
-  const time = document.getElementById('time').value;
-  const acoustic = document.getElementById('acoustic').checked ? 'Акустично' : '';
-  const radar = document.getElementById('radar').checked ? 'Радар' : '';
-  const visual = document.getElementById('visual').checked ? 'Візуально' : '';
-  const obs = document.getElementById('obs').checked ? 'За допомогою засобів спостереження' : '';
-  const result = document.querySelector('input[name="result"]:checked')?.value || '';
-
-  let ammo = '';
-  if (result === 'Обстріляно' || result === 'Уражено') {
-    const map = {
-      'ammo1': 'АК-74 - 5.45',
-      'ammo2': 'CANiK M2',
-      'ammo3': 'ДП-27 7.62',
-      // 'ammo4': 'Інше' // закоментовано
-    };
-    for (const key in map) {
-      if (document.getElementById(key).checked) {
-        const count = document.getElementById(key + 'Count').value || 0;
-        ammo += `${map[key]}: ${count} шт.\n`;
-      }
-    }
+    if (!input.readOnly) input.focus();
   }
 
-  const descSound = document.getElementById('descSound').checked ? "змінений звук" : "";
-  const descCourse = document.getElementById('descCourse').checked ? "змінений курс" : "";
-  const descText = document.getElementById('description').value;
-
-  let fullDesc = "";
-  if (descSound) fullDesc += descSound + "; ";
-  if (descCourse) fullDesc += descCourse + "; ";
-  if (descText) fullDesc += descText;
-
-  let report = `П: ${sector}, ${position}\n`;
-  report += `Ціль: ${targetType}, ${side}, ${targetNumber}\n`;
-  if (targetName) report += `Назва: ${targetName}\n`;
-  report += `Висота: ${height} м\n`;
-  report += `Відстань: ${distance} м\n`;
-  report += `Кількість: ${targetCount} од\n`;
-  report += `А: ${azimuth}°\n`;
-  report += `К: ${course}°\n`;
-  report += `НП: ${location}\n`;
-  report += `Час: ${time}\n`;
-  report += `Вияв: ${[acoustic, radar, visual, obs].filter(Boolean).join(', ')}\n`;
-  report += `ПП: ${result}\n`;
-  if (ammo) report += `Розхід БК:\n${ammo}`;
-  if (fullDesc) report += `Опис: ${fullDesc}\n`;
-
-  return report;
-}
-
-// --- Оновлення міні-звіту ---
-function updatePreview() {
-  document.getElementById('preview').textContent = generateReportText();
-}
-
-// --- Копіювати звіт ---
-function copyReport() {
-  const text = generateReportText();
-  navigator.clipboard.writeText(text).then(() => {
-    document.getElementById('preview').textContent = text;
-  });
-}
-
-// --- Надіслати в Signal ---
-function sendToSignal() {
-  const text = generateReportText();
-  navigator.clipboard.writeText(text).then(() => {
-    document.getElementById('preview').textContent = text;
-    window.location.href = "sgnl://";
-  });
-}
-
-// --- Компас ---
-let sensorActive = { azimuth: false, course: false };
-let currentField = null;
-
-function toggleSensor(field) {
-  if (sensorActive[field]) {
-    sensorActive[field] = false;
-    document.getElementById(field + 'Btn').textContent = field === 'azimuth' ? 'визначити азимут' : 'визначити курс';
-    window.removeEventListener('deviceorientation', onDeviceOrientation);
-    currentField = null;
-  } else {
-    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-      DeviceOrientationEvent.requestPermission().then(res => {
-        if (res === 'granted') startSensor(field);
-      }).catch(console.error);
-    } else {
-      startSensor(field);
-    }
+  function toggleNumberField() {
+    const chk = document.getElementById('noNumber');
+    const num = document.getElementById('targetNumber');
+    num.readOnly = chk.checked;
+    if (chk.checked) num.value = '';
   }
-}
 
-function startSensor(field) {
-  sensorActive[field] = true;
-  currentField = field;
-  document.getElementById(field + 'Btn').textContent = 'зберегти';
-  window.addEventListener('deviceorientation', onDeviceOrientation);
-}
-
-function onDeviceOrientation(event) {
-  if (!currentField) return;
-  let heading = null;
-  if (event.webkitCompassHeading !== undefined) {
-    heading = event.webkitCompassHeading;
-  } else if (event.alpha !== null) {
-    heading = 360 - event.alpha;
-    if (heading < 0) heading += 360;
-  }
-  if (heading !== null) {
-    heading = Math.round(heading);
-    if (heading > 359) heading = 359;
-    document.getElementById(currentField).value = heading;
+  function changeCount(delta) {
+    const input = document.getElementById("targetCount");
+    let val = parseInt(input.value) || 0;
+    val += delta;
+    if (val < 1) val = 1;
+    input.value = val;
     updatePreview();
   }
-}
 
-// --- Ініціалізація ---
-window.onload = () => {
-  loadStored();
-  setNowTime();
-  checkDetect();
-  updateAmmoVisibility();
-  updatePreview();
-  document.querySelectorAll("input, textarea, select").forEach(el => {
-    el.addEventListener("input", updatePreview);
-    if (el.type === "checkbox" || el.type === "radio") {
-      el.addEventListener("change", updatePreview);
+  function adjustValue(id, delta) {
+    const input = document.getElementById(id);
+    let val = parseInt(input.value) || 0;
+    val += delta;
+    if (val < 0) val = 0;
+    input.value = val;
+    updatePreview();
+  }
+
+  function checkDetect() {
+    const visual = document.getElementById("visual");
+    const obs = document.getElementById("obs");
+    if (obs) {
+      obs.disabled = !visual.checked;
+      if (!visual.checked) obs.checked = false;
     }
-  });
+  }
+
+  function setNowTime() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById("time").value = `${hh}:${mm}`;
+  }
+
+  function changeTime(deltaMinutes) {
+    const input = document.getElementById("time");
+    if (!input.value) return setNowTime();
+    const [hh, mm] = input.value.split(":").map(Number);
+    const now = new Date();
+    now.setHours(hh, mm + deltaMinutes);
+    const nh = String(now.getHours()).padStart(2, '0');
+    const nm = String(now.getMinutes()).padStart(2, '0');
+    input.value = `${nh}:${nm}`;
+    updatePreview();
+  }
+
+  function updateAmmoVisibility() {
+    const result = document.querySelector('input[name="result"]:checked');
+    const group = document.getElementById('ammoGroup');
+    if (!result || !group) return;
+    const show = result.value === 'Обстріляно' || result.value === 'Уражено';
+    group.style.display = show ? 'block' : 'none';
+  }
+
+  function setTargetNameAndUpdate(name) {
+    const input = document.getElementById("targetName");
+    input.value = name;
+    updatePreview();
+  }
+
+  function generateReportText() {
+    const sector = document.getElementById("sector")?.value || "-";
+    const position = document.getElementById("position")?.value || "-";
+    const location = document.getElementById("location")?.value || "-";
+
+    const target = document.querySelector('input[name="target"]:checked')?.value || "-";
+    const side = document.querySelector('input[name="side"]:checked')?.value || "-";
+
+    const noNumber = document.getElementById("noNumber")?.checked;
+    const targetNumber = noNumber ? "без видачі" : (document.getElementById("targetNumber")?.value || "-");
+
+    const name = document.getElementById("targetName")?.value || "-";
+    const count = document.getElementById("targetCount")?.value || "-";
+    const azimuth = document.getElementById("azimuth")?.value || "-";
+    const course = document.getElementById("course")?.value || "-";
+    const distance = document.getElementById("distance")?.value || "-";
+    const height = document.getElementById("height")?.value || "-";
+    const time = document.getElementById("time")?.value || "-";
+
+    const detections = [];
+    if (document.getElementById("acoustic")?.checked) detections.push("Акустично");
+    if (document.getElementById("radar")?.checked) detections.push("Радіолокаційно");
+    if (document.getElementById("visual")?.checked) detections.push("Візуально");
+    if (document.getElementById("obs")?.checked) detections.push("За допомогою засобів");
+
+    const result = document.querySelector('input[name="result"]:checked')?.value || "-";
+
+    let ammo = "";
+    if (result === 'Обстріляно' || result === 'Уражено') {
+      [["ammo1", "АК-74 - 5.45"], ["ammo2", "CANiK M2"], ["ammo3", "ДП-27 7.62"]].forEach(([id, label]) => {
+        if (document.getElementById(id)?.checked) {
+          const val = document.getElementById(id + "Count")?.value;
+          if (val) ammo += `${label}: ${val}\n`;
+        }
+      });
+    }
+
+    const descParts = [];
+    if (document.getElementById("descSound")?.checked) descParts.push("змінений звук");
+    if (document.getElementById("descCourse")?.checked) descParts.push("змінений курс");
+    const customDesc = document.getElementById("description")?.value;
+    if (customDesc) descParts.push(customDesc);
+
+    return `П: ${sector}, ${position}
+Ціль: ${target}, ${side}, ${targetNumber}
+Назва: ${name}
+Кількість: ${count} од
+А: ${azimuth}°, К: ${course}°
+Висота: ${height} м, Відстань: ${distance} м
+НП: ${location}
+Час: ${time}
+Вияв: ${detections.join(", ")}
+ПП: ${result}
+${ammo ? "Розхід БК:\n" + ammo : ""}
+${descParts.length ? "Опис: " + descParts.join(", ") : ""}`.trim();
+  }
+
+  function updatePreview() {
+    document.getElementById("preview").textContent = generateReportText();
+  }
+
+  function attachReportUpdateListeners() {
+    const fields = document.querySelectorAll("input, textarea, select");
+    fields.forEach(el => {
+      el.addEventListener("input", updatePreview);
+      el.addEventListener("change", updatePreview);
+    });
+  }
+
+  function copyReport() {
+    const text = generateReportText();
+    navigator.clipboard.writeText(text).then(() => {
+      updatePreview();
+      // alert("✅ Звіт скопійовано!");
+    });
+  }
+
+  function sendToSignal() {
+    const text = generateReportText();
+    navigator.clipboard.writeText(text).then(() => {
+      updatePreview();
+      window.location.href = "sgnl://";
+    });
+  }
+
+  window.onload = () => {
+    toggleNumberField();
+    setNowTime();
+    checkDetect();
+    updateAmmoVisibility();
+    attachReportUpdateListeners();
+    updatePreview();
+  };
+
   document.querySelectorAll("button").forEach(btn => {
     btn.addEventListener("dblclick", e => e.preventDefault());
   });
-};
 </script>
 
 </body>
