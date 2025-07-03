@@ -663,24 +663,26 @@ function onDeviceOrientation(event) {
 
   let heading = null;
 
-  if (typeof event.webkitCompassHeading === "number") {
-    heading = event.webkitCompassHeading; // iOS Safari
-  } else if (typeof event.alpha === "number") {
-    // Android fallback: 360 - alpha
-    heading = 360 - event.alpha;
+  // iOS — webkitCompassHeading
+  if (event.webkitCompassHeading !== undefined) {
+    heading = event.webkitCompassHeading;
+  }
+  // Android — fallback через alpha
+  else if (event.absolute === true || event.absolute === undefined) {
+    if (typeof event.alpha === "number") {
+      // 🟡 Компенсуємо зсув +90°
+      heading = 360 - event.alpha + 90;
+      if (heading >= 360) heading -= 360;
+    }
   }
 
   if (heading != null) {
-    const now = Date.now();
-    if (now - lastUpdate < 300) return; // throttle
-    lastUpdate = now;
-
     heading = Math.round(heading % 360);
     document.getElementById(currentField).value = heading;
-    document.getElementById("debug").textContent = `📍 ${currentField}: ${heading}°`;
-    updatePreview();
+    document.getElementById("debug")?.textContent = `📍 ${currentField}: ${heading}°`;
   }
 }
+
 
 
 window.onload = () => {
