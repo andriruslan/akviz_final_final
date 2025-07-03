@@ -657,7 +657,12 @@ function stopSensor(field) {
   window.removeEventListener("deviceorientation", onDeviceOrientation);
   document.getElementById("debug").textContent = `⛔ Компас вимкнено`;
 }
-
+let sensorActive = {
+  azimuth: false,
+  course: false
+};
+let currentField = null;
+let lastUpdate = 0; // 🆕 Додано — обовʼязково
 function onDeviceOrientation(event) {
   if (!currentField) return;
 
