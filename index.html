@@ -678,6 +678,80 @@ window.onload = () => {
     btn.addEventListener("dblclick", e => e.preventDefault())
   );
 };
+  // --- Компас: підтримка iOS + Android для азимута та курсу ---
+let sensorActive = {
+  azimuth: false,
+  course: false
+};
+let currentField = null;
+
+function toggleSensor(field) {
+  if (sensorActive[field]) {
+    stopSensor(field);
+  } else {
+    if (
+      typeof DeviceOrientationEvent !== "undefined" &&
+      typeof DeviceOrientationEvent.requestPermission === "function"
+    ) {
+      // iOS
+      DeviceOrientationEvent.requestPermission()
+        .then(response => {
+          if (response === "granted") {
+            startSensor(field);
+          } else {
+            alert("❌ Доступ до компаса заборонено.");
+          }
+        })
+        .catch(() => {
+          alert("❌ Неможливо отримати дозвіл на компас.");
+        });
+    } else {
+      // Android
+      startSensor(field);
+    }
+  }
+}
+
+function startSensor(field) {
+  sensorActive[field] = true;
+  currentField = field;
+  document.getElementById(field + "Btn").textContent = "Зберегти";
+  window.addEventListener("deviceorientation", onDeviceOrientation);
+  document.getElementById("debug")?.textContent = `⏳ Визначення ${field}...`;
+}
+
+function stopSensor(field) {
+  sensorActive[field] = false;
+  currentField = null;
+  document.getElementById(field + "Btn").textContent =
+    field === "azimuth" ? "визначити азимут" : "визначити курс";
+  window.removeEventListener("deviceorientation", onDeviceOrientation);
+  document.getElementById("debug")?.textContent = "⛔ Компас вимкнено";
+}
+
+function onDeviceOrientation(event) {
+  if (!currentField) return;
+
+  let heading = null;
+
+  // --- iOS: webkitCompassHeading ---
+  if (event.webkitCompassHeading !== undefined) {
+    heading = event.webkitCompassHeading;
+  }
+  // --- Android / fallback: event.alpha ---
+  else if (typeof event.alpha === "number") {
+    heading = 360 - event.alpha;
+    if (heading < 0) heading += 360;
+  }
+
+  if (heading != null) {
+    heading = Math.round(heading % 360);
+    document.getElementById(currentField).value = heading;
+    document.getElementById("debug")?.textContent = `📍 ${currentField}: ${heading}°`;
+    updatePreview?.(); // якщо є підтримка звіту
+  }
+}
+
 </script>
 
 </body>
