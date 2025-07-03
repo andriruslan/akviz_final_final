@@ -616,9 +616,10 @@ function attachReportUpdateListeners() {
   });
 }
 
-// --- Компас ---
+// --- Компас (iOS + Android підтримка) ---
 let sensorActive = { azimuth: false, course: false };
 let currentField = null;
+let lastUpdate = 0;
 
 function toggleSensor(field) {
   if (sensorActive[field]) {
@@ -627,6 +628,7 @@ function toggleSensor(field) {
     typeof DeviceOrientationEvent !== "undefined" &&
     typeof DeviceOrientationEvent.requestPermission === "function"
   ) {
+    // iOS
     DeviceOrientationEvent.requestPermission()
       .then(resp => {
         if (resp === "granted") startSensor(field);
@@ -634,6 +636,7 @@ function toggleSensor(field) {
       })
       .catch(() => alert("❌ Неможливо отримати доступ."));
   } else {
+    // Android або інші
     startSensor(field);
   }
 }
@@ -641,6 +644,7 @@ function toggleSensor(field) {
 function startSensor(field) {
   sensorActive[field] = true;
   currentField = field;
+  lastUpdate = 0;
   document.getElementById(field + "Btn").textContent = "Зберегти";
   window.addEventListener("deviceorientation", onDeviceOrientation);
   document.getElementById("debug").textContent = `⏳ Визначення ${field}...`;
@@ -648,22 +652,36 @@ function startSensor(field) {
 
 function stopSensor(field) {
   sensorActive[field] = false;
-  document.getElementById(field + "Btn").textContent = field === "azimuth" ? "визначити азимут" : "визначити курс";
   currentField = null;
+  document.getElementById(field + "Btn").textContent = field === "azimuth" ? "визначити азимут" : "визначити курс";
   window.removeEventListener("deviceorientation", onDeviceOrientation);
   document.getElementById("debug").textContent = `⛔ Компас вимкнено`;
 }
 
 function onDeviceOrientation(event) {
   if (!currentField) return;
-  let heading = event.webkitCompassHeading ?? (event.absolute ? 360 - event.alpha : null);
+
+  let heading = null;
+
+  if (typeof event.webkitCompassHeading === "number") {
+    heading = event.webkitCompassHeading; // iOS Safari
+  } else if (typeof event.alpha === "number") {
+    // Android fallback: 360 - alpha
+    heading = 360 - event.alpha;
+  }
+
   if (heading != null) {
+    const now = Date.now();
+    if (now - lastUpdate < 300) return; // throttle
+    lastUpdate = now;
+
     heading = Math.round(heading % 360);
     document.getElementById(currentField).value = heading;
     document.getElementById("debug").textContent = `📍 ${currentField}: ${heading}°`;
     updatePreview();
   }
 }
+
 
 window.onload = () => {
   loadStoredFields();
