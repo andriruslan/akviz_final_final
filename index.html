@@ -445,10 +445,6 @@
   </div> 
   
 <script>
-let sensorActive = { azimuth: false, course: false };
-let currentField = null;
-let lastUpdate = 0;
-
 function toggleLock(id) {
   const input = document.getElementById(id);
   input.readOnly = !input.readOnly;
@@ -456,8 +452,11 @@ function toggleLock(id) {
   if (btn && btn.tagName === "BUTTON") {
     btn.textContent = input.readOnly ? "🔓" : "🔒";
   }
-  if (!input.readOnly) input.focus();
-  else localStorage.setItem(id, input.value);
+  if (!input.readOnly) {
+    input.focus();
+  } else {
+    localStorage.setItem(id, input.value);
+  }
 }
 
 function loadStoredFields() {
@@ -538,17 +537,19 @@ function generateReportText() {
   const get = id => document.getElementById(id)?.value || "-";
   const isChecked = id => document.getElementById(id)?.checked;
   const checkedVal = name => document.querySelector(`input[name="${name}"]:checked`)?.value || "-";
+
   const targetNumber = isChecked("noNumber") ? "без видачі" : get("targetNumber");
 
-  const detections = [];
-  if (isChecked("acoustic")) detections.push("Акустично");
-  if (isChecked("radar")) detections.push("Радіолокаційно");
-  if (isChecked("visual")) detections.push("Візуально");
-  if (isChecked("obs")) detections.push("За допомогою засобів");
+  let detections = [];
+  if (isChecked("acoustic")) detections.push("акустично");
+  if (isChecked("radar")) detections.push("радіолокаційно");
+  if (isChecked("visual")) detections.push("візуально");
+  if (isChecked("obs") && isChecked("visual")) {
+    detections = detections.map(d => d === "візуально" ? "візуально із застосуванням приладів" : d);
+  }
 
   const result = checkedVal("result");
 
-  // Розхід БК
   let ammoText = "";
   if (result === "Обстріляно" || result === "Уражено") {
     [["ammo1", "АК-74 (5.45х39мм)"], ["ammo2", "CANiK M2 (12.7х99мм)"], ["ammo3", "ДП-27 (7.62x54мм)"]].forEach(([id, label]) => {
@@ -559,17 +560,21 @@ function generateReportText() {
     });
   }
 
-  // Опис
   let desc = [];
-  const custom = get("description");
-  const sound = isChecked("descSound");
-  const course = isChecked("descCourse");
   if (result === "Обстріляно" || result === "Уражено") {
-    if (sound && course) desc.push("Після обстрілу ціль змінила звук та курс.");
-    else if (sound) desc.push("Після обстрілу ціль змінила звук.");
-    else if (course) desc.push("Після обстрілу ціль змінила курс.");
+    const changedSound = isChecked("descSound");
+    const changedCourse = isChecked("descCourse");
+    if (changedSound && changedCourse) {
+      desc.push("Після обстрілу ціль змінила звук та курс");
+    } else if (changedSound) {
+      desc.push("Після обстрілу ціль змінила звук");
+    } else if (changedCourse) {
+      desc.push("Після обстрілу ціль змінила курс");
+    }
   }
-  if (custom) desc.push(custom);
+
+  const txt = get("description");
+  if (txt) desc.push(txt);
 
   return `П: ${get("sector")}, ${get("position")}
 Ціль: ${checkedVal("target")}, ${checkedVal("side")}, ${targetNumber}
@@ -580,8 +585,7 @@ function generateReportText() {
 НП: ${get("location")}
 Час: ${get("time")}
 Вияв: ${detections.join(", ")}
-ПП: ${result}
-${ammoText ? "Розхід БК:\n" + ammoText.trim() : ""}${desc.length ? "\nОпис: " + desc.join(" ") : ""}`.trim();
+ПП: ${result}${ammoText ? "\nРозхід БК:\n" + ammoText : ""}${desc.length ? "\nОпис: " + desc.join(", ") : ""}`.trim();
 }
 
 function updatePreview() {
@@ -621,7 +625,11 @@ function attachReportUpdateListeners() {
   });
 }
 
-// --- Компас iOS + Android ---
+// --- Компас (iOS + Android підтримка) ---
+let sensorActive = { azimuth: false, course: false };
+let currentField = null;
+let lastUpdate = 0;
+
 function toggleSensor(field) {
   if (sensorActive[field]) {
     stopSensor(field);
@@ -630,7 +638,10 @@ function toggleSensor(field) {
     typeof DeviceOrientationEvent.requestPermission === "function"
   ) {
     DeviceOrientationEvent.requestPermission()
-      .then(resp => resp === "granted" ? startSensor(field) : alert("❌ Доступ до компаса відхилено."))
+      .then(resp => {
+        if (resp === "granted") startSensor(field);
+        else alert("❌ Доступ до компаса відхилено.");
+      })
       .catch(() => alert("❌ Неможливо отримати доступ."));
   } else {
     startSensor(field);
@@ -643,16 +654,15 @@ function startSensor(field) {
   lastUpdate = 0;
   document.getElementById(field + "Btn").textContent = "Зберегти";
   window.addEventListener("deviceorientation", onDeviceOrientation);
-  document.getElementById("debug").textContent = `⏳ Визначення ${field}...`;
+  document.getElementById("debug")?.textContent = `⏳ Визначення ${field}...`;
 }
 
 function stopSensor(field) {
   sensorActive[field] = false;
   currentField = null;
-  document.getElementById(field + "Btn").textContent =
-    field === "azimuth" ? "визначити азимут" : "визначити курс";
+  document.getElementById(field + "Btn").textContent = field === "azimuth" ? "визначити азимут" : "визначити курс";
   window.removeEventListener("deviceorientation", onDeviceOrientation);
-  document.getElementById("debug").textContent = `⛔ Компас вимкнено`;
+  document.getElementById("debug")?.textContent = `⛔ Компас вимкнено`;
 }
 
 function onDeviceOrientation(event) {
@@ -661,9 +671,9 @@ function onDeviceOrientation(event) {
   let heading = null;
 
   if (typeof event.webkitCompassHeading === "number") {
-    heading = event.webkitCompassHeading;
+    heading = event.webkitCompassHeading; // iOS
   } else if (typeof event.alpha === "number") {
-    heading = 360 - event.alpha + 90;
+    heading = 360 - event.alpha + 90; // Android fallback
     if (heading >= 360) heading -= 360;
   }
 
@@ -679,6 +689,7 @@ function onDeviceOrientation(event) {
   }
 }
 
+// --- Запуск при завантаженні ---
 window.onload = () => {
   loadStoredFields();
   toggleNumberField();
