@@ -449,7 +449,6 @@ let sensorActive = { azimuth: false, course: false };
 let currentField = null;
 let lastUpdate = 0;
 
-// 🔐 Блокування/розблокування полів
 function toggleLock(id) {
   const input = document.getElementById(id);
   input.readOnly = !input.readOnly;
@@ -457,14 +456,10 @@ function toggleLock(id) {
   if (btn && btn.tagName === "BUTTON") {
     btn.textContent = input.readOnly ? "🔓" : "🔒";
   }
-  if (!input.readOnly) {
-    input.focus();
-  } else {
-    localStorage.setItem(id, input.value);
-  }
+  if (!input.readOnly) input.focus();
+  else localStorage.setItem(id, input.value);
 }
 
-// 🗃️ Підтягування локально збережених значень
 function loadStoredFields() {
   ['sector', 'position', 'location'].forEach(id => {
     const val = localStorage.getItem(id);
@@ -472,7 +467,6 @@ function loadStoredFields() {
   });
 }
 
-// 🎯 Обробка чекбокса "Без видачі"
 function toggleNumberField() {
   const no = document.getElementById('noNumber');
   const num = document.getElementById('targetNumber');
@@ -480,7 +474,6 @@ function toggleNumberField() {
   if (no.checked) num.value = '';
 }
 
-// ➕➖ Кількість
 function changeCount(delta) {
   const input = document.getElementById("targetCount");
   let val = parseInt(input.value) || 1;
@@ -490,7 +483,6 @@ function changeCount(delta) {
   updatePreview();
 }
 
-// ➕➖ Для висоти, відстані
 function adjustValue(id, delta) {
   const input = document.getElementById(id);
   let val = parseInt(input.value) || 0;
@@ -500,7 +492,6 @@ function adjustValue(id, delta) {
   updatePreview();
 }
 
-// 👁️‍🗨️ Виявлення: блокування поля приладу
 function checkDetect() {
   const vis = document.getElementById("visual");
   const obs = document.getElementById("obs");
@@ -508,7 +499,6 @@ function checkDetect() {
   if (!vis.checked) obs.checked = false;
 }
 
-// 🕓 Поточний час
 function setNowTime() {
   const now = new Date();
   const h = now.getHours().toString().padStart(2,'0');
@@ -516,7 +506,6 @@ function setNowTime() {
   document.getElementById("time").value = `${h}:${m}`;
 }
 
-// 🕓 Зміна часу
 function changeTime(delta) {
   const time = document.getElementById("time");
   if (!time.value) return setNowTime();
@@ -527,14 +516,12 @@ function changeTime(delta) {
   updatePreview();
 }
 
-// 🎯 Відображення блоку Розхід БК
 function updateAmmoVisibility() {
   const result = document.querySelector('input[name="result"]:checked')?.value;
   document.getElementById("ammoGroup").style.display =
     (result === "Обстріляно" || result === "Уражено") ? "block" : "none";
 }
 
-// 📦 Активування / деактивація полів Розхід БК
 function toggleAmmoCount(id) {
   const cb = document.getElementById(id);
   const count = document.getElementById(id + "Count");
@@ -542,18 +529,15 @@ function toggleAmmoCount(id) {
   if (!cb.checked) count.value = '';
 }
 
-// ✍️ Швидке заповнення назви
 function setTargetNameAndUpdate(name) {
   document.getElementById("targetName").value = name;
   updatePreview();
 }
 
-// 🧾 Формування тексту звіту
 function generateReportText() {
   const get = id => document.getElementById(id)?.value || "-";
   const isChecked = id => document.getElementById(id)?.checked;
   const checkedVal = name => document.querySelector(`input[name="${name}"]:checked`)?.value || "-";
-
   const targetNumber = isChecked("noNumber") ? "без видачі" : get("targetNumber");
 
   const detections = [];
@@ -564,21 +548,28 @@ function generateReportText() {
 
   const result = checkedVal("result");
 
+  // Розхід БК
   let ammoText = "";
   if (result === "Обстріляно" || result === "Уражено") {
-    [["ammo1", "АК-74 - 5.45"], ["ammo2", "CANiK M2"], ["ammo3", "ДП-27 7.62"]].forEach(([id, label]) => {
+    [["ammo1", "АК-74 (5.45х39мм)"], ["ammo2", "CANiK M2 (12.7х99мм)"], ["ammo3", "ДП-27 (7.62x54мм)"]].forEach(([id, label]) => {
       if (isChecked(id)) {
         const qty = get(id + "Count");
-        if (qty) ammoText += `${label}: ${qty}\n`;
+        if (qty) ammoText += `${label} - ${qty} шт.\n`;
       }
     });
   }
 
+  // Опис
   let desc = [];
-  if (isChecked("descSound")) desc.push("змінений звук");
-  if (isChecked("descCourse")) desc.push("змінений курс");
-  const txt = get("description");
-  if (txt) desc.push(txt);
+  const custom = get("description");
+  const sound = isChecked("descSound");
+  const course = isChecked("descCourse");
+  if (result === "Обстріляно" || result === "Уражено") {
+    if (sound && course) desc.push("Після обстрілу ціль змінила звук та курс.");
+    else if (sound) desc.push("Після обстрілу ціль змінила звук.");
+    else if (course) desc.push("Після обстрілу ціль змінила курс.");
+  }
+  if (custom) desc.push(custom);
 
   return `П: ${get("sector")}, ${get("position")}
 Ціль: ${checkedVal("target")}, ${checkedVal("side")}, ${targetNumber}
@@ -590,21 +581,17 @@ function generateReportText() {
 Час: ${get("time")}
 Вияв: ${detections.join(", ")}
 ПП: ${result}
-${ammoText ? "Розхід БК:\n" + ammoText : ""}
-${desc.length ? "Опис: " + desc.join(", ") : ""}`.trim();
+${ammoText ? "Розхід БК:\n" + ammoText.trim() : ""}${desc.length ? "\nОпис: " + desc.join(" ") : ""}`.trim();
 }
 
-// 🔁 Оновлення міні-звіту
 function updatePreview() {
   document.getElementById("preview").textContent = generateReportText();
 }
 
-// 📋 Копіювання
 function copyReport() {
   navigator.clipboard.writeText(generateReportText()).then(updatePreview);
 }
 
-// 📤 Відправка в Signal
 function sendToSignal() {
   navigator.clipboard.writeText(generateReportText()).then(() => {
     updatePreview();
@@ -612,84 +599,6 @@ function sendToSignal() {
   });
 }
 
-// 📡 Компас
-function toggleSensor(field) {
-  if (sensorActive[field]) {
-    stopSensor(field);
-  } else if (
-    typeof DeviceOrientationEvent !== "undefined" &&
-    typeof DeviceOrientationEvent.requestPermission === "function"
-  ) {
-    // iOS
-    DeviceOrientationEvent.requestPermission()
-      .then(resp => {
-        if (resp === "granted") startSensor(field);
-        else alert("❌ Доступ до компаса відхилено.");
-      })
-      .catch(() => alert("❌ Неможливо отримати доступ."));
-  } else {
-    // Android
-    startSensor(field);
-  }
-}
-
-function startSensor(field) {
-  sensorActive[field] = true;
-  currentField = field;
-  lastUpdate = 0;
-  document.getElementById(field + "Btn").textContent = "Зберегти";
-  window.addEventListener("deviceorientation", onDeviceOrientation);
-  document.getElementById("debug").textContent = `⏳ Визначення ${field}...`;
-}
-
-function stopSensor(field) {
-  sensorActive[field] = false;
-  currentField = null;
-  document.getElementById(field + "Btn").textContent = field === "azimuth" ? "визначити азимут" : "визначити курс";
-  window.removeEventListener("deviceorientation", onDeviceOrientation);
-  document.getElementById("debug").textContent = `⛔ Компас вимкнено`;
-}
-
-function onDeviceOrientation(event) {
-  if (!currentField) return;
-  let heading = null;
-
-  if (typeof event.webkitCompassHeading === "number") {
-    heading = event.webkitCompassHeading; // iOS
-  } else if (typeof event.alpha === "number") {
-    heading = 360 - event.alpha + 90; // Android + компенсація
-    if (heading >= 360) heading -= 360;
-  }
-
-  if (heading != null) {
-    const now = Date.now();
-    if (now - lastUpdate < 300) return;
-    lastUpdate = now;
-
-    heading = Math.round(heading % 360);
-    document.getElementById(currentField).value = heading;
-    document.getElementById("debug").textContent = `📍 ${currentField}: ${heading}°`;
-    updatePreview();
-  }
-}
-
-// 🧠 Автозапуск
-window.onload = () => {
-  loadStoredFields();
-  toggleNumberField();
-  setNowTime();
-  checkDetect();
-  updateAmmoVisibility();
-  attachReportUpdateListeners();
-  updatePreview();
-
-  // Вимкнення подвійного кліку
-  document.querySelectorAll("button").forEach(btn =>
-    btn.addEventListener("dblclick", e => e.preventDefault())
-  );
-};
-
-// 🔗 Автооновлення при взаємодії
 function attachReportUpdateListeners() {
   document.querySelectorAll("input, textarea").forEach(el => {
     el.addEventListener("input", updatePreview);
@@ -711,6 +620,78 @@ function attachReportUpdateListeners() {
     }
   });
 }
+
+// --- Компас iOS + Android ---
+function toggleSensor(field) {
+  if (sensorActive[field]) {
+    stopSensor(field);
+  } else if (
+    typeof DeviceOrientationEvent !== "undefined" &&
+    typeof DeviceOrientationEvent.requestPermission === "function"
+  ) {
+    DeviceOrientationEvent.requestPermission()
+      .then(resp => resp === "granted" ? startSensor(field) : alert("❌ Доступ до компаса відхилено."))
+      .catch(() => alert("❌ Неможливо отримати доступ."));
+  } else {
+    startSensor(field);
+  }
+}
+
+function startSensor(field) {
+  sensorActive[field] = true;
+  currentField = field;
+  lastUpdate = 0;
+  document.getElementById(field + "Btn").textContent = "Зберегти";
+  window.addEventListener("deviceorientation", onDeviceOrientation);
+  document.getElementById("debug").textContent = `⏳ Визначення ${field}...`;
+}
+
+function stopSensor(field) {
+  sensorActive[field] = false;
+  currentField = null;
+  document.getElementById(field + "Btn").textContent =
+    field === "azimuth" ? "визначити азимут" : "визначити курс";
+  window.removeEventListener("deviceorientation", onDeviceOrientation);
+  document.getElementById("debug").textContent = `⛔ Компас вимкнено`;
+}
+
+function onDeviceOrientation(event) {
+  if (!currentField) return;
+
+  let heading = null;
+
+  if (typeof event.webkitCompassHeading === "number") {
+    heading = event.webkitCompassHeading;
+  } else if (typeof event.alpha === "number") {
+    heading = 360 - event.alpha + 90;
+    if (heading >= 360) heading -= 360;
+  }
+
+  if (heading != null) {
+    const now = Date.now();
+    if (now - lastUpdate < 300) return;
+    lastUpdate = now;
+
+    heading = Math.round(heading % 360);
+    document.getElementById(currentField).value = heading;
+    document.getElementById("debug").textContent = `📍 ${currentField}: ${heading}°`;
+    updatePreview();
+  }
+}
+
+window.onload = () => {
+  loadStoredFields();
+  toggleNumberField();
+  setNowTime();
+  checkDetect();
+  updateAmmoVisibility();
+  attachReportUpdateListeners();
+  updatePreview();
+
+  document.querySelectorAll("button").forEach(btn =>
+    btn.addEventListener("dblclick", e => e.preventDefault())
+  );
+};
 </script>
 </body>
 </html>
