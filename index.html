@@ -706,6 +706,73 @@ window.onload = () => {
 
 
 </script>
+<script>
+  let sensorActive = { azimuth: false, course: false };
+  let currentField = null;
+  let lastUpdate = 0;
 
+  function toggleSensor(field) {
+    if (sensorActive[field]) {
+      stopSensor(field);
+    } else {
+      if (typeof DeviceOrientationEvent !== "undefined" &&
+          typeof DeviceOrientationEvent.requestPermission === "function") {
+        DeviceOrientationEvent.requestPermission().then(response => {
+          if (response === "granted") {
+            startSensor(field);
+          } else {
+            alert("❌ Доступ до компаса заборонено.");
+          }
+        }).catch(() => {
+          alert("❌ Неможливо отримати дозвіл на компас.");
+        });
+      } else {
+        startSensor(field);
+      }
+    }
+  }
+
+  function startSensor(field) {
+    sensorActive[field] = true;
+    currentField = field;
+    document.getElementById(field + "Btn").textContent = "Зберегти";
+    window.addEventListener("deviceorientation", onDeviceOrientation);
+    document.getElementById("debug").textContent = `⏳ Визначення ${field}...`;
+  }
+
+  function stopSensor(field) {
+    sensorActive[field] = false;
+    currentField = null;
+    document.getElementById(field + "Btn").textContent =
+      field === "azimuth" ? "визначити азимут" : "визначити курс";
+    window.removeEventListener("deviceorientation", onDeviceOrientation);
+    document.getElementById("debug").textContent = `⛔ Компас вимкнено`;
+  }
+
+  function onDeviceOrientation(event) {
+    if (!currentField) return;
+
+    let heading = null;
+
+    if (typeof event.webkitCompassHeading === "number") {
+      heading = event.webkitCompassHeading; // iOS
+    } else if (typeof event.alpha === "number") {
+      heading = 360 - event.alpha + 90; // Android fallback + 90°
+      if (heading >= 360) heading -= 360;
+    }
+
+    if (heading != null) {
+      const now = Date.now();
+      if (now - lastUpdate < 300) return;
+      lastUpdate = now;
+
+      heading = Math.round(heading % 360);
+      document.getElementById(currentField).value = heading;
+      document.getElementById("debug").textContent =
+        `📍 ${currentField}: ${heading}°`;
+      updatePreview();
+    }
+  }
+</script>
 </body>
 </html>
