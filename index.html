@@ -140,15 +140,17 @@
       margin-top: 8px;
     }
 
-    #preview {
-      background: #1a1a1a;
-      border: 1px solid #444;
-      padding: 8px;
-      white-space: pre-wrap;
-      font-family: monospace;
-      min-height: 100px;
-      color: #fff;
-    }
+   #preview {
+  background: #1a1a1a;
+  border: 1px solid #444;
+  padding: 8px;
+  white-space: pre-wrap;
+  font-family: 'Courier New', monospace; /* 👈 зручніший для читання */
+  font-size: 0.8rem;                     /* 👈 збільш шрифт тут */
+  line-height: 1.5;                       /* 👈 відстань між рядками */
+  min-height: 100px;
+  color: #fff;
+}
 
     .full-width-button {
       width: 100%;
@@ -540,7 +542,7 @@ function setTargetNameAndUpdate(name) {
 function generateReportText() {
   const get = id => document.getElementById(id)?.value || "-";
   const isChecked = id => document.getElementById(id)?.checked;
-  const checkedVal = name => document.querySelector(`input[name="${name}"]:checked`)?.value || "-";
+  const checkedVal = name => document.querySelector(`input[name="${name}"]:checked`)?.value || "";
 
   const targetNumber = isChecked("noNumber") ? "без видачі" : get("targetNumber");
 
@@ -586,8 +588,10 @@ function generateReportText() {
 Ціль: ${checkedVal("target")}, ${checkedVal("side")}, ${targetNumber}
 Назва: ${get("targetName")}
 Кількість: ${get("targetCount")} од
-А: ${get("azimuth")}°, К: ${get("course")}°
-Висота: ${get("height")} м, Відстань: ${get("distance")} м
+А: ${get("azimuth")}°, 
+К: ${get("course")}°
+Висота: ${get("height")} м, 
+Відстань: ${get("distance")} м
 НП: ${get("location")}
 Час: ${get("time")}
 Вияв: ${detections.join(", ")}
