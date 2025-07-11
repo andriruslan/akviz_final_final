@@ -736,10 +736,12 @@ function attachReportUpdateListeners() {
         label.addEventListener("click", () => el.click());
       }
     }
-  });
+
+    // 🛠️ Додано: слухач для вибору типу цілі
     if (el.name === "target") {
-  el.addEventListener("change", updateResultOptionsByTargetType);
+      el.addEventListener("change", updateResultOptionsByTargetType);
     }
+  });
 }
 
 // --- Компас (iOS + Android з компенсацією) ---
