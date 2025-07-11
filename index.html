@@ -555,64 +555,153 @@ function setTargetNameAndUpdate(name) {
 function generateReportText() {
   const get = id => document.getElementById(id)?.value || "-";
   const isChecked = id => document.getElementById(id)?.checked;
-  const checkedVal = name => document.querySelector(`input[name="${name}"]:checked`)?.value || "";
+  const checkedVal = name => document.querySelector(`input[name="${name}"]:checked`)?.value || "-";
 
-  const targetNumber = isChecked("noNumber") ? "без видачі" : get("targetNumber");
-
-  // Виявлення (малими літерами + логіка приладів)
-  let detections = [];
-  if (isChecked("acoustic")) detections.push("акустично");
-  if (isChecked("radar")) detections.push("радіолокаційно");
-  if (isChecked("visual")) {
-    detections.push("візуально" + (isChecked("obs") ? " із застосуванням приладів" : ""));
-  }
-
+  const type = checkedVal("target");
+  const side = checkedVal("side");
   const result = checkedVal("result");
-  const nameMap = {
-    "ammo1": "АК-74 (5.45х39мм)",
-    "ammo2": "CANiK M2 (12.7х99мм)",
-    "ammo3": "ДП-27 (7.62x54мм)"
-  };
+  const time = get("time");
+  const sector = get("sector");
+  const position = get("position");
+  const location = get("location");
+  const azimuth = get("azimuth");
+  const course = get("course");
+  const height = get("height");
+  const distance = get("distance");
+  const count = get("targetCount");
+  const name = get("targetName");
+  const targetNumber = isChecked("noNumber") ? "" : get("targetNumber");
 
-  let ammoText = "";
-  if (result === "Обстріляно" || result === "Уражено") {
-    ["ammo1", "ammo2", "ammo3"].forEach(id => {
-      if (isChecked(id)) {
-        const qty = get(id + "Count");
-        if (qty) ammoText += `${nameMap[id]} - ${qty}\n`;
-      }
-    });
+  // 🟡 Виявлення: акустично, візуально, радіолокаційно
+  const detects = [];
+  if (isChecked("acoustic")) detects.push("акустично");
+  if (isChecked("radar")) detects.push("радіолокаційно");
+  if (isChecked("visual")) {
+    if (isChecked("obs")) detects.push("візуально із застосуванням приладів");
+    else detects.push("візуально");
   }
 
-  // Формування опису
-  let desc = [];
-  if (result === "Обстріляно" || result === "Уражено") {
-    const sound = isChecked("descSound");
-    const course = isChecked("descCourse");
-    if (sound && course) desc.push("Після обстрілу ціль змінила звук та курс");
-    else if (sound) desc.push("Після обстрілу ціль змінила звук");
-    else if (course) desc.push("Після обстрілу ціль змінила курс");
+  const detectionText = detects.join(", ");
+
+  // 🟡 Опис логіка
+  const hasSound = isChecked("descSound");
+  const hasCourse = isChecked("descCourse");
+  const descCustom = get("description");
+
+  let description = "";
+  if ((result === "Обстріляно" || result === "Уражено") && (hasSound || hasCourse)) {
+    if (hasSound && hasCourse) {
+      description += "Після обстрілу ціль змінила звук та курс";
+    } else if (hasSound) {
+      description += "Після обстрілу ціль змінила звук";
+    } else if (hasCourse) {
+      description += "Після обстрілу ціль змінила курс";
+    }
   }
 
-  const txt = get("description");
-  if (txt) desc.push(txt);
+  if (descCustom) {
+    if (description) description += ". ";
+    description += descCustom;
+  }
 
-  return `П: ${get("sector")}, ${get("position")}
-Ціль: ${checkedVal("target")}, ${checkedVal("side")}, ${targetNumber}
-Назва: ${get("targetName")}
-Кількість: ${get("targetCount")} од
-А: ${get("azimuth")}°, 
-К: ${get("course")}°
-Висота: ${get("height")} м, 
-Відстань: ${get("distance")} м
-НП: ${get("location")}
-Час: ${get("time")}
-Вияв: ${detections.join(", ")}
-ПП: ${result} ${ammoText ? "Розхід БК:\n" + ammoText : ""}${desc.length ? "\nОпис: " + desc.join(". ") : ""}`.trim();
+  // 🟡 Розхід БК
+  let ammo = [];
+  if (result === "Обстріляно" || result === "Уражено") {
+    if (isChecked("ammo1")) {
+      const val = get("ammo1Count");
+      if (val) ammo.push(`АК-74 (5.45х39мм) - ${val} шт.`);
+    }
+    if (isChecked("ammo2")) {
+      const val = get("ammo2Count");
+      if (val) ammo.push(`CANiK M2 (12.7х99мм) - ${val} шт.`);
+    }
+    if (isChecked("ammo3")) {
+      const val = get("ammo3Count");
+      if (val) ammo.push(`ДП-27 (7.62x54мм) - ${val} шт.`);
+    }
+  }
+
+  const ammoText = ammo.length ? `Розхід БК: ${ammo.join(", ")}` : "";
+
+  // 🟡 Тип цілі — спеціальні правила
+  if (type === "Постріли (ЗУ,кулемет)" || type === "Виходи (ПЗРК,ЗРК)" || type === "Вибух") {
+    const targetInfo = isChecked("noNumber") ? `${type}, ${side}` : `${type}, ${side}, по цілі №${targetNumber}`;
+
+    return `П: ${sector}, ${position}
+Ціль: ${targetInfo}
+Відстань: ${distance}
+А: ${azimuth}
+НП: ${location}
+Ч: ${time}
+Вияв: ${detectionText}
+ПП: ${result}
+Опис: ${descCustom}`.trim();
+  }
+
+  // 🟡 Повна форма для БПЛА / ракети / гелікоптера тощо
+  if (result === "Обстріляно" || result === "Уражено") {
+    const comment = isChecked("noNumber") ? "" : `№${targetNumber}`;
+    const boezdat = result === "Обстріляно" ? "боєздатний (не уражено)" : "небоєздатний (уражено)";
+
+    return `П: ${sector}, ${position}
+Тип: ${type}
+Назва: ${name}
+Боєздатність: ${boezdat}
+Ч: ${time}
+Коментар: ${comment}
+Висота: ${height}
+Відстань: ${distance}
+Кількість: ${count}
+А: ${azimuth}
+К: ${course}
+Вияв: ${detectionText}
+${ammoText}
+НП: ${location}
+${description ? "Опис: " + description : ""}`.trim();
+  }
+
+  // 🟡 Стандартна форма для Виявлено
+  const titleLine = isChecked("noNumber") ? `${type}, ${side}, без видачі` : `${type}, ${side}, №${targetNumber}`;
+
+  return `П: ${sector}, ${position}
+Ціль: ${titleLine}
+Висота: ${height}
+Відстань: ${distance}
+Кількість: ${count}
+А: ${azimuth}
+К: ${course}
+НП: ${location}
+Ч: ${time}
+Вияв: ${detectionText}
+ПП: ${result}
+${description ? "Опис: " + description : ""}`.trim();
 }
+
 
 function updatePreview() {
   document.getElementById("preview").textContent = generateReportText();
+}
+function updateResultOptionsByTargetType() {
+  const type = document.querySelector('input[name="target"]:checked')?.value || "";
+  const resultBlock = document.querySelectorAll('input[name="result"]');
+  const group = document.querySelector('div.group input[name="result"]').closest(".group");
+
+  if (!type || !group || !resultBlock) return;
+
+  if (["Постріли (ЗУ,кулемет)", "Виходи (ПЗРК,ЗРК)", "Вибух"].includes(type)) {
+    resultBlock.forEach(r => {
+      if (r.value !== "Виявлено") r.closest("label").style.display = "none";
+      else {
+        r.closest("label").style.display = "block";
+        r.checked = true;
+      }
+    });
+  } else {
+    resultBlock.forEach(r => r.closest("label").style.display = "block");
+  }
+
+  updateAmmoVisibility();
+  updatePreview();
 }
 
 function copyReport() {
@@ -647,6 +736,9 @@ function attachReportUpdateListeners() {
       }
     }
   });
+    if (el.name === "target") {
+  el.addEventListener("change", updateResultOptionsByTargetType);
+    }
 }
 
 // --- Компас (iOS + Android з компенсацією) ---
@@ -719,6 +811,7 @@ window.onload = () => {
   updateAmmoVisibility();
   attachReportUpdateListeners();
   updatePreview();
+  updateResultOptionsByTargetType();
 
   document.querySelectorAll("button").forEach(btn =>
     btn.addEventListener("dblclick", e => e.preventDefault())
