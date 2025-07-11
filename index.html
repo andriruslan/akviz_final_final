@@ -564,11 +564,11 @@ function generateReportText() {
   const sector = get("sector");
   const position = get("position");
   const location = get("location");
-  const azimuth = get("azimuth");
-  const course = get("course");
+  const azimuth = get("azimuth") ? `${get("azimuth")}°` : "-";
+  const course = get("course") ? `${get("course")}°` : "-";
   const height = get("height") ? `${get("height")} м` : "-";
-  const distance = get("distance");
-  const count = get("targetCount");
+  const distance = get("distance") ? `+${get("distance")}м` : "-";
+  const count = get("targetCount") ? `${get("targetCount")} од.` : "-";
   const name = get("targetName");
   const targetNumber = isChecked("noNumber") ? "" : get("targetNumber");
 
