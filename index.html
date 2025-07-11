@@ -11,7 +11,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', 'Roboto', sans-serif;
-      background-color: #0e0e0e;
+      background-color: #0a0a0a;
       color: #e0e0e0;
       overflow-x: hidden;
       touch-action: manipulation;
@@ -23,13 +23,14 @@
       min-height: 100vh;
     }
 
-    .container {
-      width: 100%;
-      max-width: 500px;
-      padding: 16px;
-      box-sizing: border-box;
-      background-color: transparent; /* 👈 додаємо це */
-    }
+ .container {
+  background-color: rgba(255, 255, 255, 0.02); /* дуже легка прозорість білого */
+  border-radius: 10px;
+  backdrop-filter: blur(3px); /* розмиття фону — сучасний вигляд */
+  padding: 16px;
+  box-sizing: border-box;
+}
+
 
     h2 {
       text-align: center;
