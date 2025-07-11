@@ -608,8 +608,7 @@ function generateReportText() {
 НП: ${get("location")}
 Час: ${get("time")}
 Вияв: ${detections.join(", ")}
-ПП: ${result}
-${ammoText ? "Розхід БК:\n" + ammoText : ""}${desc.length ? "\nОпис: " + desc.join(". ") : ""}`.trim();
+ПП: ${result} ${ammoText ? "Розхід БК:\n" + ammoText : ""}${desc.length ? "\nОпис: " + desc.join(". ") : ""}`.trim();
 }
 
 function updatePreview() {
