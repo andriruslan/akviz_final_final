@@ -566,7 +566,7 @@ function generateReportText() {
   const location = get("location");
   const azimuth = get("azimuth");
   const course = get("course");
-  const height = get("height");
+  const height = get("height") ? `${get("height")} м` : "-";
   const distance = get("distance");
   const count = get("targetCount");
   const name = get("targetName");
