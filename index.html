@@ -498,11 +498,16 @@ function toggleNumberField() {
 
 function changeCount(delta) {
   const input = document.getElementById("targetCount");
-  let val = parseInt(input.value) || 1;
-  val += delta;
-  if (val < 1) val = 1;
-  input.value = val;
-  updatePreview();
+  let value = parseInt(input.value) || 0;
+  value += delta;
+
+  if (value < 1) value = 1;
+  input.value = value;
+
+  // Активуємо/деактивуємо кнопку -1
+  document.getElementById("minusBtn").disabled = value <= 1;
+
+  updatePreview(); // оновлюємо міні-звіт
 }
 
 function adjustValue(id, delta) {
