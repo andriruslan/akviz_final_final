@@ -578,13 +578,23 @@ const getRaw = id => document.getElementById(id)?.value || "";
   const sector = getOrDash("sector");
   const position = getOrDash("position");
   const location = getOrDash("location");
-  const azimuth = getOrDash("azimuth") ? `${get("azimuth")}°` : "-";
-  const course = getOrDash("course") ? `${get("course")}°` : "-";
-  const height = getOrDash("height") ? `${get("height")} м` : "-";
-  const distance = getOrDash("distance") ? `${get("distance")}+ м` : "-";
-  const count = getOrDash("targetCount") ? `${get("targetCount")} од.` : "-";
-  const name = getOrDash("targetName");
-  const targetNumber = isChecked("noNumber") ? "" : get("targetNumber");
+  const azimuthVal = getRaw("azimuth").trim();
+const azimuth = azimuthVal ? `${azimuthVal}°` : "-";
+
+const courseVal = getRaw("course").trim();
+const course = courseVal ? `${courseVal}°` : "-";
+
+const heightVal = getRaw("height").trim();
+const height = heightVal ? `${heightVal} м` : "-";
+
+const distanceVal = getRaw("distance").trim();
+const distance = distanceVal ? `${distanceVal}+ м` : "-";
+
+const countVal = getRaw("targetCount").trim();
+const count = countVal ? `${countVal} од.` : "-";
+
+const targetNumber = isChecked("noNumber") ? "" : getRaw("targetNumber").trim();
+
 
   // 🟡 Виявлення: акустично, візуально, радіолокаційно
   const detects = [];
