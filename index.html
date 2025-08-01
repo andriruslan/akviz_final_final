@@ -562,23 +562,28 @@ function setTargetNameAndUpdate(name) {
 }
 
 function generateReportText() {
-  const get = id => document.getElementById(id)?.value || "-";
+ // Для всіх полів, де "-" потрібен як дефолт:
+const getOrDash = id => document.getElementById(id)?.value || "-";
+
+// Для полів, де важливо знати чи поле ПУСТЕ (опис):
+const getRaw = id => document.getElementById(id)?.value || "";
+
   const isChecked = id => document.getElementById(id)?.checked;
   const checkedVal = name => document.querySelector(`input[name="${name}"]:checked`)?.value || "-";
 
   const type = checkedVal("target");
   const side = checkedVal("side");
   const result = checkedVal("result");
-  const time = get("time");
-  const sector = get("sector");
-  const position = get("position");
-  const location = get("location");
-  const azimuth = get("azimuth") ? `${get("azimuth")}°` : "-";
-  const course = get("course") ? `${get("course")}°` : "-";
-  const height = get("height") ? `${get("height")} м` : "-";
-  const distance = get("distance") ? `${get("distance")}+ м` : "-";
-  const count = get("targetCount") ? `${get("targetCount")} од.` : "-";
-  const name = get("targetName");
+  const time = getOrDash("time");
+  const sector = getOrDash("sector");
+  const position = getOrDash("position");
+  const location = getOrDash("location");
+  const azimuth = getOrDash("azimuth") ? `${get("azimuth")}°` : "-";
+  const course = getOrDash("course") ? `${get("course")}°` : "-";
+  const height = getOrDash("height") ? `${get("height")} м` : "-";
+  const distance = getOrDash("distance") ? `${get("distance")}+ м` : "-";
+  const count = getOrDash("targetCount") ? `${get("targetCount")} од.` : "-";
+  const name = getOrDash("targetName");
   const targetNumber = isChecked("noNumber") ? "" : get("targetNumber");
 
   // 🟡 Виявлення: акустично, візуально, радіолокаційно
@@ -595,7 +600,7 @@ function generateReportText() {
   // 🟡 Опис логіка
 const hasSound = isChecked("descSound");
 const hasCourse = isChecked("descCourse");
-const descCustom = get("description").trim(); // обрізаємо пробіли з початку/кінця
+const descCustom = getRaw("description").trim(); // обрізаємо пробіли з початку/кінця
 
 let descriptionParts = [];
 
