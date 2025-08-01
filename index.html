@@ -593,25 +593,31 @@ function generateReportText() {
   const detectionText = detects.join(", ");
 
   // 🟡 Опис логіка
-  const hasSound = isChecked("descSound");
-  const hasCourse = isChecked("descCourse");
-  const descCustom = get("description");
+const hasSound = isChecked("descSound");
+const hasCourse = isChecked("descCourse");
+const descCustom = get("description").trim(); // обрізаємо пробіли з початку/кінця
 
-  let description = "";
-  if ((result === "Обстріляно" || result === "Уражено") && (hasSound || hasCourse)) {
-    if (hasSound && hasCourse) {
-      description += "Після обстрілу ціль змінила звук та курс";
-    } else if (hasSound) {
-      description += "Після обстрілу ціль змінила звук";
-    } else if (hasCourse) {
-      description += "Після обстрілу ціль змінила курс";
-    }
-  }
+let descriptionParts = [];
 
-  if (descCustom) {
-    if (description) description += ".";
-    description += descCustom;
+// якщо є галочки + обстріляно/уражено
+if ((result === "Обстріляно" || result === "Уражено") && (hasSound || hasCourse)) {
+  if (hasSound && hasCourse) {
+    descriptionParts.push("Після обстрілу ціль змінила звук та курс");
+  } else if (hasSound) {
+    descriptionParts.push("Після обстрілу ціль змінила звук");
+  } else if (hasCourse) {
+    descriptionParts.push("Після обстрілу ціль змінила курс");
   }
+}
+
+// якщо є текстовий коментар
+if (descCustom) {
+  descriptionParts.push(descCustom);
+}
+
+// об’єднання частин опису
+const description = descriptionParts.length > 0 ? descriptionParts.join(". ") : "";
+
 
   // 🟡 Розхід БК
   let ammo = [];
