@@ -1,4 +1,4 @@
-,<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="uk">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
@@ -598,22 +598,20 @@ function generateReportText() {
   const descCustom = get("description");
 
   let description = "";
-  let descriptionParts = [];
-if ((result === "Обстріляно" || result === "Уражено") && (hasSound || hasCourse)) {
-  if (hasSound && hasCourse) {
-    descriptionParts.push("Після обстрілу ціль змінила звук та курс");
-  } else if (hasSound) {
-    descriptionParts.push("Після обстрілу ціль змінила звук");
-  } else if (hasCourse) {
-    descriptionParts.push("Після обстрілу ціль змінила курс");
+  if ((result === "Обстріляно" || result === "Уражено") && (hasSound || hasCourse)) {
+    if (hasSound && hasCourse) {
+      description += "Після обстрілу ціль змінила звук та курс";
+    } else if (hasSound) {
+      description += "Після обстрілу ціль змінила звук";
+    } else if (hasCourse) {
+      description += "Після обстрілу ціль змінила курс";
+    }
   }
-}
 
-if (descCustom.trim()) {
-  descriptionParts.push(descCustom.trim());
-}
-
-const description = descriptionParts.length > 0 ? descriptionParts.join(". ") : "";
+  if (descCustom) {
+    if (description) description += ".";
+    description += descCustom;
+  }
 
   // 🟡 Розхід БК
   let ammo = [];
