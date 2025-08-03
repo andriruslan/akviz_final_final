@@ -1,0 +1,188 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  background-color: #0a0a0a;
+  color: #e0e0e0;
+  overflow-x: hidden;
+  touch-action: manipulation;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.container {
+  background-color: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+  backdrop-filter: blur(3px);
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+h2 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.group {
+  margin-bottom: 1.4rem;
+}
+
+label {
+  font-weight: bold;
+  font-size: 1.05rem;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+hr {
+  border: none;
+  border-bottom: 1px solid #444;
+  margin: 4px 0 10px 0;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="time"],
+textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 5px;
+  color: #fff;
+  box-sizing: border-box;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #4caf50;
+}
+
+button {
+  font-size: 1rem;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.plus-button {
+  background-color: #2e7d32;
+  color: white;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.minus-button {
+  background-color: #b71c1c;
+  color: white;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.inline-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.inline-buttons button {
+  flex: 1 1 48%;
+}
+
+.two-rows-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.three-cols-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.three-cols label,
+.two-cols label,
+.side-3col label {
+  flex: 1 1 calc(33.3% - 8px);
+}
+
+#preview {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  padding: 8px;
+  white-space: pre-wrap;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  min-height: 100px;
+  color: #fff;
+}
+
+.full-width-button {
+  width: 100%;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.field-row input {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.lock-btn {
+  padding: 0.4rem 0.6rem;
+  font-size: 1.2rem;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.radio-inline-group.side-3col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.target-type-group .radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  line-height: 1.1;
+}
+
+.target-type-group .radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ammo-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.ammo-item {
+  flex: 1 1 calc(50% - 1rem);
+}
