@@ -1,0 +1,11 @@
+<div class="group">
+  <label>Висота, м</label>
+  <hr>
+  <input type="number" id="height" inputmode="numeric" placeholder="висота в метрах" />
+  <div class="inline-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+    <button class="plus-button" onclick="adjustValue('height', 100)">+100 м</button>
+    <button class="plus-button" onclick="adjustValue('height', 500)">+500 м</button>
+    <button class="minus-button" onclick="adjustValue('height', -100)">-100 м</button>
+    <button class="minus-button" onclick="adjustValue('height', -500)">-500 м</button>
+  </div>
+</div>
