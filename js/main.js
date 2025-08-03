@@ -1,22 +1,39 @@
-// js/main.js
-const loadComponent = async (id, path) => {
-  try {
-    const res = await fetch(path);
-    const html = await res.text();
-    document.getElementById(id).innerHTML = html;
-  } catch (e) {
-    console.error("Помилка завантаження:", path);
-  }
-};
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("formContainer");
 
-window.onload = () => {
-  const components = [
-    "sector", "position", "location", "target-type", "side", "target-number",
-    "name", "count", "azimuth", "course", "distance", "height", "time",
-    "detection", "result", "ammo", "description", "preview", "actions", "compass-debug"
+  // Список компонентів у потрібному порядку
+  const componentFiles = [
+    "sector.html",
+    "position.html",
+    "location.html",
+    "target-type.html",
+    "side.html",
+    "target-number.html",
+    "target-name.html",
+    "target-count.html",
+    "azimuth.html",
+    "course.html",
+    "distance.html",
+    "height.html",
+    "time.html",
+    "detection.html",
+    "result.html",
+    "ammo.html",
+    "description.html",
+    "preview.html",
+    "actions.html",
+    "debug.html"
   ];
 
-  components.forEach(name => {
-    loadComponent(`${name}-container`, `components/${name}.html`);
-  });
-};
+  for (const file of componentFiles) {
+    try {
+      const res = await fetch(`components/${file}`);
+      const html = await res.text();
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = html;
+      container.appendChild(wrapper);
+    } catch (err) {
+      console.error(`❌ Помилка завантаження ${file}:`, err);
+    }
+  }
+});
