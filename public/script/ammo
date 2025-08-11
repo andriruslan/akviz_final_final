@@ -1,0 +1,14 @@
+function toggleAmmoCount(ammoId) {
+  const checkbox = document.getElementById(ammoId);
+  const input = document.getElementById(ammoId + "Count");
+
+  if (checkbox.checked) {
+    input.disabled = false;
+    input.focus();
+  } else {
+    input.disabled = true;
+    input.value = "";
+  }
+
+  updatePreview(); // оновлення міні-звіту
+}
